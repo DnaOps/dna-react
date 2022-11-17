@@ -5,14 +5,14 @@ import logoImg from "../../../src/assets/images/logo_img.png";
 import logoText from "../../../src/assets/images/logo_text.png";
 import menu from "../../../src/assets/images/menu.png";
 
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const Container = styled.div`
   width: 100%;
-  height: 48px;
+  min-height: 48px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   border: solid 2.5px #024298;
   box-sizing: border-box;
   padding: 0 8px;
@@ -27,37 +27,94 @@ const LogoContainer = styled.div`
 const LogoImg = styled.img`
   margin: 7px 8px 0 0;
 `;
+
 const LogoText = styled.img``;
 
 const NavContainer = styled.div`
-  width: 394px;
-  height: 100%;
+  width: 463px;
+  min-height: 48px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 `;
 
-const Nav = styled.div`
-  height: 20px;
+// const fadeInAnimation = keyframes`
+// 0% {
+//   transform: translateY(-100%);
+// }
+
+// 100% {
+//   transform: translateY(0);
+// }
+// `;
+
+const StyledNav = styled.div`
+  width: 160px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 `;
 
+const DropDownDivider = styled.div`
+  width: 1px;
+  height: 166px;
+  background: #024298;
+  margin: 14px 0;
+`;
+
+const MenuWrapper = styled.div`
+  width: 143px;
+`;
+
 const Menu = styled.img`
+  margin-left: 93px;
   cursor: pointer;
 `;
 
-const MenuDropDown = styled.div`
-width: 100%;
-height: 252px;
-border: solid 2.5px #024298;
-border-top: none;
-`
+const DropDownNavContainer = styled.div`
+  height: 152px;
+  /* overflow: hidden;
+  animation: ${fadeInAnimation} 0.4s ease; */
+`;
+const DropDownNav = styled.div`
+  margin: 0 0 12px 0;
+  font-size: 10px;
+  font-weight: 400;
+  cursor: pointer;
+`;
 
-// const DropDownNavContainer = styled.div`
-// width:
-// `
+const DropDownMenuWrapper = styled.div`
+  box-sizing: border-box;
+  padding-top: 8px;
+  margin-left: 28px;
+`;
+
+const DropDownMenuContainer = styled.div`
+  margin: 12px 0;
+`;
+
+const DropDownMenu = styled.div`
+  font-size: 10px;
+  font-weight: 400;
+  cursor: pointer;
+`;
+
+const Nav = ({ typo, menuClicked, options }) => {
+  return (
+    <div>
+      <StyledNav>{typo}</StyledNav>
+      {menuClicked ? (
+        <DropDownNavContainer>
+          {options.map((option) => (
+            <DropDownNav>{option}</DropDownNav>
+          ))}
+        </DropDownNavContainer>
+      ) : null}
+    </div>
+  );
+};
 
 const Header = () => {
   const navigate = useNavigate();
@@ -82,10 +139,13 @@ const Header = () => {
   };
 
   const nav = ["개요", "게시판"];
+  const navOptions = {
+    개요: ["About us", "회칙"],
+    게시판: ["공지사항", "자유게시판", "스터디 게시판", "앨범 게시판"],
+  };
 
   return (
-    <>
-    <Container style={{borderBottom: menuClicked ? "transparent" : null}} >
+    <Container>
       <LogoContainer>
         <LogoImg src={logoImg} />
         <LogoText src={logoText} />
@@ -94,18 +154,33 @@ const Header = () => {
       <NavContainer>
         {nav.map((t) => (
           <Nav
+            typo={t}
+            menuClicked={menuClicked}
+            options={navOptions[t]}
             onClick={() => {
               navClickHandler(t);
             }}
-          >
-            {t}
-          </Nav>
+          />
         ))}
-        <Menu src={menu} onClick={menuClickHandler} />
+        {menuClicked ? <DropDownDivider /> : null}
+        <MenuWrapper>
+          <Menu src={menu} onClick={menuClickHandler} />
+          {menuClicked ? (
+            <DropDownMenuWrapper>
+              <DropDownMenu>
+                <b>scorpion</b> 회원님
+              </DropDownMenu>
+              <DropDownMenuContainer>
+                <DropDownMenu>권한 : 관리자</DropDownMenu>
+                <DropDownMenu>게시글 수 : 10</DropDownMenu>
+                <DropDownMenu>댓글 수 : 10</DropDownMenu>
+              </DropDownMenuContainer>
+              <DropDownMenu>가입일시 : 2016.09.01</DropDownMenu>
+            </DropDownMenuWrapper>
+          ) : null}
+        </MenuWrapper>
       </NavContainer>
-      </Container>
-      {menuClicked ? <MenuDropDown>menu drop down</MenuDropDown> : null}
-    </>
+    </Container>
   );
 };
 
