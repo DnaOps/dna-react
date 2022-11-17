@@ -30,22 +30,23 @@ const LogoImg = styled.img`
 
 const LogoText = styled.img``;
 
+const fadeInAnimation = keyframes`
+0% {
+  transform: translateY(-100%);
+}
+
+100% {
+  transform: translateY(0);
+}
+`;
+
 const NavContainer = styled.div`
   width: 463px;
   min-height: 48px;
   display: flex;
   justify-content: space-between;
+  animation: ${fadeInAnimation} 0.4s ease;
 `;
-
-// const fadeInAnimation = keyframes`
-// 0% {
-//   transform: translateY(-100%);
-// }
-
-// 100% {
-//   transform: translateY(0);
-// }
-// `;
 
 const StyledNav = styled.div`
   width: 160px;
@@ -75,14 +76,14 @@ const Menu = styled.img`
 
 const DropDownNavContainer = styled.div`
   height: 152px;
-  /* overflow: hidden;
-  animation: ${fadeInAnimation} 0.4s ease; */
+  overflow: hidden;
 `;
 const DropDownNav = styled.div`
   margin: 0 0 12px 0;
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
+  animation: ${fadeInAnimation} 0.4s ease;
 `;
 
 const DropDownMenuWrapper = styled.div`
@@ -99,6 +100,7 @@ const DropDownMenu = styled.div`
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
+  animation: ${fadeInAnimation} 0.4s ease;
 `;
 
 const Nav = ({ typo, menuClicked, options }) => {
