@@ -13,6 +13,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  background: #fff;
   border: solid 2.5px #024298;
   box-sizing: border-box;
   padding: 0 8px;
