@@ -16,6 +16,8 @@ const Container = styled.div`
   border: solid 2.5px #024298;
   box-sizing: border-box;
   padding: 0 8px;
+  position: absolute;
+  z-index: 1;
 `;
 
 const LogoContainer = styled.div`
@@ -30,22 +32,11 @@ const LogoImg = styled.img`
 
 const LogoText = styled.img``;
 
-const fadeInAnimation = keyframes`
-0% {
-  transform: translateY(-100%);
-}
-
-100% {
-  transform: translateY(0);
-}
-`;
-
 const NavContainer = styled.div`
   width: 463px;
   min-height: 48px;
   display: flex;
   justify-content: space-between;
-  animation: ${fadeInAnimation} 0.4s ease;
 `;
 
 const StyledNav = styled.div`
@@ -78,6 +69,17 @@ const DropDownNavContainer = styled.div`
   height: 152px;
   overflow: hidden;
 `;
+
+const fadeInAnimation = keyframes`
+0% {
+  transform: translateY(-100%);
+}
+
+100% {
+  transform: translateY(0);
+}
+`;
+
 const DropDownNav = styled.div`
   margin: 0 0 12px 0;
   font-size: 10px;
@@ -103,6 +105,10 @@ const DropDownMenu = styled.div`
   animation: ${fadeInAnimation} 0.4s ease;
 `;
 
+const UpperSpace = styled.div`
+  height: 53px;
+`;
+
 const Nav = ({ typo, menuClicked, options }) => {
   return (
     <div>
@@ -110,7 +116,7 @@ const Nav = ({ typo, menuClicked, options }) => {
       {menuClicked ? (
         <DropDownNavContainer>
           {options.map((option) => (
-            <DropDownNav>{option}</DropDownNav>
+            <DropDownNav key={option}>{option}</DropDownNav>
           ))}
         </DropDownNavContainer>
       ) : null}
@@ -147,42 +153,46 @@ const Header = () => {
   };
 
   return (
-    <Container>
-      <LogoContainer>
-        <LogoImg src={logoImg} />
-        <LogoText src={logoText} />
-      </LogoContainer>
+    <>
+      <Container>
+        <LogoContainer>
+          <LogoImg src={logoImg} />
+          <LogoText src={logoText} />
+        </LogoContainer>
 
-      <NavContainer>
-        {nav.map((t) => (
-          <Nav
-            typo={t}
-            menuClicked={menuClicked}
-            options={navOptions[t]}
-            onClick={() => {
-              navClickHandler(t);
-            }}
-          />
-        ))}
-        {menuClicked ? <DropDownDivider /> : null}
-        <MenuWrapper>
-          <Menu src={menu} onClick={menuClickHandler} />
-          {menuClicked ? (
-            <DropDownMenuWrapper>
-              <DropDownMenu>
-                <b>scorpion</b> 회원님
-              </DropDownMenu>
-              <DropDownMenuContainer>
-                <DropDownMenu>권한 : 관리자</DropDownMenu>
-                <DropDownMenu>게시글 수 : 10</DropDownMenu>
-                <DropDownMenu>댓글 수 : 10</DropDownMenu>
-              </DropDownMenuContainer>
-              <DropDownMenu>가입일시 : 2016.09.01</DropDownMenu>
-            </DropDownMenuWrapper>
-          ) : null}
-        </MenuWrapper>
-      </NavContainer>
-    </Container>
+        <NavContainer>
+          {nav.map((t) => (
+            <Nav
+              key={t}
+              typo={t}
+              menuClicked={menuClicked}
+              options={navOptions[t]}
+              onClick={() => {
+                navClickHandler(t);
+              }}
+            />
+          ))}
+          {menuClicked ? <DropDownDivider /> : null}
+          <MenuWrapper>
+            <Menu src={menu} onClick={menuClickHandler} />
+            {menuClicked ? (
+              <DropDownMenuWrapper>
+                <DropDownMenu>
+                  <b>scorpion</b> 회원님
+                </DropDownMenu>
+                <DropDownMenuContainer>
+                  <DropDownMenu>권한 : 관리자</DropDownMenu>
+                  <DropDownMenu>게시글 수 : 10</DropDownMenu>
+                  <DropDownMenu>댓글 수 : 10</DropDownMenu>
+                </DropDownMenuContainer>
+                <DropDownMenu>가입일시 : 2016.09.01</DropDownMenu>
+              </DropDownMenuWrapper>
+            ) : null}
+          </MenuWrapper>
+        </NavContainer>
+      </Container>
+      <UpperSpace />
+    </>
   );
 };
 
