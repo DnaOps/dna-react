@@ -27,6 +27,24 @@ const WaveGroup = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
+    const resize = () => {
+      const stgWidth = 2 * document.body.clientWidth;
+      const stgHeight = 2 * document.body.clientHeight;
+
+      canvas.width = document.body.clientWidth * 2;
+      canvas.height = document.body.clientHeight * 2;
+
+      context.scale(2, 2);
+
+      for (let i = 0; i < waveGroup.totalWave; i++) {
+        waveGroup.waves[i].resize(stgWidth, stgHeight);
+      }
+    };
+
+    window.addEventListener("resize", resize);
+
+    resize(); // dislay wave with rendering
+
     const animate = () => {
       const stgWidth = 2 * document.body.clientWidth;
       const stgHeight = 2 * document.body.clientHeight;
@@ -45,20 +63,6 @@ const WaveGroup = () => {
 
       window.requestAnimationFrame(animate);
     };
-
-    window.addEventListener("resize", () => {
-      const stgWidth = 2 * document.body.clientWidth;
-      const stgHeight = 2 * document.body.clientHeight;
-
-      canvas.width = document.body.clientWidth * 2;
-      canvas.height = document.body.clientHeight * 2;
-
-      context.scale(2, 2);
-
-      for (let i = 0; i < waveGroup.totalWave; i++) {
-        waveGroup.waves[i].resize(stgWidth, stgHeight);
-      }
-    });
 
     window.requestAnimationFrame(animate);
   }, []);
