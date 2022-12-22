@@ -14,7 +14,8 @@ class WaveGroupClass {
   constructor() {
     this.totalWave = 2;
     this.totalPoints = 5;
-    this.color = ["#DCDAF9", "#b5b1e9"];
+    this.color = ["#DCDAF9", "rgba(181, 177, 233, 0.5)"];
+    // 투명도 조정
 
     this.waves = [];
 
