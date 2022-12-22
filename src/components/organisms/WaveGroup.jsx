@@ -13,7 +13,7 @@ import styled from "styled-components";
 class WaveGroupClass {
   constructor() {
     this.totalWave = 2;
-    this.totalPoints = 4;
+    this.totalPoints = 5;
     this.color = ["#DCDAF9", "#b5b1e9"];
 
     this.waves = [];

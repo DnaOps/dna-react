@@ -5,7 +5,7 @@ class Point {
     this.x = x;
     this.y = y;
     this.fixedX = x;
-    this.speed = 0.05;
+    this.speed = 0.03;
     this.cur = index;
     this.max = Math.random() * 100 + 100;
   }
