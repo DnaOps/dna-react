@@ -1,15 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Wave from "../molecules/Wave";
 import "../../index.css";
-import styled from "styled-components";
 
-// const Background = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   background: #e7e6f5;
-//   position: absolute;
-//   z-index: -1;
-// `;
 class WaveGroupClass {
   constructor() {
     this.totalWave = 2;
@@ -28,10 +20,6 @@ class WaveGroupClass {
 
 const WaveGroup = () => {
   const canvasRef = useRef(null);
-  const [stageWidth, setStageWidth] = useState(document.body.clientWidth * 2);
-  const [stageHeight, setStageHeight] = useState(
-    document.body.clientHeight * 2
-  );
 
   const waveGroup = new WaveGroupClass();
 
@@ -43,8 +31,6 @@ const WaveGroup = () => {
       const stgWidth = 2 * document.body.clientWidth;
       const stgHeight = 2 * document.body.clientHeight;
 
-      setStageWidth(stgWidth);
-      setStageHeight(stgHeight);
       context.clearRect(0, 0, stgWidth, stgHeight);
 
       // fill background
@@ -64,9 +50,6 @@ const WaveGroup = () => {
       const stgWidth = 2 * document.body.clientWidth;
       const stgHeight = 2 * document.body.clientHeight;
 
-      setStageWidth(stgWidth);
-      setStageHeight(stgHeight);
-
       canvas.width = document.body.clientWidth * 2;
       canvas.height = document.body.clientHeight * 2;
 
@@ -83,7 +66,6 @@ const WaveGroup = () => {
   return (
     <>
       <canvas ref={canvasRef}></canvas>
-      {/* <Background /> */}
     </>
   );
 };
