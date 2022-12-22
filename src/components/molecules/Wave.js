@@ -23,8 +23,6 @@ class Wave {
 
     this.pointGap = this.stageHeight / (2 * (this.totalPoints - 1));
 
-    console.log("point gap: " + this.pointGap);
-
     this.init();
   }
 
