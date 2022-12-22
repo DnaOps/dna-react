@@ -1,42 +1,73 @@
 import React, { useRef, useEffect, useState } from "react";
 import Wave from "../molecules/Wave";
 import "../../index.css";
+import styled from "styled-components";
+
+// const Background = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   background: #e7e6f5;
+//   position: absolute;
+//   z-index: -1;
+// `;
+class WaveGroupClass {
+  constructor() {
+    this.totalWave = 2;
+    this.totalPoints = 4;
+    this.color = ["#DCDAF9", "#b5b1e9"];
+
+    this.waves = [];
+
+    for (let i = 0; i < this.totalWave; i++) {
+      const wave = new Wave(i, this.totalPoints, this.color[i]);
+      this.waves[i] = wave;
+    }
+  }
+}
 
 const WaveGroup = () => {
   const canvasRef = useRef(null);
-  // const [stageWidth, setStageWidth] = useState(document.body.clientWidth * 2);
-  // const [stageHeight, setStageHeight] = useState(
-  //   document.body.clientHeight * 2
-  // );
+  const [stageWidth, setStageWidth] = useState(document.body.clientWidth * 2);
+  const [stageHeight, setStageHeight] = useState(
+    document.body.clientHeight * 2
+  );
+
+  const waveGroup = new WaveGroupClass();
+
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    const wave = new Wave();
+    const animate = () => {
+      const stgWidth = 2 * document.body.clientWidth;
+      const stgHeight = 2 * document.body.clientHeight;
 
-    const animate = async () => {
-      context.clearRect(
-        0,
-        0,
-        document.body.clientWidth * 2,
-        document.body.clientHeight * 2
-      );
+      setStageWidth(stgWidth);
+      setStageHeight(stgHeight);
+      context.clearRect(0, 0, stgWidth, stgHeight);
 
-      wave.draw(context);
+      for (let i = 0; i < waveGroup.totalWave; i++) {
+        waveGroup.waves[i].draw(context);
+      }
 
       window.requestAnimationFrame(animate);
     };
 
     window.addEventListener("resize", () => {
-      // setStageWidth(document.body.clientWidth);
-      // setStageHeight(document.body.clientHeight);
+      const stgWidth = 2 * document.body.clientWidth;
+      const stgHeight = 2 * document.body.clientHeight;
+
+      setStageWidth(stgWidth);
+      setStageHeight(stgHeight);
 
       canvas.width = document.body.clientWidth * 2;
       canvas.height = document.body.clientHeight * 2;
 
       context.scale(2, 2);
 
-      wave.resize(document.body.clientWidth, document.body.clientHeight);
+      for (let i = 0; i < waveGroup.totalWave; i++) {
+        waveGroup.waves[i].resize(stgWidth, stgHeight);
+      }
     });
 
     window.requestAnimationFrame(animate);
@@ -45,6 +76,7 @@ const WaveGroup = () => {
   return (
     <>
       <canvas ref={canvasRef}></canvas>
+      {/* <Background /> */}
     </>
   );
 };

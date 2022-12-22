@@ -1,18 +1,12 @@
 import React from "react";
 
 class Point {
-  state = {
-    x: 0,
-    y: 0,
-    cur: 0,
-  };
-
-  constructor(x, y) {
+  constructor(index, x, y) {
     this.x = x;
     this.y = y;
     this.fixedX = x;
     this.speed = 0.05;
-    this.cur = 0;
+    this.cur = index;
     this.max = Math.random() * 100 + 100;
   }
 
