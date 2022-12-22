@@ -30,10 +30,12 @@ class Wave {
 
   init() {
     this.points = [];
+    this.centerPoint = this.totalPoints / 2;
     for (let i = 0; i < this.totalPoints; i++) {
       const point = new Point(
         this.index + i,
-        this.centerX / 2,
+        this.centerX / 2 + (i - this.centerPoint) * 80,
+        // 축을 수직 -> 사선으로 변경
         this.pointGap * i
       );
       // index, x, y
