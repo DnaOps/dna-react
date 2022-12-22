@@ -46,6 +46,12 @@ const WaveGroup = () => {
       setStageHeight(stgHeight);
       context.clearRect(0, 0, stgWidth, stgHeight);
 
+      // fill background
+      context.rect(0, 0, stgWidth, stgHeight);
+      context.fillStyle = "#E7E6F5";
+      context.fill();
+
+      context.beginPath();
       for (let i = 0; i < waveGroup.totalWave; i++) {
         waveGroup.waves[i].draw(context);
       }
