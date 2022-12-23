@@ -67,11 +67,7 @@ const WaveGroup = () => {
     window.requestAnimationFrame(animate);
   }, []);
 
-  return (
-    <>
-      <canvas ref={canvasRef}></canvas>
-    </>
-  );
+  return <canvas ref={canvasRef}></canvas>;
 };
 
 export default WaveGroup;
