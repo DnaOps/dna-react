@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "dna_login",
+=======
+  "name": "dna-react",
+>>>>>>> 76b1c57099c77c4082fdaf9aa94e1a63d85e1f4d
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,7 +12,13 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "react-scripts": "5.0.1",
+=======
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.6",
+>>>>>>> 76b1c57099c77c4082fdaf9aa94e1a63d85e1f4d
     "web-vitals": "^2.1.4"
   },
   "scripts": {
