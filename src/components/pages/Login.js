@@ -1,96 +1,144 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const Page = styled.div`
+import WaveGroup from "../organisms/WaveGroup";
+
+import idIcon from "../../assets/images/id_icon.png";
+import pwIcon from "../../assets/images/pw_icon.png";
+import checkIcon from "../../assets/images/check.png";
+import googleLogo from "../../assets/images/google_icon.png";
+
+const Container = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoginForm = styled.div`
+  width: 300px;
+  height: 334px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fff;
   border-radius: 20px;
   border: 1px solid #024298;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 25%;
-  height: 50%;
-  max-width: 500px;
-  padding: 0 20px;
-
-  left: 50%;
-  transform: translate(-50%, 50%);
-
-  background-color: white;
-
-  overflow: hidden;
-  flex-direction: column;
+  box-sizing: border-box;
+  padding: 45px 25px;
 `;
 
-const TitleWrap = styled.div`
-  font-size: 20px;
-  padding: 0 20px;
-  font-weight: 700;
-  color: black;
-`;
-
-const ContentWrap = styled.div`
-  margin: top 26px;
-  flex: 1;
-`;
-
-const InputWrap = styled.div`
+const InputContainer = styled.div`
+  box-sizing: border-box;
+  padding: 0 12px;
   border-radius: 8px;
-  padding: 10px;
-  margin-top: 8px;
-  background-color: white;
   border: 1px solid #b5b5b5;
 `;
 
-const ErrorMessageWrap = styled.div`
-  margin-top: 8px;
-  color: red;
-  font-size: 12px;
+const InputDivider = styled.div`
+  width: calc(100% + 24px);
+  height: 1px;
+  background: #b5b5b5;
+  box-sizing: border-box;
+  margin: 0 -12px;
+`;
+
+const InputSubWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Icon = styled.img`
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
 `;
 
 const KeepLogin = styled.div`
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  margin: 10px 0 3.5px 15px;
   font-size: 12px;
   font-weight: 700;
   color: #b5b5b5;
 `;
 
-const MainLoginButton = styled.button`
-  position: relative;
-  left: 0;
-  top: 50px;
+const ErrorMessageWrapper = styled.div`
+  margin-top: 3.5px;
+  color: #a10c0c;
+  font-size: 10px;
+`;
 
+const StyledComminityButton = styled.button`
   width: 100%;
   height: 40px;
-  border: none;
+  background: #024298;
+  color: #fff;
+  font-size: 20px;
   font-weight: 700;
-  color: white;
-  font-size: 15px;
-  background-color: #024298;
+  border: 1px solid #024298;
   border-radius: 8px;
+  box-sizing: border-box;
+  margin: 4px 0;
   cursor: pointer;
 `;
 
-const GoogleLoginButton = styled.button`
-  position: relative;
-  left: 0;
-  top: 50px;
+const CommunityButton = ({ typo }) => {
+  return <StyledComminityButton>{typo}</StyledComminityButton>;
+};
 
-  /*  background-image: url(./assets/images/google_icon.png);
-  background-size: 20px;
-  background-repeat: no-repeat;
-  background-position: 70px 10px;
-  */
-
-  border: 1px solid #828282;
+const StyledGoogleLoginButton = styled.div`
   width: 100%;
   height: 40px;
-  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #828282;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 4px 0;
   color: #828282;
   font-size: 15px;
-  background-color: white;
-  border-radius: 8px;
+  font-weight: 700;
   cursor: pointer;
 `;
+
+const GoogleIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin: 4px;
+`;
+
+const GoogleLoginButton = () => {
+  return (
+    <StyledGoogleLoginButton>
+      <GoogleIcon src={googleLogo} />
+      Google 로그인
+    </StyledGoogleLoginButton>
+  );
+};
+
+const LinkContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 4px 0 0 0;
+  font-size: 10px;
+  color: #828282;
+  font-weight: 400;
+`;
+
+const StyledLink = styled.div`
+  box-sizing: border-box;
+  margin: 0 3px;
+  cursor: pointer;
+`;
+
+const Link = ({ typo }) => {
+  return <StyledLink>{typo}</StyledLink>;
+};
 
 export default function Login() {
   const [id, setId] = useState("");
@@ -104,6 +152,8 @@ export default function Login() {
     /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
   );
   // 정규 표현식 객체 생성
+
+  const LinkTypo = ["회원가입", "아이디 찾기", "문의"];
 
   const handleId = (e) => {
     setId(e.target.value);
@@ -125,47 +175,62 @@ export default function Login() {
   };
 
   return (
-    <Page>
-      <TitleWrap>
-        <br />
-        <br />
-      </TitleWrap>
+    <Container>
+      <LoginForm>
+        <div>
+          <InputContainer>
+            <InputSubWrapper>
+              <Icon src={idIcon} />
+              <input
+                type="text"
+                className="input"
+                placeholder="아이디"
+                value={id}
+                onChange={handleId}
+              />
+            </InputSubWrapper>
+            <InputDivider />
+            <InputSubWrapper>
+              <Icon src={pwIcon} />
+              <input
+                type="password"
+                className="input"
+                placeholder="비밀번호"
+                value={pw}
+                onChange={handlePw}
+              />
+            </InputSubWrapper>
+          </InputContainer>
 
-      <ContentWrap>
-        <InputWrap>
-          <input
-            type="text"
-            className="input"
-            placeholder="아이디"
-            value={id}
-            onChange={handleId}
-          />
-        </InputWrap>
-        <ErrorMessageWrap>
-          {!idValid && id.length > 0 && <div>아이디를 입력해주세요.</div>}
-        </ErrorMessageWrap>
-        <InputWrap>
-          <input
-            type="password"
-            className="input"
-            placeholder="비밀번호"
-            value={pw}
-            onChange={handlePw}
-          />
-        </InputWrap>
-        <ErrorMessageWrap>
-          {!pwValid && pw.length > 0 && <div>비밀번호를 입력해주세요.</div>}
-        </ErrorMessageWrap>
+          <KeepLogin>
+            <Icon src={checkIcon} /> 로그인 상태 유지
+          </KeepLogin>
 
-        <KeepLogin>로그인 상태 유지</KeepLogin>
-      </ContentWrap>
+          <ErrorMessageWrapper>
+            {!idValid && id.length > 0 && <div>아이디를 입력해주세요.</div>}
+          </ErrorMessageWrapper>
+          <ErrorMessageWrapper>
+            {idValid && !pwValid && pw.length > 0 && (
+              <div>비밀번호를 입력해주세요.</div>
+            )}
+          </ErrorMessageWrapper>
+        </div>
 
-      <div>
-        <MainLoginButton>로그인</MainLoginButton>
-      </div>
-      <div style={{ marginTop: "10px" }}>
-        <GoogleLoginButton>Google 로그인</GoogleLoginButton>
-      </div>
-    </Page>
+        <div>
+          <CommunityButton typo="로그인" />
+          <GoogleLoginButton />
+        </div>
+      </LoginForm>
+      <LinkContainer>
+        {LinkTypo.map((item, index) => {
+          return (
+            <>
+              <Link typo={item} /> {index < LinkTypo.length - 1 ? "|" : null}
+            </>
+          );
+        })}
+      </LinkContainer>
+      <WaveGroup />
+    </Container>
   );
 }
