@@ -103,6 +103,7 @@ export default function Login() {
   const regex = new RegExp(
     /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
   );
+  // 정규 표현식 객체 생성
 
   const handleId = (e) => {
     setId(e.target.value);
