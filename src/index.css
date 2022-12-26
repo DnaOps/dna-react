@@ -38,12 +38,3 @@ canvas {
 .input::placeholder {
   color: #b5b5b5;
 }
-
-.inputWrap:focus-within {
-  border: 2px solid #024298;
-}
-
-.mainLoginButton:disabled {
-  background-color: #b5b5b5;
-  color: white;
-}

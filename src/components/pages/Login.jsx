@@ -6,6 +6,7 @@ import WaveGroup from "../organisms/WaveGroup";
 import idIcon from "../../assets/images/id_icon.png";
 import pwIcon from "../../assets/images/pw_icon.png";
 import checkIcon from "../../assets/images/check.png";
+import activatedCheckIcon from "../../assets/images/activated_check.png";
 import googleLogo from "../../assets/images/google_icon.png";
 
 const Container = styled.div`
@@ -55,14 +56,28 @@ const Icon = styled.img`
   margin-right: 12px;
 `;
 
-const KeepLogin = styled.div`
+const StyledKeepLogin = styled.div`
   display: flex;
   align-items: center;
   margin: 10px 0 3.5px 15px;
   font-size: 12px;
   font-weight: 700;
-  color: #b5b5b5;
+  cursor: pointer;
 `;
+
+const KeepLogin = ({ keepLoginClicked, onClick }) => {
+  return (
+    <StyledKeepLogin
+      style={{ color: keepLoginClicked ? "#024298" : "#b5b5b5" }}
+    >
+      <Icon
+        src={keepLoginClicked ? activatedCheckIcon : checkIcon}
+        onClick={onClick}
+      />
+      <span onClick={onClick}>로그인 상태 유지</span>
+    </StyledKeepLogin>
+  );
+};
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 3.5px;
@@ -73,19 +88,26 @@ const ErrorMessageWrapper = styled.div`
 const StyledComminityButton = styled.button`
   width: 100%;
   height: 40px;
-  background: #024298;
   color: #fff;
   font-size: 20px;
   font-weight: 700;
-  border: 1px solid #024298;
   border-radius: 8px;
   box-sizing: border-box;
   margin: 4px 0;
-  cursor: pointer;
 `;
 
-const CommunityButton = ({ typo }) => {
-  return <StyledComminityButton>{typo}</StyledComminityButton>;
+const CommunityButton = ({ typo, activated }) => {
+  return (
+    <StyledComminityButton
+      style={{
+        background: activated ? "#024298" : "#b5b5b5",
+        border: activated ? "1px solid #024298" : "1px solid #b5b5b5",
+        cursor: activated ? "pointer" : "",
+      }}
+    >
+      {typo}
+    </StyledComminityButton>
+  );
 };
 
 const StyledGoogleLoginButton = styled.div`
@@ -146,7 +168,11 @@ export default function Login() {
 
   const [idValid, setIdValid] = useState(false);
   const [pwValid, setPwValid] = useState(false);
-  const [notAllow, setNotAllow] = useState(true);
+
+  const [keepLoginClicked, setKeepLoginClicked] = useState(false);
+  const onClickKeepLogin = () => {
+    setKeepLoginClicked((prev) => !prev);
+  };
 
   const regex = new RegExp(
     /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
@@ -185,7 +211,6 @@ export default function Login() {
                 type="text"
                 className="input"
                 placeholder="아이디"
-                value={id}
                 onChange={handleId}
               />
             </InputSubWrapper>
@@ -196,15 +221,15 @@ export default function Login() {
                 type="password"
                 className="input"
                 placeholder="비밀번호"
-                value={pw}
                 onChange={handlePw}
               />
             </InputSubWrapper>
           </InputContainer>
 
-          <KeepLogin>
-            <Icon src={checkIcon} /> 로그인 상태 유지
-          </KeepLogin>
+          <KeepLogin
+            keepLoginClicked={keepLoginClicked}
+            onClick={onClickKeepLogin}
+          />
 
           <ErrorMessageWrapper>
             {!idValid && id.length > 0 && <div>아이디를 입력해주세요.</div>}
@@ -217,7 +242,7 @@ export default function Login() {
         </div>
 
         <div>
-          <CommunityButton typo="로그인" />
+          <CommunityButton typo="로그인" activated={idValid && pwValid} />
           <GoogleLoginButton />
         </div>
       </LoginForm>
@@ -225,7 +250,8 @@ export default function Login() {
         {LinkTypo.map((item, index) => {
           return (
             <>
-              <Link typo={item} /> {index < LinkTypo.length - 1 ? "|" : null}
+              <Link key={item} typo={item} />{" "}
+              {index < LinkTypo.length - 1 ? "|" : null}
             </>
           );
         })}
