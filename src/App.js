@@ -1,12 +1,10 @@
-import Header from "./components/organisms/Header";
+import Login from "./components/pages/Login";
 
 function App() {
   return (
-    <>
-      <Header/>
-      <div>App</div>
-    </>
-  );
+    <div>
+      <Login />
+    </div>)
 }
 
 export default App;
