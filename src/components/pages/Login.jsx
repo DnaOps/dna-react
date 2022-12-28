@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import WaveGroup from "../organisms/WaveGroup";
 
 import idIcon from "../../assets/images/id_icon.png";
 import pwIcon from "../../assets/images/pw_icon.png";
+import activatedIdIcon from "../../assets/images/activated_id.png";
+import activatedPwIcon from "../../assets/images/activated_pw.png";
+
 import checkIcon from "../../assets/images/check.png";
 import activatedCheckIcon from "../../assets/images/activated_check.png";
 import googleLogo from "../../assets/images/google_icon.png";
@@ -47,10 +50,6 @@ const InputDivider = styled.div`
   box-sizing: border-box;
   margin: auto;
 `;
-
-const Input = ({ type, placeholder }) => {
-  return <input type={type} placeholder={placeholder} className="input" />;
-};
 
 const Icon = styled.img`
   width: 16px;
@@ -208,11 +207,16 @@ export default function Login() {
   };
 
   const inputInfo = [
-    { type: "text", placeholder: "아이디", src: idIcon, handle: handleId },
+    {
+      type: "text",
+      placeholder: "아이디",
+      src: { activated: activatedIdIcon, non_activated: idIcon },
+      handle: handleId,
+    },
     {
       type: "password",
       placeholder: "비밀번호",
-      src: pwIcon,
+      src: { activated: activatedPwIcon, non_activated: pwIcon },
       handle: handlePw,
     },
   ];
@@ -244,7 +248,13 @@ export default function Login() {
                           : "",
                     }}
                   >
-                    <Icon src={item.src} />
+                    <Icon
+                      src={
+                        index === focusedIndex
+                          ? item.src.activated
+                          : item.src.non_activated
+                      }
+                    />
                     <input
                       className="input"
                       type={item.type}
