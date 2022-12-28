@@ -12,6 +12,9 @@ import checkIcon from "../../assets/images/check.png";
 import activatedCheckIcon from "../../assets/images/activated_check.png";
 import googleLogo from "../../assets/images/google_icon.png";
 
+import InputContainer from "../organisms/InputContainer";
+import CommunityButton from "../organisms/CommunityButton";
+
 const Container = styled.div`
   height: 100vh;
   display: flex;
@@ -33,30 +36,6 @@ const LoginForm = styled.div`
   padding: 45px 25px;
 `;
 
-const InputContainer = styled.div``;
-
-const InputSubWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  border-left: solid 1px #b5b5b5;
-  border-right: solid 1px #b5b5b5;
-  box-sizing: border-box;
-  padding: 0 12px;
-`;
-
-const InputDivider = styled.div`
-  height: 1px;
-  background: #b5b5b5;
-  box-sizing: border-box;
-  margin: auto;
-`;
-
-const Icon = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-right: 12px;
-`;
-
 const StyledKeepLogin = styled.div`
   display: flex;
   align-items: center;
@@ -64,6 +43,12 @@ const StyledKeepLogin = styled.div`
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+`;
+
+const Icon = styled.img`
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
 `;
 
 const KeepLogin = ({ keepLoginClicked, onClick }) => {
@@ -85,31 +70,6 @@ const ErrorMessageWrapper = styled.div`
   color: #a10c0c;
   font-size: 10px;
 `;
-
-const StyledComminityButton = styled.button`
-  width: 100%;
-  height: 40px;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 700;
-  border-radius: 8px;
-  box-sizing: border-box;
-  margin: 4px 0;
-`;
-
-const CommunityButton = ({ typo, activated }) => {
-  return (
-    <StyledComminityButton
-      style={{
-        background: activated ? "#024298" : "#b5b5b5",
-        border: activated ? "1px solid #024298" : "1px solid #b5b5b5",
-        cursor: activated ? "pointer" : "",
-      }}
-    >
-      {typo}
-    </StyledComminityButton>
-  );
-};
 
 const StyledGoogleLoginButton = styled.div`
   width: 100%;
@@ -170,15 +130,6 @@ export default function Login() {
   const [idValid, setIdValid] = useState(false);
   const [pwValid, setPwValid] = useState(false);
 
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  const inputOnFocus = (index) => {
-    console.log("focused index : " + focusedIndex);
-    setFocusedIndex(index);
-  };
-  const inputOnBlur = () => {
-    setFocusedIndex(-1);
-  };
-
   const [keepLoginClicked, setKeepLoginClicked] = useState(false);
   const onClickKeepLogin = () => {
     setKeepLoginClicked((prev) => !prev);
@@ -227,57 +178,7 @@ export default function Login() {
     <Container>
       <LoginForm>
         <div>
-          <InputContainer>
-            {inputInfo.map((item, index) => {
-              const inputLength = inputInfo.length;
-              const isFirst = index === 0;
-              const isLast = index === inputLength - 1;
-              return (
-                <>
-                  <InputSubWrapper
-                    style={{
-                      borderTop: isFirst ? "solid 1px #b5b5b5" : "",
-                      borderBottom: isLast ? "solid 1px #b5b5b5" : "",
-                      borderColor:
-                        index === focusedIndex ? "#024298" : "#b5b5b5",
-                      borderRadius:
-                        index === 0
-                          ? "8px 8px 0 0"
-                          : index === inputLength - 1
-                          ? "0 0 8px 8px"
-                          : "",
-                    }}
-                  >
-                    <Icon
-                      src={
-                        index === focusedIndex
-                          ? item.src.activated
-                          : item.src.non_activated
-                      }
-                    />
-                    <input
-                      className="input"
-                      type={item.type}
-                      placeholder={item.placeholder}
-                      onChange={item.handle}
-                      onFocus={() => inputOnFocus(index)}
-                      onBlur={() => inputOnBlur(index)}
-                    />
-                  </InputSubWrapper>
-                  {!isLast ? (
-                    <InputDivider
-                      style={{
-                        background:
-                          index === focusedIndex || index === focusedIndex - 1
-                            ? "#024298"
-                            : "#b5b5b5",
-                      }}
-                    />
-                  ) : null}
-                </>
-              );
-            })}
-          </InputContainer>
+          <InputContainer inputInfo={inputInfo} />
 
           <KeepLogin
             keepLoginClicked={keepLoginClicked}
@@ -285,12 +186,12 @@ export default function Login() {
           />
 
           <ErrorMessageWrapper>
-            {!idValid && id.length > 0 && <div>아이디를 입력해주세요.</div>}
+            {!idValid && id.length > 0 ? (
+              <div>아이디를 입력해주세요.</div>
+            ) : null}
           </ErrorMessageWrapper>
           <ErrorMessageWrapper>
-            {idValid && !pwValid && pw.length > 0 && (
-              <div>비밀번호를 입력해주세요.</div>
-            )}
+            {!pwValid && pw.length > 0 && <div>비밀번호를 입력해주세요.</div>}
           </ErrorMessageWrapper>
         </div>
 
@@ -306,7 +207,7 @@ export default function Login() {
         {linkTypo.map((item, index) => {
           return (
             <>
-              <Link key={item} typo={item} />{" "}
+              <Link key={item} typo={item} />
               {index < linkTypo.length - 1 ? "|" : null}
             </>
           );
