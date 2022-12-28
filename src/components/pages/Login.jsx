@@ -36,19 +36,19 @@ const LoginForm = styled.div`
   padding: 45px 25px;
 `;
 
-const StyledKeepLogin = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 10px 0 3.5px 15px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-`;
-
 const Icon = styled.img`
   width: 16px;
   height: 16px;
   margin-right: 12px;
+`;
+
+const StyledKeepLogin = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 10px 0 3.5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
 `;
 
 const KeepLogin = ({ keepLoginClicked, onClick }) => {
