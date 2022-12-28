@@ -185,9 +185,7 @@ export default function Login() {
     setKeepLoginClicked((prev) => !prev);
   };
 
-  const regex = new RegExp(
-    /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
-  );
+  const regex = new RegExp("^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$");
   // 정규 표현식 객체 생성
 
   const handleId = (e) => {
@@ -287,7 +285,10 @@ export default function Login() {
         </div>
 
         <div>
-          <CommunityButton typo="로그인" activated={idValid && pwValid} />
+          <CommunityButton
+            typo="로그인"
+            activated={id && pw && idValid && pwValid}
+          />
           <GoogleLoginButton />
         </div>
       </LoginForm>
