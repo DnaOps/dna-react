@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import WaveGroup from "../organisms/WaveGroup";
-
 import idIcon from "../../assets/images/id_icon.png";
 import pwIcon from "../../assets/images/pw_icon.png";
 import activatedIdIcon from "../../assets/images/activated_id.png";
@@ -12,8 +10,11 @@ import checkIcon from "../../assets/images/check.png";
 import activatedCheckIcon from "../../assets/images/activated_check.png";
 import googleLogo from "../../assets/images/google_icon.png";
 
+import WaveGroup from "../organisms/WaveGroup";
+
 import InputContainer from "../organisms/InputContainer";
 import CommunityButton from "../organisms/CommunityButton";
+import ErrorMessage from "../organisms/ErrorMessage";
 
 const Container = styled.div`
   height: 100vh;
@@ -64,12 +65,6 @@ const KeepLogin = ({ keepLoginClicked, onClick }) => {
     </StyledKeepLogin>
   );
 };
-
-const ErrorMessageWrapper = styled.div`
-  margin-top: 3.5px;
-  color: #a10c0c;
-  font-size: 10px;
-`;
 
 const StyledGoogleLoginButton = styled.div`
   width: 100%;
@@ -185,14 +180,14 @@ export default function Login() {
             onClick={onClickKeepLogin}
           />
 
-          <ErrorMessageWrapper>
-            {!idValid && id.length > 0 ? (
-              <div>아이디를 입력해주세요.</div>
-            ) : null}
-          </ErrorMessageWrapper>
-          <ErrorMessageWrapper>
-            {!pwValid && pw.length > 0 && <div>비밀번호를 입력해주세요.</div>}
-          </ErrorMessageWrapper>
+          <ErrorMessage
+            valid={!idValid && id.length > 0}
+            msg="아이디를 입력해주세요."
+          />
+          <ErrorMessage
+            valid={!pwValid && pw.length > 0}
+            msg="비밀번호를 입력해주세요."
+          />
         </div>
 
         <div>
