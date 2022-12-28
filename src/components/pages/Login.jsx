@@ -30,25 +30,27 @@ const LoginForm = styled.div`
   padding: 45px 25px;
 `;
 
-const InputContainer = styled.div`
-  box-sizing: border-box;
-  padding: 0 12px;
-  border-radius: 8px;
-  border: 1px solid #b5b5b5;
-`;
-
-const InputDivider = styled.div`
-  width: calc(100% + 24px);
-  height: 1px;
-  background: #b5b5b5;
-  box-sizing: border-box;
-  margin: 0 -12px;
-`;
+const InputContainer = styled.div``;
 
 const InputSubWrapper = styled.div`
   display: flex;
   align-items: center;
+  border-left: solid 1px #b5b5b5;
+  border-right: solid 1px #b5b5b5;
+  box-sizing: border-box;
+  padding: 0 12px;
 `;
+
+const InputDivider = styled.div`
+  height: 1px;
+  background: #b5b5b5;
+  box-sizing: border-box;
+  margin: auto;
+`;
+
+const Input = ({ type, placeholder }) => {
+  return <input type={type} placeholder={placeholder} className="input" />;
+};
 
 const Icon = styled.img`
   width: 16px;
@@ -169,6 +171,15 @@ export default function Login() {
   const [idValid, setIdValid] = useState(false);
   const [pwValid, setPwValid] = useState(false);
 
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const inputOnFocus = (index) => {
+    console.log("focused index : " + focusedIndex);
+    setFocusedIndex(index);
+  };
+  const inputOnBlur = () => {
+    setFocusedIndex(-1);
+  };
+
   const [keepLoginClicked, setKeepLoginClicked] = useState(false);
   const onClickKeepLogin = () => {
     setKeepLoginClicked((prev) => !prev);
@@ -178,8 +189,6 @@ export default function Login() {
     /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
   );
   // 정규 표현식 객체 생성
-
-  const LinkTypo = ["회원가입", "아이디 찾기", "문의"];
 
   const handleId = (e) => {
     setId(e.target.value);
@@ -200,30 +209,66 @@ export default function Login() {
     }
   };
 
+  const inputInfo = [
+    { type: "text", placeholder: "아이디", src: idIcon, handle: handleId },
+    {
+      type: "password",
+      placeholder: "비밀번호",
+      src: pwIcon,
+      handle: handlePw,
+    },
+  ];
+
+  const linkTypo = ["회원가입", "아이디 찾기", "문의"];
+
   return (
     <Container>
       <LoginForm>
         <div>
           <InputContainer>
-            <InputSubWrapper>
-              <Icon src={idIcon} />
-              <input
-                type="text"
-                className="input"
-                placeholder="아이디"
-                onChange={handleId}
-              />
-            </InputSubWrapper>
-            <InputDivider />
-            <InputSubWrapper>
-              <Icon src={pwIcon} />
-              <input
-                type="password"
-                className="input"
-                placeholder="비밀번호"
-                onChange={handlePw}
-              />
-            </InputSubWrapper>
+            {inputInfo.map((item, index) => {
+              const inputLength = inputInfo.length;
+              const isFirst = index === 0;
+              const isLast = index === inputLength - 1;
+              return (
+                <>
+                  <InputSubWrapper
+                    style={{
+                      borderTop: isFirst ? "solid 1px #b5b5b5" : "",
+                      borderBottom: isLast ? "solid 1px #b5b5b5" : "",
+                      borderColor:
+                        index === focusedIndex ? "#024298" : "#b5b5b5",
+                      borderRadius:
+                        index === 0
+                          ? "8px 8px 0 0"
+                          : index === inputLength - 1
+                          ? "0 0 8px 8px"
+                          : "",
+                    }}
+                  >
+                    <Icon src={item.src} />
+                    <input
+                      className="input"
+                      type={item.type}
+                      placeholder={item.placeholder}
+                      onChange={item.handle}
+                      onFocus={() => inputOnFocus(index)}
+                      onBlur={() => inputOnBlur(index)}
+                    />
+                  </InputSubWrapper>
+                  {!isLast ? (
+                    <InputDivider
+                      style={{
+                        background:
+                          index === focusedIndex || index === focusedIndex - 1
+                            ? "#024298"
+                            : "#b5b5b5",
+                      }}
+                    />
+                  ) : null}
+                </>
+              );
+            })}
           </InputContainer>
 
           <KeepLogin
@@ -247,11 +292,11 @@ export default function Login() {
         </div>
       </LoginForm>
       <LinkContainer>
-        {LinkTypo.map((item, index) => {
+        {linkTypo.map((item, index) => {
           return (
             <>
               <Link key={item} typo={item} />{" "}
-              {index < LinkTypo.length - 1 ? "|" : null}
+              {index < linkTypo.length - 1 ? "|" : null}
             </>
           );
         })}
