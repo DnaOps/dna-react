@@ -3,6 +3,13 @@
   src: url();
 }
 
+@font-face {
+  font-family: "Jua";
+  font-weight: 700;
+  src: url("./assets/fonts/BMJUA_otf.otf") format("opentype"),
+    url("./assets//fonts/BMJUA_ttf.ttf") format("truetype");
+}
+
 html {
   width: 100%;
   height: 100%;
