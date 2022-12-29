@@ -10,6 +10,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: #e7e6f5;
 `;
 
 const BoardContainer = styled.div`
