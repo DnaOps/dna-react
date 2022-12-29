@@ -1,10 +1,11 @@
-import Login from "./components/pages/Login";
+import Onboard from "./components/pages/Onboard.jsx";
 
 function App() {
   return (
     <div>
-      <Login />
-    </div>)
+      <Onboard />
+    </div>
+  );
 }
 
 export default App;
