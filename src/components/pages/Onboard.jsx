@@ -1,4 +1,3 @@
-import WaveGroup from "../organisms/WaveGroup.jsx";
 import styled from "styled-components";
 
 import onboardIcon from "../../assets/images/onboard_icon.png";
@@ -132,7 +131,6 @@ const Onboard = () => {
         <OnboardIcon src={onboardIcon} />
       </BoardContainer>
       <DNAIntro />
-      <WaveGroup />
     </Container>
   );
 };
