@@ -33,11 +33,11 @@ const StyledBoard = styled.div`
   font-weight: 700;
 `;
 
-const Board = ({ typo, color, element }) => {
+const Board = ({ boardInfo }) => {
   return (
-    <StyledBoard style={{ background: color }}>
-      {typo}
-      {element}
+    <StyledBoard style={{ background: boardInfo.color }}>
+      {boardInfo.typo}
+      {boardInfo.element}
     </StyledBoard>
   );
 };
@@ -96,20 +96,39 @@ const EnterButton = styled.div`
   cursor: pointer;
 `;
 
+const boardInfo = {
+  dongguk: {
+    typo: "Dongguk",
+    color: "#fab80a",
+    element: <DonggukImg src={donggukImg} />,
+  },
+  network: {
+    typo: "Network",
+    color: "#024298",
+    element: null,
+  },
+  users: {
+    typo: "Users'",
+    color: "#C5C5C5",
+    element: null,
+  },
+  association: {
+    typo: "Association",
+    color: "#7BA4DA",
+    element: null,
+  },
+};
+
 const Onboard = () => {
   return (
     <Container>
-      <Board
-        typo="Dongguk"
-        color="#fab80a"
-        element={<DonggukImg src={donggukImg} />}
-      />
+      <Board boardInfo={boardInfo.dongguk} />
       <BoardContainer>
-        <Board typo="Network" color="#024298" />
-        <Board typo="Users'" color="#C5C5C5" />
+        <Board boardInfo={boardInfo.network} />
+        <Board boardInfo={boardInfo.users} />
       </BoardContainer>
       <BoardContainer>
-        <Board typo="Association" color="#7BA4DA" />
+        <Board boardInfo={boardInfo.association} />
         <OnboardIcon src={onboardIcon} />
       </BoardContainer>
       <DNAIntro />
