@@ -27,6 +27,7 @@ const StyledBoard = styled.div`
   box-sizing: border-box;
   padding: 0 28px;
   margin: 2px;
+  font-family: Jua;
   color: #fff;
   font-size: 40px;
   font-weight: 700;
