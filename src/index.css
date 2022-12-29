@@ -45,3 +45,10 @@ canvas {
 .input::placeholder {
   color: #b5b5b5;
 }
+
+.jua {
+  font-family: Jua;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+}
