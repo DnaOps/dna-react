@@ -1,4 +1,5 @@
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -46,6 +47,7 @@ const Board = ({ boardInfo }) => {
       ref={ref}
       style={{ background: boardInfo.color }}
       className={inView ? boardInfo.className + "-Active" : boardInfo.className}
+      // inView 시 제자리로 돌아오는 애니메이션 적용되도록 From-(direction)-Active로 클래스명 변경
     >
       {boardInfo.typo}
       {boardInfo.element}
@@ -81,8 +83,7 @@ const DNAIntroBlue = styled.span`
 
 const DNAIntro = () => {
   const { ref, inView } = useInView();
-
-  console.log("inviewed " + inView);
+  // inview animation에서 transition delay 값을 넣지 않는 경우 애니메이션이 적용되지 않는 듯 보일 수 있음
 
   return (
     <StyledDNAIntro
@@ -116,6 +117,7 @@ const EnterButton = styled.div`
   cursor: pointer;
 `;
 
+// 4개의 보드가 갖는 텍스트, 색, 아이콘(선택), 애니메이션 적용을 위한 클래스명을 객체화 시커서 전달
 const boardInfo = {
   dongguk: {
     typo: "Dongguk",
