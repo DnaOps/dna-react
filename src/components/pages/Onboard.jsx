@@ -8,6 +8,7 @@ import donggukImg from "../../assets/images/dongguk.png";
 
 import "../../index.css";
 import { useState } from "react";
+import { useRef } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -115,7 +116,9 @@ const DNAIntro = () => {
     setOnMouseOver(false);
   };
 
-  const hoveredAnimation = { animation: "inAnimation 250ms ease-in" };
+  const hoveredAnimation = {
+    animation: "inAnimation 250ms ease-in",
+  };
   const unhoveredAnimation = {
     animation: "outAnimation 250ms ease-out",
     animationFillMode: "forwards",
@@ -125,7 +128,11 @@ const DNAIntro = () => {
   return (
     <StyledDNAIntro
       ref={ref}
-      className={inView ? "jua From-Bottom-Active" : "jua From-Bottom"}
+      className={
+        inView
+          ? "jua enter-button From-Bottom-Active"
+          : "jua enter-button From-Bottom"
+      }
     >
       <DNAIntroTypo>
         동국대학교 중앙동아리 <DNAIntroBlue>DNA</DNAIntroBlue>는 Dongguk Network
@@ -140,12 +147,15 @@ const DNAIntro = () => {
         onMouseOver={handleMouseOverEnter}
         onMouseOut={handleMouseOutEnter}
       >
-        Enter
-        {
-          <span style={onMouseOver ? hoveredAnimation : unhoveredAnimation}>
-            {">>"}
-          </span>
-        }
+        <span style={{ pointerEvents: "none" }}>
+          {/* enter 버튼 안에서 텍스트들은 움직이지 않도록 설정 */}
+          Enter
+          {
+            <span style={onMouseOver ? hoveredAnimation : unhoveredAnimation}>
+              {">>"}
+            </span>
+          }
+        </span>
       </EnterButton>
     </StyledDNAIntro>
   );
