@@ -1,7 +1,11 @@
+import { useInView } from "react-intersection-observer";
+
 import styled from "styled-components";
 
 import onboardIcon from "../../assets/images/onboard_icon.png";
 import donggukImg from "../../assets/images/dongguk.png";
+
+import "../../index.css";
 
 const Container = styled.div`
   width: 100%;
@@ -27,6 +31,7 @@ const StyledBoard = styled.div`
   box-sizing: border-box;
   padding: 0 28px;
   margin: 2px;
+  transition: all 1s ease-in-out;
   font-family: Jua;
   color: #fff;
   font-size: 40px;
@@ -34,8 +39,14 @@ const StyledBoard = styled.div`
 `;
 
 const Board = ({ boardInfo }) => {
+  const { ref, inView } = useInView();
+
   return (
-    <StyledBoard style={{ background: boardInfo.color }}>
+    <StyledBoard
+      ref={ref}
+      style={{ background: boardInfo.color }}
+      className={inView ? boardInfo.className + "-Active" : boardInfo.className}
+    >
       {boardInfo.typo}
       {boardInfo.element}
     </StyledBoard>
@@ -49,6 +60,7 @@ const DonggukImg = styled.img`
 
 const OnboardIcon = styled.img`
   margin: 3px;
+  transition: all 1s ease-in-out;
 `;
 
 const StyledDNAIntro = styled.div`
@@ -58,6 +70,7 @@ const StyledDNAIntro = styled.div`
   box-sizing: border-box;
   margin: 80px 0 -80px 0;
   text-align: center;
+  transition: all 1s ease-in-out;
 `;
 
 const DNAIntroTypo = styled.div``;
@@ -67,8 +80,15 @@ const DNAIntroBlue = styled.span`
 `;
 
 const DNAIntro = () => {
+  const { ref, inView } = useInView();
+
+  console.log("inviewed " + inView);
+
   return (
-    <StyledDNAIntro className="jua">
+    <StyledDNAIntro
+      ref={ref}
+      className={inView ? "jua From-Bottom-Active" : "jua From-Bottom"}
+    >
       <DNAIntroTypo>
         동국대학교 중앙동아리 <DNAIntroBlue>DNA</DNAIntroBlue>는 Dongguk Network
         Users'의 Association의 줄임말로
@@ -101,25 +121,31 @@ const boardInfo = {
     typo: "Dongguk",
     color: "#fab80a",
     element: <DonggukImg src={donggukImg} />,
+    className: "From-Up",
   },
   network: {
     typo: "Network",
     color: "#024298",
     element: null,
+    className: "From-Left",
   },
   users: {
     typo: "Users'",
     color: "#C5C5C5",
     element: null,
+    className: "From-Right",
   },
   association: {
     typo: "Association",
     color: "#7BA4DA",
     element: null,
+    className: "From-Bottom",
   },
 };
 
 const Onboard = () => {
+  const { ref, inView } = useInView();
+
   return (
     <Container>
       <Board boardInfo={boardInfo.dongguk} />
@@ -129,7 +155,11 @@ const Onboard = () => {
       </BoardContainer>
       <BoardContainer>
         <Board boardInfo={boardInfo.association} />
-        <OnboardIcon src={onboardIcon} />
+        <OnboardIcon
+          ref={ref}
+          className={inView ? "From-Bottom-Active" : "From-Bottom"}
+          src={onboardIcon}
+        />
       </BoardContainer>
       <DNAIntro />
     </Container>
