@@ -85,6 +85,12 @@ const DNAIntro = () => {
   const { ref, inView } = useInView();
   // inview animation에서 transition delay 값을 넣지 않는 경우 애니메이션이 적용되지 않는 듯 보일 수 있음
 
+  const navigate = useNavigate();
+  const handleClickEnter = () => {
+    navigate("/login");
+  };
+  // 경로 설정: 라우팅 X
+
   return (
     <StyledDNAIntro
       ref={ref}
@@ -97,7 +103,9 @@ const DNAIntro = () => {
         <DNAIntroBlue>컴퓨터</DNAIntroBlue>를 좋아하거나 배우고 싶은 사람들이
         모여 만든 <DNAIntroBlue>학술 동아리</DNAIntroBlue>입니다.
       </DNAIntroTypo>
-      <EnterButton className="jua">Enter</EnterButton>
+      <EnterButton className="jua" onClick={handleClickEnter}>
+        Enter
+      </EnterButton>
     </StyledDNAIntro>
   );
 };
