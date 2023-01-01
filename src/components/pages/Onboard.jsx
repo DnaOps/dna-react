@@ -7,6 +7,7 @@ import onboardIcon from "../../assets/images/onboard_icon.png";
 import donggukImg from "../../assets/images/dongguk.png";
 
 import "../../index.css";
+import { useState } from "react";
 
 const Container = styled.div`
   width: 100%;
@@ -81,35 +82,6 @@ const DNAIntroBlue = styled.span`
   color: #024298;
 `;
 
-const DNAIntro = () => {
-  const { ref, inView } = useInView();
-  // inview animation에서 transition delay 값을 넣지 않는 경우 애니메이션이 적용되지 않는 듯 보일 수 있음
-
-  const navigate = useNavigate();
-  const handleClickEnter = () => {
-    navigate("/login");
-  };
-  // 경로 설정: 라우팅 X
-
-  return (
-    <StyledDNAIntro
-      ref={ref}
-      className={inView ? "jua From-Bottom-Active" : "jua From-Bottom"}
-    >
-      <DNAIntroTypo>
-        동국대학교 중앙동아리 <DNAIntroBlue>DNA</DNAIntroBlue>는 Dongguk Network
-        Users'의 Association의 줄임말로
-        <br />
-        <DNAIntroBlue>컴퓨터</DNAIntroBlue>를 좋아하거나 배우고 싶은 사람들이
-        모여 만든 <DNAIntroBlue>학술 동아리</DNAIntroBlue>입니다.
-      </DNAIntroTypo>
-      <EnterButton className="jua" onClick={handleClickEnter}>
-        Enter
-      </EnterButton>
-    </StyledDNAIntro>
-  );
-};
-
 const EnterButton = styled.div`
   width: 90px;
   height: 40px;
@@ -124,6 +96,60 @@ const EnterButton = styled.div`
   box-shadow: 5px 5px 5px #000;
   cursor: pointer;
 `;
+
+const DNAIntro = () => {
+  const { ref, inView } = useInView();
+  // inview animation에서 transition delay 값을 넣지 않는 경우 애니메이션이 적용되지 않는 듯 보일 수 있음
+
+  const navigate = useNavigate();
+  const handleClickEnter = () => {
+    navigate("/login");
+  };
+  // 경로 설정: 라우팅 X
+
+  const [onMouseOver, setOnMouseOver] = useState(false);
+  const handleMouseOverEnter = () => {
+    setOnMouseOver(true);
+  };
+  const handleMouseOutEnter = () => {
+    setOnMouseOver(false);
+  };
+
+  const hoveredAnimation = { animation: "inAnimation 250ms ease-in" };
+  const unhoveredAnimation = {
+    animation: "outAnimation 250ms ease-out",
+    animationFillMode: "forwards",
+  };
+  // hover event using keyframe
+
+  return (
+    <StyledDNAIntro
+      ref={ref}
+      className={inView ? "jua From-Bottom-Active" : "jua From-Bottom"}
+    >
+      <DNAIntroTypo>
+        동국대학교 중앙동아리 <DNAIntroBlue>DNA</DNAIntroBlue>는 Dongguk Network
+        Users'의 Association의 줄임말로
+        <br />
+        <DNAIntroBlue>컴퓨터</DNAIntroBlue>를 좋아하거나 배우고 싶은 사람들이
+        모여 만든 <DNAIntroBlue>학술 동아리</DNAIntroBlue>입니다.
+      </DNAIntroTypo>
+      <EnterButton
+        className="jua"
+        onClick={handleClickEnter}
+        onMouseOver={handleMouseOverEnter}
+        onMouseOut={handleMouseOutEnter}
+      >
+        Enter
+        {
+          <span style={onMouseOver ? hoveredAnimation : unhoveredAnimation}>
+            {">>"}
+          </span>
+        }
+      </EnterButton>
+    </StyledDNAIntro>
+  );
+};
 
 // 4개의 보드가 갖는 텍스트, 색, 아이콘(선택), 애니메이션 적용을 위한 클래스명을 객체화 시커서 전달
 const boardInfo = {

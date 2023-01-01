@@ -84,3 +84,26 @@ canvas {
 .From-Bottom-Active {
   transform: translateX(0);
 }
+
+@keyframes inAnimation {
+  0% {
+    opacity: 0;
+    display: none;
+    margin-left: -25px;
+  }
+  100% {
+    opacity: 1;
+    display: initial;
+  }
+}
+
+@keyframes outAnimation {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+    margin-left: -25px;
+  }
+}
