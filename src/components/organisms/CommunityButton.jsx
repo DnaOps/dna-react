@@ -11,9 +11,10 @@ const StyledComminityButton = styled.button`
   margin: 4px 0;
 `;
 
-const CommunityButton = ({ typo, activated }) => {
+const CommunityButton = ({ typo, activated, onClick }) => {
   return (
     <StyledComminityButton
+      onClick={onClick}
       style={{
         background: activated ? "#024298" : "#b5b5b5",
         border: activated ? "1px solid #024298" : "1px solid #b5b5b5",
