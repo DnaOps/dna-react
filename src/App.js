@@ -1,10 +1,11 @@
-import Login from "./components/pages/Login";
+import NotifyList from "./components/pages/NotifyList";
 
 function App() {
   return (
     <div>
-      <Login />
-    </div>)
+      <NotifyList />
+    </div>
+  );
 }
 
 export default App;
