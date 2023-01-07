@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import sortboxArrow from "../../assets/images/sortbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
