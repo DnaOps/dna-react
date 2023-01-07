@@ -1,8 +1,12 @@
+import { useInView } from "react-intersection-observer";
+
 import sortboxArrow from "../../assets/images/sortbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
 
 import styled from "styled-components";
+import GlobalStyle from "../../styles/GlobalStyle";
+import { useEffect, useState } from "react";
 
 const Background = styled.div`
   width: 100%;
@@ -44,7 +48,7 @@ const NoticeBlock = styled.div`
   box-sizing: border-box;
   padding: 7.5px 31px;
   margin: 0 30px 0 0;
-  font-family: jua;
+  font-family: Jua;
   font-size: 25px;
   color: #fff;
 `;
@@ -85,7 +89,11 @@ const SearchBarContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-const StyledSortBox = styled.div`
+const SortBoxWrapper = styled.div`
+  height: 100%;
+`;
+
+const SortBox = styled.div`
   width: 155px;
   height: 100%;
   display: flex;
@@ -96,22 +104,28 @@ const StyledSortBox = styled.div`
   padding: 11px 11px 11px 18px;
   font-size: 15px;
   color: #828282;
+  position: relative;
   cursor: pointer;
 `;
+
+const SortBoxDropDown = ({ onClick, selected }) => {
+  const typos = ["제목", "내용", "작성자"];
+
+  return (
+    <>
+      {typos.map((typo) => {
+        return typo !== selected ? (
+          <SortBox onClick={() => onClick(typo)}>{typo}</SortBox>
+        ) : null;
+      })}
+    </>
+  );
+};
 
 const SortBoxArrow = styled.img`
   width: 13px;
   height: 8px;
 `;
-
-const SortBox = ({ typo }) => {
-  return (
-    <StyledSortBox>
-      <div>{typo}</div>
-      <SortBoxArrow src={sortboxArrow} />
-    </StyledSortBox>
-  );
-};
 
 const SearchBar = styled.div`
   width: 330px;
@@ -216,7 +230,7 @@ const Notice = ({ noticeInfo }) => {
   );
 };
 
-const Loading = styled.div`
+const StyledLoading = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
@@ -224,6 +238,20 @@ const Loading = styled.div`
   align-items: center;
   background: #fff;
 `;
+
+const Loading = () => {
+  const [ref, inView] = useInView();
+
+  if (inView) {
+    // request new notices
+  }
+
+  return (
+    <StyledLoading ref={ref}>
+      <img src={loading} />
+    </StyledLoading>
+  );
+};
 
 const NotifyList = () => {
   const noticeInfo = {
@@ -235,8 +263,25 @@ const NotifyList = () => {
     liked: 22,
   };
 
+  const [notices, setNotices] = useState([]);
+  const [selected, setSelected] = useState("제목");
+  const handleSelected = (typo) => {
+    setSelected(typo);
+    setSortboxClicked(false);
+  };
+  const [sortboxClicked, setSortboxClicked] = useState(false);
+  const sortboxOnClick = () => {
+    setSortboxClicked((prev) => !prev);
+  };
+
+  useEffect(() => {
+    // request first 13 notices
+    // setNotices(res....);
+  }, []);
+
   return (
     <>
+      <GlobalStyle />
       <Background />
       <Container>
         <NoticeContainer>
@@ -252,7 +297,18 @@ const NotifyList = () => {
         </NoticeContainer>
 
         <SearchBarContainer>
-          <SortBox typo="제목" />
+          <SortBoxWrapper>
+            <SortBox onClick={sortboxOnClick}>
+              {selected}
+              <SortBoxArrow
+                src={sortboxArrow}
+                style={{ transform: sortboxClicked ? "rotate(180deg)" : "" }}
+              />
+            </SortBox>
+            {sortboxClicked ? (
+              <SortBoxDropDown onClick={handleSelected} selected={selected} />
+            ) : null}
+          </SortBoxWrapper>
           <SearchBar>
             <SearchField />
             <SearchButton />
@@ -262,10 +318,9 @@ const NotifyList = () => {
         <NoticeList>
           {[...Array(13)].map((_) => (
             <Notice noticeInfo={noticeInfo} />
+            // notices로 수정
           ))}
-          <Loading>
-            <img src={loading} />
-          </Loading>
+          <Loading />
         </NoticeList>
       </Container>
     </>
