@@ -1,6 +1,6 @@
 import { useInView } from "react-intersection-observer";
 
-import sortboxArrow from "../../assets/images/sortbox_arrow.png";
+import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
 
@@ -89,11 +89,11 @@ const SearchBarContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-const SortBoxWrapper = styled.div`
+const SearchSelectBoxWrapper = styled.div`
   height: 100%;
 `;
 
-const SortBox = styled.div`
+const SearchSelectBox = styled.div`
   width: 155px;
   height: 100%;
   display: flex;
@@ -108,21 +108,23 @@ const SortBox = styled.div`
   cursor: pointer;
 `;
 
-const SortBoxDropDown = ({ onClick, selected }) => {
+const SearchSelectBoxDropDown = ({ onClick, selected }) => {
   const typos = ["제목", "내용", "작성자"];
 
   return (
     <>
       {typos.map((typo) => {
         return typo !== selected ? (
-          <SortBox onClick={() => onClick(typo)}>{typo}</SortBox>
+          <SearchSelectBox onClick={() => onClick(typo)}>
+            {typo}
+          </SearchSelectBox>
         ) : null;
       })}
     </>
   );
 };
 
-const SortBoxArrow = styled.img`
+const SearchSelectBoxArrow = styled.img`
   width: 13px;
   height: 8px;
 `;
@@ -267,11 +269,11 @@ const NotifyList = () => {
   const [selected, setSelected] = useState("제목");
   const handleSelected = (typo) => {
     setSelected(typo);
-    setSortboxClicked(false);
+    setSearchSelectboxClicked(false);
   };
-  const [sortboxClicked, setSortboxClicked] = useState(false);
-  const sortboxOnClick = () => {
-    setSortboxClicked((prev) => !prev);
+  const [searchSelectboxClicked, setSearchSelectboxClicked] = useState(false);
+  const searchSelectboxOnClick = () => {
+    setSearchSelectboxClicked((prev) => !prev);
   };
 
   useEffect(() => {
@@ -297,18 +299,23 @@ const NotifyList = () => {
         </NoticeContainer>
 
         <SearchBarContainer>
-          <SortBoxWrapper>
-            <SortBox onClick={sortboxOnClick}>
+          <SearchSelectBoxWrapper>
+            <SearchSelectBox onClick={searchSelectboxOnClick}>
               {selected}
-              <SortBoxArrow
-                src={sortboxArrow}
-                style={{ transform: sortboxClicked ? "rotate(180deg)" : "" }}
+              <SearchSelectBoxArrow
+                src={searchSelectboxArrow}
+                style={{
+                  transform: searchSelectboxClicked ? "rotate(180deg)" : "",
+                }}
               />
-            </SortBox>
-            {sortboxClicked ? (
-              <SortBoxDropDown onClick={handleSelected} selected={selected} />
+            </SearchSelectBox>
+            {searchSelectboxClicked ? (
+              <SearchSelectBoxDropDown
+                onClick={handleSelected}
+                selected={selected}
+              />
             ) : null}
-          </SortBoxWrapper>
+          </SearchSelectBoxWrapper>
           <SearchBar>
             <SearchField />
             <SearchButton />
