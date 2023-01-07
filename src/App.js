@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import SignUp from "./components/pages/SignUp";
+import Header from "./components/organisms/Header";
+import ErrorMessage from "./components/organisms/ErrorMessage";
+import InputContainer from "./components/organisms/InputContainer";
+import CommunityButton from "./components/organisms/CommunityButton";
+import WaveGroup from "./components/organisms/WaveGroup";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <div>
+      <SignUp />
+    </div>)
 }
 
 export default App;
