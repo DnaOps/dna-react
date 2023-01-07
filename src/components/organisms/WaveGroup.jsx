@@ -33,6 +33,8 @@ const WaveGroup = () => {
 
       canvas.width = document.body.clientWidth * 2;
       canvas.height = document.body.clientHeight * 2;
+      canvas.position = "fixed";
+      canvas.zIndex = -1;
 
       context.scale(2, 2);
 
