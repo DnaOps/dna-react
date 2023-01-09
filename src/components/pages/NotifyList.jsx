@@ -5,7 +5,6 @@ import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
 
 import styled from "styled-components";
-import GlobalStyle from "../../styles/GlobalStyle";
 import { useEffect, useState } from "react";
 
 const Background = styled.div`
@@ -48,9 +47,10 @@ const NoticeBlock = styled.div`
   box-sizing: border-box;
   padding: 7.5px 31px;
   margin: 0 30px 0 0;
-  font-family: Jua;
+  font-family: var(--jua-font);
   font-size: 25px;
   color: #fff;
+  box-shadow: var(--box-shadow-deeper);
 `;
 
 const NoticeHeader = styled.div`
@@ -63,6 +63,7 @@ const NoticeHeader = styled.div`
   background: #fff;
   box-sizing: border-box;
   padding: 33px 33px 20px 33px;
+  box-shadow: var(--box-shadow);
 `;
 
 const NoticeHeaderTitle = styled.div`
@@ -84,18 +85,20 @@ const SearchBarContainer = styled.div`
   height: 34px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   box-sizing: border-box;
   margin-bottom: 30px;
 `;
 
 const SearchSelectBoxWrapper = styled.div`
-  height: 100%;
+  height: 34px;
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  transition: all ease-in-out 0.3s;
 `;
 
 const SearchSelectBox = styled.div`
   width: 155px;
-  height: 100%;
+  height: 34px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -133,6 +136,7 @@ const SearchBar = styled.div`
   width: 330px;
   height: 100%;
   display: flex;
+  box-shadow: var(--box-shadow);
 `;
 
 const SearchField = styled.input`
@@ -163,6 +167,7 @@ const NoticeList = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 2.5px solid #024298;
+  box-shadow: var(--box-shadow);
 `;
 
 const StyledNotice = styled.div`
@@ -281,9 +286,16 @@ const NotifyList = () => {
     // setNotices(res....);
   }, []);
 
+  const selectBoxOpenedAnimation = {
+    height: "102px",
+  };
+
+  const selectBoxClosedAnimation = {
+    height: "34px",
+  };
+
   return (
     <>
-      <GlobalStyle />
       <Background />
       <Container>
         <NoticeContainer>
@@ -299,7 +311,13 @@ const NotifyList = () => {
         </NoticeContainer>
 
         <SearchBarContainer>
-          <SearchSelectBoxWrapper>
+          <SearchSelectBoxWrapper
+            style={
+              searchSelectboxClicked
+                ? selectBoxOpenedAnimation
+                : selectBoxClosedAnimation
+            }
+          >
             <SearchSelectBox onClick={searchSelectboxOnClick}>
               {selected}
               <SearchSelectBoxArrow
@@ -309,12 +327,11 @@ const NotifyList = () => {
                 }}
               />
             </SearchSelectBox>
-            {searchSelectboxClicked ? (
-              <SearchSelectBoxDropDown
-                onClick={handleSelected}
-                selected={selected}
-              />
-            ) : null}
+
+            <SearchSelectBoxDropDown
+              onClick={handleSelected}
+              selected={selected}
+            />
           </SearchSelectBoxWrapper>
           <SearchBar>
             <SearchField />
