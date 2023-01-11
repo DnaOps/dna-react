@@ -6,6 +6,9 @@ import styled from "styled-components";
 import onboardIcon from "../../assets/images/onboard_icon.png";
 import donggukImg from "../../assets/images/dongguk.png";
 
+import AppearAnimation from "../../styles/AppearAnimations";
+import KeyFrame from "../../styles/KeyFrames";
+
 import { useState } from "react";
 import { useRef } from "react";
 
@@ -193,6 +196,8 @@ const Onboard = () => {
 
   return (
     <Container>
+      <AppearAnimation />
+      <KeyFrame />
       <Board boardInfo={boardInfo.dongguk} />
       <BoardContainer>
         <Board boardInfo={boardInfo.network} />
