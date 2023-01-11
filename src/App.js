@@ -1,3 +1,4 @@
+
 import SignUp from "./components/pages/SignUp";
 import Header from "./components/organisms/Header";
 import ErrorMessage from "./components/organisms/ErrorMessage";
@@ -8,8 +9,10 @@ import WaveGroup from "./components/organisms/WaveGroup";
 function App() {
   return (
     <div>
-      <SignUp />
-    </div>)
+      <Notify />
+    </div>
+
+  );
 }
 
 export default App;

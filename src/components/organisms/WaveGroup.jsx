@@ -1,7 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import Wave from "../molecules/Wave";
+<<<<<<< HEAD
 import "../../index.css";
 
+=======
+>>>>>>> d96484410d36b12c5656616da0d7006b503f8564
 
 class WaveGroupClass {
   constructor() {
@@ -34,6 +37,11 @@ const WaveGroup = () => {
 
       canvas.width = document.body.clientWidth * 2;
       canvas.height = document.body.clientHeight * 2;
+<<<<<<< HEAD
+=======
+      canvas.position = "fixed";
+      canvas.zIndex = -1;
+>>>>>>> d96484410d36b12c5656616da0d7006b503f8564
 
       context.scale(2, 2);
 

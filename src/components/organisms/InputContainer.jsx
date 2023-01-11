@@ -1,9 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+<<<<<<< HEAD
 import "../../index.css";
 
 
+=======
+>>>>>>> d96484410d36b12c5656616da0d7006b503f8564
 const InputSubWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -52,8 +55,13 @@ const InputContainer = ({ inputInfo }) => {
                   index === 0
                     ? "8px 8px 0 0"
                     : index === inputLength - 1
+<<<<<<< HEAD
                       ? "0 0 8px 8px"
                       : "",
+=======
+                    ? "0 0 8px 8px"
+                    : "",
+>>>>>>> d96484410d36b12c5656616da0d7006b503f8564
               }}
             >
               <Icon
