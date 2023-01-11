@@ -1,9 +1,9 @@
-import Onboard from "./components/pages/Onboard.jsx";
+import Notify from "./components/pages/Notify";
 
 function App() {
   return (
     <div>
-      <Onboard />
+      <Notify />
     </div>
   );
 }
