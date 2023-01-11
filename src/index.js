@@ -1,13 +1,82 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
+import { createGlobalStyle } from "styled-components";
+import BmjuaOTF from "./assets/fonts/BMJUA_otf.otf";
+import BmjuaTTF from "./assets/fonts/BMJUA_ttf.ttf";
+
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+  font-family: Noto-Sans;
+  src: url();
+}
+
+@font-face {
+  font-family: "Jua";
+  font-weight: 700;
+  src: url(${BmjuaOTF}) format("opentype"), url(${BmjuaTTF}) format("truetype");
+}
+
+:root {
+  --jua-font: Jua;
+  --box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+  --box-shadow-deeper: 0 6px 6px rgba(0,0,0,0.26);
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Noto Sans KR", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input:focus {
+  outline:none;
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.input::placeholder {
+  color: #b5b5b5;
+}
+
+.jua {
+  font-family: Jua;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 25px;
+}
+
+.enter-button :active {
+  transform: translate(5px, 5px);
+  box-shadow: none;
+}
+
+`;
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
+    <GlobalStyle />
     <App />
   </BrowserRouter>
 );

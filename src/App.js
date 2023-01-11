@@ -1,10 +1,10 @@
-import Onboard from "./components/pages/Onboard.jsx";
+import NotifyList from "./components/pages/NotifyList";
 
 function App() {
   return (
-    <div>
-      <Onboard />
-    </div>
+    <>
+      <NotifyList />
+    </>
   );
 }
 
