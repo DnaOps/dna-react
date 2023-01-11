@@ -16,6 +16,8 @@ import InputContainer from "../organisms/InputContainer";
 import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 
+import axios from "axios";
+
 const Container = styled.div`
   height: 100vh;
   display: flex;
@@ -152,6 +154,26 @@ export default function Login() {
     }
   };
 
+  const handleLogin = () => {
+    console.log("login clicked");
+    const signInData = {
+      email: id,
+      password: pw,
+    };
+    console.log("sign in data: ", signInData);
+    axios
+      .post("http://localhost:8080/authenticate", signInData)
+      .then((res) => {
+        const jwt = res.data.data.jwt;
+        console.log("res:", jwt);
+        console.log("request sended");
+        localStorage.setItem("Authorization", jwt.accessToken);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const inputInfo = [
     {
       type: "text",
@@ -194,6 +216,7 @@ export default function Login() {
           <CommunityButton
             typo="로그인"
             activated={id && pw && idValid && pwValid}
+            onClick={handleLogin}
           />
           <GoogleLoginButton />
         </div>
