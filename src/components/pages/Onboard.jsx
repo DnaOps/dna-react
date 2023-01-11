@@ -6,7 +6,6 @@ import styled from "styled-components";
 import onboardIcon from "../../assets/images/onboard_icon.png";
 import donggukImg from "../../assets/images/dongguk.png";
 
-import "../../index.css";
 import { useState } from "react";
 import { useRef } from "react";
 

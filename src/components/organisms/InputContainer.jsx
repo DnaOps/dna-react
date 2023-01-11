@@ -1,8 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import "../../index.css";
-
 const InputSubWrapper = styled.div`
   display: flex;
   align-items: center;
