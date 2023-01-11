@@ -46,16 +46,16 @@ const SmallTypo = styled.div`
 `;
 
 const CommentInfo = ({ commentInfo }) => {
-  const { authorLevel, authorName, writeDate, content } = commentInfo;
+  const { level, author, modifiedAt, content } = commentInfo;
   return (
     <>
       <StyledCommentInfo>
-        <AuthorLevel>{authorLevel}</AuthorLevel>
+        <AuthorLevel>{level}</AuthorLevel>
 
-        <CommentWriter>{authorName}</CommentWriter>
+        <CommentWriter>{author}</CommentWriter>
 
         <CommentWriteDate>
-          <SmallTypo>{writeDate}</SmallTypo>
+          <SmallTypo>{modifiedAt}</SmallTypo>
         </CommentWriteDate>
       </StyledCommentInfo>
       <CommentContent>{content}</CommentContent>

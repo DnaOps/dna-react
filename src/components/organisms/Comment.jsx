@@ -27,9 +27,9 @@ const Comment = () => {
   };
 
   const commentInfo = {
-    authorLevel: 17,
-    authorName: "jaypyon",
-    writeDate: "6시간 전 | 2022. 11. 07",
+    level: 17,
+    author: "jaypyon",
+    modifiedAt: "6시간 전 | 2022. 11. 07",
     content: "앞으로 열심히 활동하도록 하겠습니다 ^-^",
   };
 

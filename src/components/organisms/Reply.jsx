@@ -37,9 +37,9 @@ const Reply = () => {
   };
 
   const commentInfo = {
-    authorLevel: 21,
-    authorName: "gona",
-    writeDate: "3시간 전 | 2022. 11. 07",
+    level: 21,
+    author: "gona",
+    modifiedAt: "3시간 전 | 2022. 11. 07",
     content: "환영합니다!",
   };
 
