@@ -1,10 +1,11 @@
-import NotifyList from "./components/pages/NotifyList";
+import Notify from "./components/pages/Notify";
 
 function App() {
   return (
-    <>
-      <NotifyList />
-    </>
+    <div>
+      <Notify />
+    </div>
+
   );
 }
 
