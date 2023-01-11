@@ -6,18 +6,12 @@ import logoText from "../../../src/assets/images/logo_text.png";
 import menu from "../../../src/assets/images/menu.png";
 
 import styled, { keyframes } from "styled-components";
-<<<<<<< HEAD
 
-const Container = styled.div`
-  width: 100%;
-  min-height: 48px;
-=======
 import { css } from "styled-components";
 
 const Container = styled.div`
   width: 100%;
   height: 53px;
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -27,11 +21,9 @@ const Container = styled.div`
   padding: 0 8px;
   position: absolute;
   z-index: 1;
-<<<<<<< HEAD
-=======
+
   overflow: hidden;
   transition: all ease-in-out 0.5s;
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
 `;
 
 const LogoContainer = styled.div`
@@ -88,28 +80,13 @@ const DropDownNavContainer = styled.div`
   overflow: hidden;
 `;
 
-<<<<<<< HEAD
-const fadeInAnimation = keyframes`
-0% {
-  transform: translateY(-100%);
-}
 
-100% {
-  transform: translateY(0);
-}
-`;
-
-=======
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
 const DropDownNav = styled.div`
   margin: 0 0 12px 0;
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
-<<<<<<< HEAD
-  animation: ${fadeInAnimation} 0.4s ease;
-=======
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
+
 `;
 
 const DropDownMenuWrapper = styled.div`
@@ -126,29 +103,13 @@ const DropDownMenu = styled.div`
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
-<<<<<<< HEAD
-  animation: ${fadeInAnimation} 0.4s ease;
-=======
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
+
 `;
 
 const UpperSpace = styled.div`
   height: 53px;
 `;
 
-<<<<<<< HEAD
-const Nav = ({ typo, menuClicked, options }) => {
-  return (
-    <div>
-      <StyledNav>{typo}</StyledNav>
-      {menuClicked ? (
-        <DropDownNavContainer>
-          {options.map((option) => (
-            <DropDownNav key={option}>{option}</DropDownNav>
-          ))}
-        </DropDownNavContainer>
-      ) : null}
-=======
 const Nav = ({ typo, options }) => {
   return (
     <div>
@@ -158,7 +119,6 @@ const Nav = ({ typo, options }) => {
           <DropDownNav key={option}>{option}</DropDownNav>
         ))}
       </DropDownNavContainer>
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
     </div>
   );
 };
@@ -191,11 +151,7 @@ const Header = () => {
     게시판: ["공지사항", "자유게시판", "스터디 게시판", "앨범 게시판"],
   };
 
-<<<<<<< HEAD
-  return (
-    <>
-      <Container>
-=======
+
   const menuOpenedAnimation = {
     height: "205px",
   };
@@ -216,7 +172,6 @@ const Header = () => {
       <Container
         style={menuClicked ? menuOpenedAnimation : menuClosedAnimation}
       >
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
         <LogoContainer>
           <LogoImg src={logoImg} />
           <LogoText src={logoText} />
@@ -227,34 +182,13 @@ const Header = () => {
             <Nav
               key={t}
               typo={t}
-<<<<<<< HEAD
-              menuClicked={menuClicked}
-=======
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
+
               options={navOptions[t]}
               onClick={() => {
                 navClickHandler(t);
               }}
             />
           ))}
-<<<<<<< HEAD
-          {menuClicked ? <DropDownDivider /> : null}
-          <MenuWrapper>
-            <Menu src={menu} onClick={menuClickHandler} />
-            {menuClicked ? (
-              <DropDownMenuWrapper>
-                <DropDownMenu>
-                  <b>scorpion</b> 회원님
-                </DropDownMenu>
-                <DropDownMenuContainer>
-                  <DropDownMenu>권한 : 관리자</DropDownMenu>
-                  <DropDownMenu>게시글 수 : 10</DropDownMenu>
-                  <DropDownMenu>댓글 수 : 10</DropDownMenu>
-                </DropDownMenuContainer>
-                <DropDownMenu>가입일시 : 2016.09.01</DropDownMenu>
-              </DropDownMenuWrapper>
-            ) : null}
-=======
           <DropDownDivider
             style={menuClicked ? menuDividerAppear : menuDividerDisappear}
           />
@@ -272,7 +206,6 @@ const Header = () => {
               </DropDownMenuContainer>
               <DropDownMenu>가입일시 : 2016.09.01</DropDownMenu>
             </DropDownMenuWrapper>
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
           </MenuWrapper>
         </NavContainer>
       </Container>
