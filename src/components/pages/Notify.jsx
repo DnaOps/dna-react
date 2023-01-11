@@ -215,13 +215,6 @@ const Notify = () => {
 
           <RecommendCommentWrapper>
             <RecommendComment recommendComment={recommendComment} />
-            {/* <RecommendCommentContainer>
-              <SmallTypo>추천</SmallTypo>
-              <RecommendCommentValue>37</RecommendCommentValue>
-              <SmallTypo>&nbsp;|&nbsp;</SmallTypo>
-              <SmallTypo>댓글</SmallTypo>
-              <RecommendCommentValue>12</RecommendCommentValue>
-            </RecommendCommentContainer> */}
           </RecommendCommentWrapper>
 
           <NoticeButtonContainer>
