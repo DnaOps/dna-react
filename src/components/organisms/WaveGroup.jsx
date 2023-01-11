@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import Wave from "../molecules/Wave";
-import "../../index.css";
 
 class WaveGroupClass {
   constructor() {
