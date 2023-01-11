@@ -160,8 +160,7 @@ export default function Login() {
       email: id,
       password: pw,
     };
-    console.log("sign in data: ", signInData);
-    postAuthenticate("/authenticate", signInData);
+    postAuthenticate(signInData);
   };
 
   const inputInfo = [
