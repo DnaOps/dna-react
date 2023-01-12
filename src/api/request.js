@@ -9,3 +9,18 @@ export const postAuthenticate = async (signInData) => {
   localStorage.setItem("Authorization", jwt.accessToken);
   setCookie("refresh_token", jwt.refreshToken, { secure: true });
 };
+
+export const getNotices = async (boardInfo) => {
+  const { start, offset, criteria, keyword } = boardInfo;
+  let res = null;
+  if (start === "" || offset === "") {
+    res = await Axios.get(`/boards/notices`);
+  } else if (criteria === "" || keyword === "") {
+    res = await Axios.get(`/boards/notices?start=${start}&offset=${offset}`);
+  } else {
+    res = await Axios.get(
+      `/boards/notices?start=${start}&offset=${offset}&criteria=${criteria}&keyword=${keyword}`
+    );
+  }
+  console.log("res: ", res);
+};
