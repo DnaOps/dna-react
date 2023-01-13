@@ -16,9 +16,7 @@ import InputContainer from "../organisms/InputContainer";
 import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 
-import axios from "axios";
-
-import { setCookie } from "../../util/Cookie";
+import { postAuthenticate } from "../../api/request";
 
 const Container = styled.div`
   height: 100vh;
@@ -162,21 +160,7 @@ export default function Login() {
       email: id,
       password: pw,
     };
-    console.log("sign in data: ", signInData);
-    axios
-      .post("http://localhost:8080/authenticate", signInData)
-      .then((res) => {
-        const jwt = res.data.data.jwt;
-        console.log("res:", jwt);
-        console.log("request sended");
-        localStorage.setItem("Authorization", jwt.accessToken);
-        // set access token as authorization in localstorage
-        setCookie("refresh_token", jwt.refreshToken);
-        // set refresh token in cookie
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    postAuthenticate(signInData);
   };
 
   const inputInfo = [
