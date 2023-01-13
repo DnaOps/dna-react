@@ -3,14 +3,21 @@ import Axios from "./axios";
 import { setCookie } from "../util/Cookie";
 
 export const postAuthenticate = async (signInData) => {
-  const res = await Axios.post("/authenticate", signInData);
-  const jwt = res.data.data.jwt;
-  console.log("jwt: ", jwt);
+  const res = await Axios.post("auth/authenticate", signInData);
+  console.log("res: ", res);
+  const userInfo = res.data.data.userInfoResponse;
+  const jwt = res.data.data.tokenResponse.jwt;
   localStorage.setItem("Authorization", jwt.accessToken);
   setCookie("refresh_token", jwt.refreshToken, { secure: true });
+  // set userinfo in state with recoil
 };
 
-export const getNotices = async (boardInfo) => {
+export const getNaverLogin = async () => {
+  const res = await Axios.get("/oauth2/authorization/naver");
+  console.log("res: ", res);
+};
+
+export const getNotices = async (boardInfo, inViewed) => {
   const { start, offset, criteria, keyword } = boardInfo;
   let res = null;
   if (start === "" || offset === "") {
@@ -23,4 +30,6 @@ export const getNotices = async (boardInfo) => {
     );
   }
   console.log("res: ", res);
+  const noticeList = res.data.data.list;
+  inViewed(noticeList);
 };

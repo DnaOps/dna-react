@@ -258,7 +258,7 @@ const Loading = ({ inViewed, cnt }) => {
 
   if (inView) {
     // console.log("refresh inviewed");
-    // getNotices(noticeInfo);
+    // getNotices(noticeInfo, inViewed);
     // inViewed();
   }
 
@@ -279,7 +279,6 @@ const NotifyList = () => {
     liked: 22,
   };
 
-  const [notices, setNotices] = useState([]);
   const [selected, setSelected] = useState("제목");
   const handleSelected = (typo) => {
     setSelected(typo);
@@ -293,14 +292,14 @@ const NotifyList = () => {
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
-    console.log("use effect");
+    console.log("notify list first rendered");
     const initialNoticeInfo = {
       start: "",
       offset: "",
       criteria: "",
       keyword: "",
     };
-    getNotices(initialNoticeInfo);
+    getNotices(initialNoticeInfo, handleRefreshInview);
   }, []);
 
   const selectBoxOpenedAnimation = {
@@ -311,9 +310,11 @@ const NotifyList = () => {
     height: "34px",
   };
 
+  const [notices, setNotices] = useState([]);
   const [refreshCnt, setRefrshCnt] = useState(0);
-  const handleRefreshInview = () => {
+  const handleRefreshInview = (noticeList) => {
     setRefrshCnt(refreshCnt + 1);
+    setNotices([...notices, ...noticeList]);
   };
 
   return (
