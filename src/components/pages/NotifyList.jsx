@@ -6,6 +6,7 @@ import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
 
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import { getNotices } from "../../api/request";
 
 const Background = styled.div`
   width: 100%;
@@ -246,11 +247,19 @@ const StyledLoading = styled.div`
   background: #fff;
 `;
 
-const Loading = () => {
+const Loading = ({ inViewed, cnt }) => {
   const [ref, inView] = useInView();
+  const noticeInfo = {
+    start: cnt,
+    offset: 13,
+    criteria: "",
+    keyword: "",
+  };
 
   if (inView) {
-    // request new notices
+    // console.log("refresh inviewed");
+    // getNotices(noticeInfo);
+    // inViewed();
   }
 
   return (
@@ -284,6 +293,14 @@ const NotifyList = () => {
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
+    console.log("use effect");
+    const initialNoticeInfo = {
+      start: "",
+      offset: "",
+      criteria: "",
+      keyword: "",
+    };
+    getNotices(initialNoticeInfo);
   }, []);
 
   const selectBoxOpenedAnimation = {
@@ -292,6 +309,11 @@ const NotifyList = () => {
 
   const selectBoxClosedAnimation = {
     height: "34px",
+  };
+
+  const [refreshCnt, setRefrshCnt] = useState(0);
+  const handleRefreshInview = () => {
+    setRefrshCnt(refreshCnt + 1);
   };
 
   return (
@@ -344,7 +366,7 @@ const NotifyList = () => {
             <Notice noticeInfo={noticeInfo} />
             // notices로 수정
           ))}
-          <Loading />
+          <Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
         </NoticeList>
       </Container>
     </>
