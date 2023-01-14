@@ -43,6 +43,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+canvas {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+}
+
 input:focus {
   outline:none;
 }

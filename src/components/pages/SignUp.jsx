@@ -18,6 +18,7 @@ import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 import SingUpBackGround from "../organisms/SignUpBackGround";
 
+import { postSignUp } from "../../api/request";
 
 const Container = styled.div`
   height: 100vh;
@@ -29,7 +30,7 @@ const Container = styled.div`
 
 const SignUpForm = styled.div`
   width: 300px;
-  height: 350px;
+  height: 385px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -61,22 +62,46 @@ const Link = ({ typo }) => {
   return <StyledLink>{typo}</StyledLink>;
 };
 
+const StyledConfirmMessage = styled.div`
+  margin-top: 3.5px;
+  color: #024298;
+  font-size: 10px;
+`;
+
+const PwComfirmMessage = ({ valid, msg }) => {
+  return (
+    <StyledConfirmMessage>
+      {valid ? <div>{msg}</div> : null}
+    </StyledConfirmMessage>
+  );
+};
 
 export default function SignUp() {
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [id, setId] = useState("");
+  const [username, setUsername] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const [pwConfirm, setPwComfirm] = useState("");
 
+  const [isUsername, setIsUsername] = useState(false);
+  const [isStudentId, setIsStudentId] = useState(false);
   const [isEmail, setIsEmail] = useState(false);
-  const [isPhone, setIsPhone] = useState(false);
-  const [isId, setIsId] = useState(false);
   const [isPw, setIsPw] = useState(false);
+  const [isPwConfirm, setIsPwComfirm] = useState(false);
+
+  const onChangeUsername = (e) => {
+    setUsername(e.target.value);
+    const usenameRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    if (usenameRegExp.test(username)) {
+      setIsUsername(true);
+    } else {
+      setIsUsername(false);
+    }
+  };
 
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
-    const emailRegExp =
-      /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    const emailRegExp = /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     if (emailRegExp.test(email)) {
       setIsEmail(true);
     } else {
@@ -84,31 +109,20 @@ export default function SignUp() {
     }
   };
 
-  const onChangePhone = (e) => {
-    setPhone(e.target.value);
-    const phoneRegExp = /^(01[016789])([1-9]{1}[0-9]{2,3})([0-9]{4})$/; // 하이픈(-) 제거
+  const onChangeStudentId = (e) => {
+    setStudentId(e.target.value);
+    const studentIdRegExp = /^([0123456789])([0-9]{8,})$/;
 
-    if (phoneRegExp.test(phone)) {
-      setIsPhone(true);
+    if (studentIdRegExp.test(studentId)) {
+      setIsStudentId(true);
     } else {
-      setIsPhone(false);
-    }
-  };
-
-  const onChangeId = (e) => {
-    setId(e.target.value);
-    const idRegExp = /^[a-zA-z0-9]{4,12}$/;
-
-    if (idRegExp.test(id)) {
-      setIsId(true);
-    } else {
-      setIsId(false);
+      setIsStudentId(false);
     }
   };
 
   const onChangePw = (e) => {
     setPw(e.target.value);
-    const pwRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/;
+    const pwRegExp = /^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$/;
 
     if (pwRegExp.test(pw)) {
       setIsPw(true);
@@ -117,7 +131,30 @@ export default function SignUp() {
     }
   };
 
+  const onChangePwConfirm = (e) => {
+    const currentPwConfirm = e.target.value;
+    setPwComfirm(currentPwConfirm);
+
+    if (pw !== currentPwConfirm) {
+      setIsPwComfirm(false);
+    } else {
+      setIsPwComfirm(true);
+    }
+  };
+
   const inputInfo = [
+    {
+      type: "text",
+      placeholder: "이름",
+      src: { activated: activatedIdIcon, non_activated: idIcon },
+      handle: onChangeUsername,
+    },
+    {
+      type: "text",
+      placeholder: "학번",
+      src: { activated: activatedPhoneIcon, non_activated: phoneIcon },
+      handle: onChangeStudentId,
+    },
     {
       type: "text",
       placeholder: "이메일",
@@ -125,26 +162,33 @@ export default function SignUp() {
       handle: onChangeEmail,
     },
     {
-      type: "text",
-      placeholder: "전화번호",
-      src: { activated: activatedPhoneIcon, non_activated: phoneIcon },
-      handle: onChangePhone,
-    },
-    {
-      type: "text",
-      placeholder: "아이디",
-      src: { activated: activatedIdIcon, non_activated: idIcon },
-      handle: onChangeId,
-    },
-    {
       type: "password",
       placeholder: "비밀번호",
       src: { activated: activatedPwIcon, non_activated: pwIcon },
       handle: onChangePw,
     },
+    {
+      type: "password",
+      placeholder: "비밀번호 확인",
+      src: { activated: activatedPwIcon, non_activated: pwIcon },
+      handle: onChangePwConfirm,
+    },
   ];
 
   const linkTypo = ["로그인", "문의"];
+
+  // email, studentId, userName, password
+  // 순서 -> 이름. 학번. 이메일. 비밀번호
+  const handleSignUp = () => {
+    const signUpData = {
+      username: username,
+      studentId: studentId,
+      email: email,
+      password: pw,
+    };
+    console.log("sign up clicked");
+    postSignUp(signUpData);
+  };
 
   return (
     <Container>
@@ -154,28 +198,43 @@ export default function SignUp() {
           <InputContainer inputInfo={inputInfo} />
 
           <ErrorMessage
+            valid={!isUsername && username.length > 0}
+            msg="이름을 입력해주세요."
+          />
+          <ErrorMessage
             valid={!isEmail && email.length > 0}
             msg="이메일 형식에 맞지 않습니다."
           />
           <ErrorMessage
-            valid={!isPhone && phone.length > 0}
-            msg="전화번호 형식에 맞지 않습니다."
-          />
-
-          <ErrorMessage
-            valid={!isId && id.length > 0}
-            msg="아이디 형식에 맞지 않습니다."
+            valid={!isStudentId && studentId.length > 0}
+            msg="학번 형식에 맞지 않습니다."
           />
           <ErrorMessage
             valid={!isPw && pw.length > 0}
             msg="비밀번호는 8자리 이상, 영소문자, 대문자, 특수문자를 포함하여야 합니다."
+          />
+          <PwComfirmMessage
+            valid={isPwConfirm && pw.length > 0}
+            msg="비밀번호가 일치합니다."
           />
         </div>
 
         <div>
           <CommunityButton
             typo="가입 요청"
-            activated={email && phone && id && pw && isEmail && isId && isPw}
+            activated={
+              username &&
+              studentId &&
+              email &&
+              pw &&
+              pwConfirm &&
+              isUsername &&
+              isStudentId &&
+              isEmail &&
+              isPw &&
+              isPwConfirm
+            }
+            onClick={handleSignUp}
           />
         </div>
       </SignUpForm>

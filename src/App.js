@@ -9,7 +9,7 @@ import WaveGroup from "./components/organisms/WaveGroup";
 function App() {
   return (
     <div>
-      <Notify />
+      <SignUp />
     </div>
 
   );

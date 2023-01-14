@@ -7,3 +7,8 @@ export const postAuthenticate = async (signInData) => {
   localStorage.setItem("Authorization", jwt.accessToken);
   // set refresh token in cookie
 };
+
+export const postSignUp = async (signUpData) => {
+  const res = await Axios.post("/auth/signUp", signUpData);
+  console.log("res: ", res);
+};
