@@ -177,8 +177,6 @@ export default function SignUp() {
 
   const linkTypo = ["로그인", "문의"];
 
-  // email, studentId, userName, password
-  // 순서 -> 이름. 학번. 이메일. 비밀번호
   const handleSignUp = () => {
     const signUpData = {
       username: username,

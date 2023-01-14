@@ -1,17 +1,13 @@
-
-import SignUp from "./components/pages/SignUp";
-import Header from "./components/organisms/Header";
+import Login from "./components/pages/Login";
 import Notify from "./components/pages/Notify";
-import InputContainer from "./components/organisms/InputContainer";
-import CommunityButton from "./components/organisms/CommunityButton";
-import WaveGroup from "./components/organisms/WaveGroup";
+import NofityList from "./components/pages/NotifyList";
+import Onboard from "./components/pages/Onboard";
 
 function App() {
   return (
     <div>
-      <SignUp />
+      <Login />
     </div>
-
   );
 }
 
