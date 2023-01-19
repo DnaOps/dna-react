@@ -49,6 +49,7 @@ const CommentInfo = ({ commentInfo }) => {
   const {
     author,
     authorId,
+    level,
     childrenComments,
     commentId,
     content,
@@ -59,7 +60,7 @@ const CommentInfo = ({ commentInfo }) => {
   return (
     <>
       <StyledCommentInfo>
-        <AuthorLevel>{}</AuthorLevel>
+        <AuthorLevel>{level}</AuthorLevel>
 
         <CommentWriter>{author}</CommentWriter>
 

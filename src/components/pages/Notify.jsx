@@ -4,10 +4,15 @@ import Header from "../organisms/Header";
 import Comment from "../organisms/Comment";
 import RecommendComment from "../molecules/RecommendComment";
 import ApplyButton from "../atoms/ApplyButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { getSpecificNotify, getNofityComments } from "../../api/request";
+import {
+  getSpecificNotify,
+  getNofityComments,
+  deleteNotify,
+  postNotifyComment,
+} from "../../api/request";
 
 const Container = styled.div`
   width: 100%;
@@ -101,12 +106,12 @@ const StyledEditDeleteButton = styled.div`
   margin: 10px 0;
 `;
 
-const EditDeleteButton = () => {
+const EditDeleteButton = ({ editOnClick, deleteOnClick }) => {
   return (
     <StyledEditDeleteButton>
-      <SmallTypo>수정</SmallTypo>
+      <SmallTypo onClick={editOnClick}>수정</SmallTypo>
       <SmallTypo>&nbsp;|&nbsp;</SmallTypo>
-      <SmallTypo>삭제</SmallTypo>
+      <SmallTypo onClick={deleteOnClick}>삭제</SmallTypo>
     </StyledEditDeleteButton>
   );
 };
@@ -172,6 +177,9 @@ const CommentContainer = styled.div`
 `;
 
 const Notify = () => {
+  let lastComment = 0;
+  const navigate = useNavigate();
+
   const grayButton = {
     background: "#828282",
   };
@@ -219,7 +227,30 @@ const Notify = () => {
 
   const [comments, setComments] = useState([]);
   const handleComment = (commentList) => {
-    setComments([...comments, ...commentList]);
+    if (comments.length <= lastComment) {
+      // 수정 필요: 이미 로드된 데이터 재로드 방지
+      setComments([...comments, ...commentList]);
+      lastComment += commentList.length;
+    }
+  };
+
+  const deleteOnClick = (id) => {
+    deleteNotify(id);
+    navigate("/notify_list");
+  };
+
+  const [commentContent, setCommentContent] = useState("");
+
+  const handleCommentWrite = (event) => {
+    setCommentContent(event.target.value);
+  };
+
+  const applyOnClick = (parentId) => {
+    postNotifyComment({
+      noticeId: notifyInfo.noticeId,
+      parentCommentId: parentId,
+      content: commentContent,
+    });
   };
 
   const { id } = useParams();
@@ -249,7 +280,9 @@ const Notify = () => {
           <NoticeDivider />
 
           <NoticeContent>{notifyInfo.content}</NoticeContent>
-          <EditDeleteButton />
+          <EditDeleteButton
+            deleteOnClick={() => deleteOnClick(notifyInfo.noticeId)}
+          />
 
           <NoticeDivider />
 
@@ -269,8 +302,11 @@ const Notify = () => {
 
           <CommentWrite>
             <CommentWriteTypo>댓글쓰기</CommentWriteTypo>
-            <CommentWriteInput />
-            <ApplyButton />
+            <CommentWriteInput
+              onChange={handleCommentWrite}
+              value={commentContent}
+            />
+            <ApplyButton onClick={applyOnClick} parentId={null} />
           </CommentWrite>
 
           <CommentContainer>

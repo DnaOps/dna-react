@@ -29,7 +29,6 @@ export const getNotices = async (boardInfo, inViewed) => {
       `/boards/notices?start=${start}&offset=${offset}&criteria=${criteria}&keyword=${keyword}`
     );
   }
-  console.log("res: ", res);
   const noticeList = res.data.data.list;
   inViewed(noticeList);
 };
@@ -41,11 +40,20 @@ export const getSpecificNotify = async (
 ) => {
   const notifyRes = await Axios.get(`/boards/notices/${id}`);
   handleNotifyInfo(notifyRes.data.data);
-  const commentRes = await Axios.get(`/comments/notices/${id}`);
-  handleComment(commentRes.data.data.list);
+  getNofityComments(id, handleComment);
 };
 
 export const getNofityComments = async (id, handleComment) => {
   const res = await Axios.get(`/comments/notices/${id}`);
   handleComment(res.data.data.list);
+};
+
+export const deleteNotify = async (id) => {
+  const res = await Axios.delete("/boards/notices", { data: { noticeId: id } });
+  console.log("res: ", res);
+};
+
+export const postNotifyComment = async (commentData) => {
+  const res = await Axios.post("/comments", commentData);
+  console.log("res: ", res);
 };
