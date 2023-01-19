@@ -11,7 +11,9 @@ const ReplyContainer = styled.div`
   width: 100%;
 `;
 
-const StyledComment = styled.div``;
+const StyledComment = styled.div`
+  margin-top: 25px;
+`;
 
 const Comment = ({ commentInfo }) => {
   const [replyClicked, setReplyClicked] = useState(false);
