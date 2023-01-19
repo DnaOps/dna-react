@@ -4,6 +4,10 @@ import Header from "../organisms/Header";
 import Comment from "../organisms/Comment";
 import RecommendComment from "../molecules/RecommendComment";
 import ApplyButton from "../atoms/ApplyButton";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { getSpecificNotify } from "../../api/request";
 
 const Container = styled.div`
   width: 100%;
@@ -183,13 +187,40 @@ const Notify = () => {
     { typo: "글쓰기", background: navyButton },
   ];
 
-  const recommendComment = {
+  const [recommendComment, setRecommentComment] = useState({
     key1: "추천",
-    val1: 37,
+    val1: -1,
     key2: "댓글",
-    val2: 12,
+    val2: -1,
     isReply: false,
+  });
+
+  const [notifyInfo, setNotifyInfo] = useState({
+    author: "",
+    authorId: -1,
+    commentCount: -1,
+    content: "",
+    level: -1,
+    likeCount: -1,
+    modifiedAt: "",
+    noticeId: -1,
+    title: "",
+  });
+  const handleNotifyInfo = (notifyInfo) => {
+    const info = notifyInfo;
+    setNotifyInfo(info);
+    setRecommentComment({
+      ...recommendComment,
+      val1: info.likeCount,
+      val2: info.commentCount,
+    });
   };
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    getSpecificNotify(id, handleNotifyInfo);
+  }, []);
 
   return (
     <>
@@ -197,18 +228,20 @@ const Notify = () => {
       <Container>
         <NoticeTypo>공지사항</NoticeTypo>
         <Notice>
-          <NoticeTitle>안녕하세요.</NoticeTitle>
+          <NoticeTitle>{notifyInfo.title}</NoticeTitle>
 
           <AuthorInfo>
-            <AuthorLevel>21</AuthorLevel>
-            <AuthorTypo>senuej37</AuthorTypo>
+            <AuthorLevel>{notifyInfo.level}</AuthorLevel>
+            <AuthorTypo>{notifyInfo.author}</AuthorTypo>
             <AuthorTypo>&nbsp;|&nbsp;</AuthorTypo>
-            <AuthorTypo>2022.11.07</AuthorTypo>
+            <AuthorTypo>
+              {notifyInfo.modifiedAt.substring(0, 10).replaceAll("-", ".")}
+            </AuthorTypo>
           </AuthorInfo>
 
           <NoticeDivider />
 
-          <NoticeContent>DNA입니다. 환영합니다!</NoticeContent>
+          <NoticeContent>{notifyInfo.content}</NoticeContent>
           <EditDeleteButton />
 
           <NoticeDivider />
