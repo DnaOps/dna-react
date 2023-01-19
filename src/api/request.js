@@ -57,3 +57,8 @@ export const postNotifyComment = async (commentData) => {
   const res = await Axios.post("/comments", commentData);
   console.log("res: ", res);
 };
+
+export const postSignUp = async (signUpData) => {
+  const res = await Axios.post("/auth/signUp", signUpData);
+  console.log("res: ", res);
+};
