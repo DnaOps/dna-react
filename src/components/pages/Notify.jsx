@@ -7,7 +7,7 @@ import ApplyButton from "../atoms/ApplyButton";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { getSpecificNotify } from "../../api/request";
+import { getSpecificNotify, getNofityComments } from "../../api/request";
 
 const Container = styled.div`
   width: 100%;
@@ -206,6 +206,7 @@ const Notify = () => {
     noticeId: -1,
     title: "",
   });
+
   const handleNotifyInfo = (notifyInfo) => {
     const info = notifyInfo;
     setNotifyInfo(info);
@@ -216,10 +217,16 @@ const Notify = () => {
     });
   };
 
+  const [comments, setComments] = useState([]);
+  const handleComment = (commentList) => {
+    setComments([...comments, ...commentList]);
+  };
+
   const { id } = useParams();
 
   useEffect(() => {
-    getSpecificNotify(id, handleNotifyInfo);
+    getSpecificNotify(id, handleNotifyInfo, handleComment);
+    // getNofityComments(id, handleComment);
   }, []);
 
   return (
@@ -267,7 +274,9 @@ const Notify = () => {
           </CommentWrite>
 
           <CommentContainer>
-            <Comment />
+            {comments.map((commentInfo) => {
+              return <Comment commentInfo={commentInfo} />;
+            })}
           </CommentContainer>
         </Notice>
       </Container>

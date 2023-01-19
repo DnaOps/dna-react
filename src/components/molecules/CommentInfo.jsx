@@ -46,11 +46,20 @@ const SmallTypo = styled.div`
 `;
 
 const CommentInfo = ({ commentInfo }) => {
-  const { level, author, modifiedAt, content } = commentInfo;
+  const {
+    author,
+    authorId,
+    childrenComments,
+    commentId,
+    content,
+    modifiedAt,
+    parentId,
+  } = commentInfo;
+
   return (
     <>
       <StyledCommentInfo>
-        <AuthorLevel>{level}</AuthorLevel>
+        <AuthorLevel>{}</AuthorLevel>
 
         <CommentWriter>{author}</CommentWriter>
 

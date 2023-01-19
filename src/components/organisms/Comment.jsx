@@ -13,25 +13,23 @@ const ReplyContainer = styled.div`
 
 const StyledComment = styled.div``;
 
-const Comment = () => {
+const Comment = ({ commentInfo }) => {
   const [replyClicked, setReplyClicked] = useState(false);
   const replyOnClick = () => {
     setReplyClicked((prev) => !prev);
   };
-  const recommendComment = {
+  const [recommendComment, setRecommentComment] = useState({
     key1: "추천",
-    val1: 37,
-    key2: "",
-    val2: null,
+    val1: -1,
+    key2: "답글",
+    val2: -1,
     isReply: true,
-  };
+  });
 
-  const commentInfo = {
-    level: 17,
-    author: "jaypyon",
-    modifiedAt: "6시간 전 | 2022. 11. 07",
-    content: "앞으로 열심히 활동하도록 하겠습니다 ^-^",
-  };
+  const childrenComments =
+    commentInfo.childrenComments !== null
+      ? commentInfo.childrenComments.list
+      : [];
 
   return (
     <StyledComment>
@@ -44,7 +42,9 @@ const Comment = () => {
       {replyClicked ? <ReplyDropDown /> : null}
 
       <ReplyContainer>
-        <Reply />
+        {childrenComments.map((reply) => (
+          <Reply replyInfo={reply} />
+        ))}
       </ReplyContainer>
     </StyledComment>
   );

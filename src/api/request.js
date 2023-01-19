@@ -34,7 +34,18 @@ export const getNotices = async (boardInfo, inViewed) => {
   inViewed(noticeList);
 };
 
-export const getSpecificNotify = async (id, handleNotifyInfo) => {
-  const res = await Axios.get(`/boards/notices/${id}`);
-  handleNotifyInfo(res.data.data);
+export const getSpecificNotify = async (
+  id,
+  handleNotifyInfo,
+  handleComment
+) => {
+  const notifyRes = await Axios.get(`/boards/notices/${id}`);
+  handleNotifyInfo(notifyRes.data.data);
+  const commentRes = await Axios.get(`/comments/notices/${id}`);
+  handleComment(commentRes.data.data.list);
+};
+
+export const getNofityComments = async (id, handleComment) => {
+  const res = await Axios.get(`/comments/notices/${id}`);
+  handleComment(res.data.data.list);
 };
