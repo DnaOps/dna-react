@@ -1,13 +1,13 @@
-import Axios from "./axios";
+import { Axios, AxiosBeforeAuthored } from "./axios";
 
 import { setCookie } from "../util/Cookie";
 
 export const postAuthenticate = async (signInData) => {
-  const res = await Axios.post("auth/authenticate", signInData);
+  const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
   console.log("res: ", res);
   const userInfo = res.data.data.userInfoResponse;
   const jwt = res.data.data.tokenResponse.jwt;
-  localStorage.setItem("Authorization", jwt.accessToken);
+  localStorage.setItem("Authorization", `Bearer ${jwt.accessToken}`);
   setCookie("refresh_token", jwt.refreshToken, { secure: true });
   // set userinfo in state with recoil
 };

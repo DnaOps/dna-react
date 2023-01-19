@@ -227,13 +227,13 @@ const Notice = ({ noticeInfo }) => {
     <StyledNotice>
       <NoticeTitleContainer>
         <NoticeTitle>{noticeInfo.title}</NoticeTitle>
-        <NoticeView>{noticeInfo.view}</NoticeView>
+        <NoticeView>{noticeInfo.commentCount}</NoticeView>
       </NoticeTitleContainer>
-      <NoticeAuthorLevel>{noticeInfo.authorLevel}</NoticeAuthorLevel>
+      <NoticeAuthorLevel>{noticeInfo.level}</NoticeAuthorLevel>
       <NoticeAuthor>{noticeInfo.author}</NoticeAuthor>
-      <NoticeCreatedDate>{noticeInfo.date}</NoticeCreatedDate>
+      <NoticeCreatedDate>{noticeInfo.modifiedAt}</NoticeCreatedDate>
       <img src={noticeLikedIcon} />
-      <NoticeLiked>{noticeInfo.liked}</NoticeLiked>
+      <NoticeLiked>{noticeInfo.likeCount}</NoticeLiked>
     </StyledNotice>
   );
 };
@@ -289,17 +289,25 @@ const NotifyList = () => {
     setSearchSelectboxClicked((prev) => !prev);
   };
 
+  const [notices, setNotices] = useState([]);
+  const [refreshCnt, setRefrshCnt] = useState(0);
+  const handleRefreshInview = (noticeList) => {
+    setRefrshCnt(refreshCnt + 1);
+    setNotices([...notices, ...noticeList]);
+  };
+
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
-    console.log("notify list first rendered");
-    const initialNoticeInfo = {
-      start: "",
-      offset: "",
-      criteria: "",
-      keyword: "",
-    };
-    getNotices(initialNoticeInfo, handleRefreshInview);
+    if (notices.length === 0) {
+      const initialNoticeInfo = {
+        start: "",
+        offset: "",
+        criteria: "",
+        keyword: "",
+      };
+      getNotices(initialNoticeInfo, handleRefreshInview);
+    }
   }, []);
 
   const selectBoxOpenedAnimation = {
@@ -308,13 +316,6 @@ const NotifyList = () => {
 
   const selectBoxClosedAnimation = {
     height: "34px",
-  };
-
-  const [notices, setNotices] = useState([]);
-  const [refreshCnt, setRefrshCnt] = useState(0);
-  const handleRefreshInview = (noticeList) => {
-    setRefrshCnt(refreshCnt + 1);
-    setNotices([...notices, ...noticeList]);
   };
 
   return (
@@ -363,10 +364,15 @@ const NotifyList = () => {
         </SearchBarContainer>
 
         <NoticeList>
-          {[...Array(13)].map((_) => (
-            <Notice noticeInfo={noticeInfo} />
-            // notices로 수정
-          ))}
+          {notices.map((notice) => {
+            notice.modifiedAt = notice.modifiedAt
+              .substring(0, 10)
+              .replaceAll("-", ".");
+            return (
+              <Notice noticeInfo={notice} />
+              // notices로 수정
+            );
+          })}
           <Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
         </NoticeList>
       </Container>
