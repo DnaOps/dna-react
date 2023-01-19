@@ -11,6 +11,7 @@ const StyledComminityButton = styled.button`
   margin: 4px 0;
 `;
 
+
 const CommunityButton = ({ typo, activated, onClick }) => {
   return (
     <StyledComminityButton
@@ -25,5 +26,6 @@ const CommunityButton = ({ typo, activated, onClick }) => {
     </StyledComminityButton>
   );
 };
+
 
 export default CommunityButton;

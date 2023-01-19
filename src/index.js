@@ -4,6 +4,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
+
 import { createGlobalStyle } from "styled-components";
 import BmjuaOTF from "./assets/fonts/BMJUA_otf.otf";
 import BmjuaTTF from "./assets/fonts/BMJUA_ttf.ttf";

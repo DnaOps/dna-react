@@ -49,8 +49,8 @@ const InputContainer = ({ inputInfo }) => {
                   index === 0
                     ? "8px 8px 0 0"
                     : index === inputLength - 1
-                    ? "0 0 8px 8px"
-                    : "",
+                      ? "0 0 8px 8px"
+                      : "",
               }}
             >
               <Icon
