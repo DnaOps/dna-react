@@ -1,4 +1,5 @@
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
@@ -222,9 +223,9 @@ const NoticeLiked = styled.div`
   margin-left: 6px;
 `;
 
-const Notice = ({ noticeInfo }) => {
+const Notice = ({ noticeInfo, onClick }) => {
   return (
-    <StyledNotice>
+    <StyledNotice onClick={() => onClick(noticeInfo.noticeId)}>
       <NoticeTitleContainer>
         <NoticeTitle>{noticeInfo.title}</NoticeTitle>
         <NoticeView>{noticeInfo.commentCount}</NoticeView>
@@ -249,12 +250,6 @@ const StyledLoading = styled.div`
 
 const Loading = ({ inViewed, cnt }) => {
   const [ref, inView] = useInView();
-  const noticeInfo = {
-    start: cnt,
-    offset: 13,
-    criteria: "",
-    keyword: "",
-  };
 
   if (inView) {
     // console.log("refresh inviewed");
@@ -270,13 +265,9 @@ const Loading = ({ inViewed, cnt }) => {
 };
 
 const NotifyList = () => {
-  const noticeInfo = {
-    title: "안녕하세요",
-    view: 22,
-    authorLevel: 21,
-    author: "장은세",
-    date: "2021. 11. 07",
-    liked: 22,
+  const navigate = useNavigate();
+  const noticeOnClick = (id) => {
+    navigate(`/notify/${id}`);
   };
 
   const [selected, setSelected] = useState("제목");
@@ -368,10 +359,7 @@ const NotifyList = () => {
             notice.modifiedAt = notice.modifiedAt
               .substring(0, 10)
               .replaceAll("-", ".");
-            return (
-              <Notice noticeInfo={notice} />
-              // notices로 수정
-            );
+            return <Notice noticeInfo={notice} onClick={noticeOnClick} />;
           })}
           <Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
         </NoticeList>
