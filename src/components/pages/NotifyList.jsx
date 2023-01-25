@@ -1,4 +1,5 @@
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
@@ -6,6 +7,7 @@ import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
 
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import { getNotices } from "../../api/request";
 
 const Background = styled.div`
   width: 100%;
@@ -221,18 +223,18 @@ const NoticeLiked = styled.div`
   margin-left: 6px;
 `;
 
-const Notice = ({ noticeInfo }) => {
+const Notice = ({ noticeInfo, onClick }) => {
   return (
-    <StyledNotice>
+    <StyledNotice onClick={() => onClick(noticeInfo.noticeId)}>
       <NoticeTitleContainer>
         <NoticeTitle>{noticeInfo.title}</NoticeTitle>
-        <NoticeView>{noticeInfo.view}</NoticeView>
+        <NoticeView>{noticeInfo.commentCount}</NoticeView>
       </NoticeTitleContainer>
-      <NoticeAuthorLevel>{noticeInfo.authorLevel}</NoticeAuthorLevel>
+      <NoticeAuthorLevel>{noticeInfo.level}</NoticeAuthorLevel>
       <NoticeAuthor>{noticeInfo.author}</NoticeAuthor>
-      <NoticeCreatedDate>{noticeInfo.date}</NoticeCreatedDate>
+      <NoticeCreatedDate>{noticeInfo.modifiedAt}</NoticeCreatedDate>
       <img src={noticeLikedIcon} />
-      <NoticeLiked>{noticeInfo.liked}</NoticeLiked>
+      <NoticeLiked>{noticeInfo.likeCount}</NoticeLiked>
     </StyledNotice>
   );
 };
@@ -246,11 +248,13 @@ const StyledLoading = styled.div`
   background: #fff;
 `;
 
-const Loading = () => {
+const Loading = ({ inViewed, cnt }) => {
   const [ref, inView] = useInView();
 
   if (inView) {
-    // request new notices
+    // console.log("refresh inviewed");
+    // getNotices(noticeInfo, inViewed);
+    // inViewed();
   }
 
   return (
@@ -261,16 +265,11 @@ const Loading = () => {
 };
 
 const NotifyList = () => {
-  const noticeInfo = {
-    title: "안녕하세요",
-    view: 22,
-    authorLevel: 21,
-    author: "장은세",
-    date: "2021. 11. 07",
-    liked: 22,
+  const navigate = useNavigate();
+  const noticeOnClick = (id) => {
+    navigate(`/notify/${id}`);
   };
 
-  const [notices, setNotices] = useState([]);
   const [selected, setSelected] = useState("제목");
   const handleSelected = (typo) => {
     setSelected(typo);
@@ -281,9 +280,25 @@ const NotifyList = () => {
     setSearchSelectboxClicked((prev) => !prev);
   };
 
+  const [notices, setNotices] = useState([]);
+  const [refreshCnt, setRefrshCnt] = useState(0);
+  const handleRefreshInview = (noticeList) => {
+    setRefrshCnt(refreshCnt + 1);
+    setNotices([...notices, ...noticeList]);
+  };
+
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
+    if (notices.length === 0) {
+      const initialNoticeInfo = {
+        start: "",
+        offset: "",
+        criteria: "",
+        keyword: "",
+      };
+      getNotices(initialNoticeInfo, handleRefreshInview);
+    }
   }, []);
 
   const selectBoxOpenedAnimation = {
@@ -340,11 +355,13 @@ const NotifyList = () => {
         </SearchBarContainer>
 
         <NoticeList>
-          {[...Array(13)].map((_) => (
-            <Notice noticeInfo={noticeInfo} />
-            // notices로 수정
-          ))}
-          <Loading />
+          {notices.map((notice) => {
+            notice.modifiedAt = notice.modifiedAt
+              .substring(0, 10)
+              .replaceAll("-", ".");
+            return <Notice noticeInfo={notice} onClick={noticeOnClick} />;
+          })}
+          <Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
         </NoticeList>
       </Container>
     </>

@@ -11,9 +11,10 @@ const StyledApplyButton = styled.div`
   margin: 5px 0;
   font-size: 12px;
   color: #fff;
+  cursor: pointer;
 `;
 
-const ApplyButton = () => {
+const ApplyButton = ({ onClick, parentId }) => {
   return (
     <div
       style={{
@@ -22,7 +23,9 @@ const ApplyButton = () => {
         justifyContent: "flex-end",
       }}
     >
-      <StyledApplyButton>등록</StyledApplyButton>
+      <StyledApplyButton onClick={() => onClick(parentId)}>
+        등록
+      </StyledApplyButton>
     </div>
   );
 };
