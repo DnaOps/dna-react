@@ -9,6 +9,7 @@ import activatedPwIcon from "../../assets/images/activated_pw.png";
 import checkIcon from "../../assets/images/check.png";
 import activatedCheckIcon from "../../assets/images/activated_check.png";
 import googleLogo from "../../assets/images/google_icon.png";
+import naverLogo from "../../assets/images/naver_logo.png";
 
 import WaveGroup from "../organisms/WaveGroup";
 
@@ -16,7 +17,7 @@ import InputContainer from "../organisms/InputContainer";
 import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 
-import { postAuthenticate } from "../../api/request";
+import { getNaverLogin, postAuthenticate } from "../../api/request";
 
 const Container = styled.div`
   height: 100vh;
@@ -28,7 +29,7 @@ const Container = styled.div`
 
 const LoginForm = styled.div`
   width: 300px;
-  height: 334px;
+  height: 382px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -36,7 +37,7 @@ const LoginForm = styled.div`
   border-radius: 20px;
   border: 1px solid #024298;
   box-sizing: border-box;
-  padding: 45px 25px;
+  padding: 45px 25px 40px 25px;
 `;
 
 const Icon = styled.img`
@@ -96,6 +97,38 @@ const GoogleLoginButton = () => {
       <GoogleIcon src={googleLogo} />
       Google 로그인
     </StyledGoogleLoginButton>
+  );
+};
+
+const StyledNaverLoginButton = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2db400;
+  border: 1px solid #2db400;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 4px 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+`;
+
+const NaverIcon = styled.img`
+  width: 40px;
+  height: 40px;
+  /* margin: 4px; */
+`;
+
+const NaverLoginButton = ({ onClick }) => {
+  return (
+    <StyledNaverLoginButton onClick={onClick}>
+      <NaverIcon src={naverLogo} />
+      NAVER 로그인
+    </StyledNaverLoginButton>
   );
 };
 
@@ -163,6 +196,11 @@ export default function Login() {
     postAuthenticate(signInData);
   };
 
+  const handleNaverLogin = () => {
+    console.log("naver login clicked");
+    getNaverLogin();
+  };
+
   const inputInfo = [
     {
       type: "text",
@@ -208,6 +246,7 @@ export default function Login() {
             onClick={handleLogin}
           />
           <GoogleLoginButton />
+          <NaverLoginButton onClick={handleNaverLogin} />
         </div>
       </LoginForm>
       <LinkContainer>
