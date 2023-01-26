@@ -153,7 +153,13 @@ const StyledLink = styled.div`
 `;
 
 const Link = ({ typo }) => {
-  return <StyledLink>{typo}</StyledLink>;
+  const navigate = useNavigate();
+  const path =
+    typo === "회원가입" ? "/signup" : typo === "아이디 찾기" ? "" : "";
+  const linkOnClick = () => {
+    navigate(path);
+  };
+  return <StyledLink onClick={linkOnClick}>{typo}</StyledLink>;
 };
 
 export default function Login() {
