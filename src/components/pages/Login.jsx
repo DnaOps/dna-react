@@ -18,6 +18,9 @@ import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 
 import { getNaverLogin, postAuthenticate } from "../../api/request";
+import { useSetRecoilState } from "recoil";
+import UserInfoState from "../../state/UserInfoState";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   height: 100vh;
@@ -187,15 +190,6 @@ export default function Login() {
     }
   };
 
-  const handleLogin = () => {
-    console.log("login clicked");
-    const signInData = {
-      email: id,
-      password: pw,
-    };
-    postAuthenticate(signInData);
-  };
-
   const handleNaverLogin = () => {
     console.log("naver login clicked");
     getNaverLogin();
@@ -217,6 +211,24 @@ export default function Login() {
   ];
 
   const linkTypo = ["회원가입", "아이디 찾기", "문의"];
+
+  const setUserInfo = useSetRecoilState(UserInfoState);
+  const handleUserInfo = (info) => {
+    setUserInfo(info);
+  };
+
+  const navigate = useNavigate();
+
+  const loginOnClick = () => {
+    console.log("login clicked");
+    const signInData = {
+      email: id,
+      password: pw,
+    };
+    postAuthenticate(signInData, handleUserInfo);
+
+    navigate("/notify_list");
+  };
 
   return (
     <Container>
@@ -243,7 +255,7 @@ export default function Login() {
           <CommunityButton
             typo="로그인"
             activated={id && pw && idValid && pwValid}
-            onClick={handleLogin}
+            onClick={loginOnClick}
           />
           <GoogleLoginButton />
           <NaverLoginButton onClick={handleNaverLogin} />
