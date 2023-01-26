@@ -30,7 +30,8 @@ const Container = styled.div`
 
 const SignUpForm = styled.div`
   width: 300px;
-  height: 385px;
+  min-height: 385px;
+  max-height: 445px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
