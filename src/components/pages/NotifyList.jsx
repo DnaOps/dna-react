@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
+import Header from "../organisms/Header";
 
 import styled from "styled-components";
 import { useEffect, useState } from "react";
@@ -312,6 +313,7 @@ const NotifyList = () => {
   return (
     <>
       <Background />
+      <Header />
       <Container>
         <NoticeContainer>
           <NoticeBlock>공지사항</NoticeBlock>
