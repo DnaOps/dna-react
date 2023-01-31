@@ -291,17 +291,15 @@ const Notify = () => {
     setLiked((prev) => !prev);
     switch (added) {
       case "added":
-        setNotifyInfo({ ...notifyInfo, likeCount: notifyInfo.likeCount + 1 });
-        setRecommentComment({
-          ...recommendComment,
-          val1: notifyInfo.likeCount,
+        handleNotifyInfo({
+          ...notifyInfo,
+          likeCount: notifyInfo.likeCount + 1,
         });
         break;
       case "deleted":
-        setNotifyInfo({ ...notifyInfo, likeCount: notifyInfo.likeCount - 1 });
-        setRecommentComment({
-          ...recommendComment,
-          val1: notifyInfo.likeCount,
+        handleNotifyInfo({
+          ...notifyInfo,
+          likeCount: notifyInfo.likeCount - 1,
         });
         break;
       default:
