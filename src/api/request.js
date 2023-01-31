@@ -2,14 +2,13 @@ import { Axios, AxiosBeforeAuthored } from "./axios";
 
 import { setCookie } from "../util/Cookie";
 
-export const postAuthenticate = async (signInData) => {
+export const postAuthenticate = async (signInData, handleUserInfo) => {
   const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
-  console.log("res: ", res);
   const userInfo = res.data.data.userInfoResponse;
   const jwt = res.data.data.tokenResponse.jwt;
   localStorage.setItem("Authorization", `Bearer ${jwt.accessToken}`);
   setCookie("refresh_token", jwt.refreshToken, { secure: true });
-  // set userinfo in state with recoil
+  handleUserInfo(userInfo);
 };
 
 export const getNaverLogin = async () => {

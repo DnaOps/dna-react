@@ -19,6 +19,7 @@ import ErrorMessage from "../organisms/ErrorMessage";
 import SingUpBackGround from "../organisms/SignUpBackGround";
 
 import { postSignUp } from "../../api/request";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   height: 100vh;
@@ -30,7 +31,8 @@ const Container = styled.div`
 
 const SignUpForm = styled.div`
   width: 300px;
-  height: 385px;
+  min-height: 385px;
+  max-height: 445px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -59,7 +61,12 @@ const StyledLink = styled.div`
 `;
 
 const Link = ({ typo }) => {
-  return <StyledLink>{typo}</StyledLink>;
+  const navigate = useNavigate();
+  const path = typo === "로그인" ? "/login" : "";
+  const linkOnClick = () => {
+    navigate(path);
+  };
+  return <StyledLink onClick={linkOnClick}>{typo}</StyledLink>;
 };
 
 const StyledConfirmMessage = styled.div`
@@ -68,10 +75,16 @@ const StyledConfirmMessage = styled.div`
   font-size: 10px;
 `;
 
-const PwComfirmMessage = ({ valid, msg }) => {
+const PwComfirmMessage = ({ valid, msg, pwValid }) => {
   return (
     <StyledConfirmMessage>
-      {valid ? <div>{msg}</div> : null}
+      {valid ? (
+        <div>{msg}</div>
+      ) : pwValid ? (
+        <div style={{ color: "#a10c0c" }}>
+          {"비밀번호가 일치하지 않습니다."}
+        </div>
+      ) : null}
     </StyledConfirmMessage>
   );
 };
@@ -188,6 +201,19 @@ export default function SignUp() {
     postSignUp(signUpData);
   };
 
+  const validations = [
+    !isUsername && username.length > 0,
+    !isStudentId && studentId.length > 0,
+    !isEmail && email.length > 0,
+    !isPw && pw.length > 0,
+  ];
+  const errorMessages = [
+    "이름을 입력해주세요.",
+    "학번 형식에 맞지 않습니다.",
+    "이메일 형식에 맞지 않습니다.",
+    "비밀번호는 8자리 이상, 영소문자, 대문자, 특수문자를 포함하여야 합니다.",
+  ];
+
   return (
     <Container>
       <SingUpBackGround />
@@ -195,24 +221,21 @@ export default function SignUp() {
         <div>
           <InputContainer inputInfo={inputInfo} />
 
-          <ErrorMessage
-            valid={!isUsername && username.length > 0}
-            msg="이름을 입력해주세요."
-          />
-          <ErrorMessage
-            valid={!isEmail && email.length > 0}
-            msg="이메일 형식에 맞지 않습니다."
-          />
-          <ErrorMessage
-            valid={!isStudentId && studentId.length > 0}
-            msg="학번 형식에 맞지 않습니다."
-          />
-          <ErrorMessage
-            valid={!isPw && pw.length > 0}
-            msg="비밀번호는 8자리 이상, 영소문자, 대문자, 특수문자를 포함하여야 합니다."
-          />
+          {validations.map((validation, index) => (
+            <ErrorMessage
+              key={index}
+              valid={
+                validations
+                  .slice(0, index)
+                  .every((current) => current === false) && validation
+              }
+              msg={errorMessages[index]}
+            />
+          ))}
+
           <PwComfirmMessage
             valid={isPwConfirm && pw.length > 0}
+            pwValid={isPw && pw.length > 0}
             msg="비밀번호가 일치합니다."
           />
         </div>
