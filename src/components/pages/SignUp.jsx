@@ -102,6 +102,8 @@ export default function SignUp() {
   const [isPw, setIsPw] = useState(false);
   const [isPwConfirm, setIsPwComfirm] = useState(false);
 
+  const navigate = useNavigate();
+
   const onChangeUsername = (e) => {
     setUsername(e.target.value);
     const usenameRegExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
@@ -238,6 +240,10 @@ export default function SignUp() {
             pwValid={isPw && pw.length > 0}
             msg="비밀번호가 일치합니다."
           />
+          <ErrorMessage
+            valid={!isPwConfirm && pwConfirm.length > 1}
+            msg="비밀번호가 일치하지 않습니다."
+          />
         </div>
 
         <div>
@@ -255,7 +261,10 @@ export default function SignUp() {
               isPw &&
               isPwConfirm
             }
-            onClick={handleSignUp}
+            onClick={() => {
+              handleSignUp();
+              navigate("/signin");
+            }}
           />
         </div>
       </SignUpForm>

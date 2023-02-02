@@ -39,7 +39,7 @@ const InputContainer = ({ inputInfo }) => {
         const isFirst = index === 0;
         const isLast = index === inputLength - 1;
         return (
-          <div>
+          <div key={index}>
             <InputSubWrapper
               style={{
                 borderTop: isFirst ? "solid 1px #b5b5b5" : "",
@@ -49,8 +49,8 @@ const InputContainer = ({ inputInfo }) => {
                   index === 0
                     ? "8px 8px 0 0"
                     : index === inputLength - 1
-                      ? "0 0 8px 8px"
-                      : "",
+                    ? "0 0 8px 8px"
+                    : "",
               }}
             >
               <Icon
