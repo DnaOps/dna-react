@@ -23,7 +23,7 @@ const ReplySubWrapper = styled.div`
   width: 100%;
 `;
 
-const Reply = () => {
+const Reply = ({ replyInfo }) => {
   const [replyClicked, setReplyClicked] = useState(false);
   const replyOnClick = () => {
     setReplyClicked((prev) => !prev);
@@ -36,18 +36,11 @@ const Reply = () => {
     isReply: true,
   };
 
-  const commentInfo = {
-    level: 21,
-    author: "gona",
-    modifiedAt: "3시간 전 | 2022. 11. 07",
-    content: "환영합니다!",
-  };
-
   return (
     <StyledReply>
       <ReplyBranch>┗</ReplyBranch>
       <ReplySubWrapper>
-        <CommentInfo commentInfo={commentInfo} />
+        <CommentInfo commentInfo={replyInfo} />
 
         <RecommendComment
           recommendComment={recommendComment}

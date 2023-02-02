@@ -5,9 +5,10 @@ import logoImg from "../../../src/assets/images/logo_img.png";
 import logoText from "../../../src/assets/images/logo_text.png";
 import menu from "../../../src/assets/images/menu.png";
 
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
-import { css } from "styled-components";
+import { useRecoilValue } from "recoil";
+import UserInfoState from "../../state/UserInfoState";
 
 const Container = styled.div`
   width: 100%;
@@ -117,6 +118,34 @@ const Nav = ({ typo, options }) => {
   );
 };
 
+const StyledNavToLogin = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+`;
+
+const NavToLogin = () => {
+  const [mouseOver, setMouseOver] = useState(false);
+
+  const navigateLogin = useNavigate("login");
+
+  const onClick = () => {
+    navigateLogin("/login");
+  };
+  return (
+    <StyledNavToLogin
+      onMouseOver={() => setMouseOver(true)}
+      onMouseOut={() => setMouseOver(false)}
+      onClick={onClick}
+      style={{
+        textDecoration: mouseOver ? "underline 1.7px" : "none",
+      }}
+    >
+      로그인이 필요합니다.
+    </StyledNavToLogin>
+  );
+};
+
 const Header = () => {
   const navigate = useNavigate();
 
@@ -160,6 +189,8 @@ const Header = () => {
     height: "0px",
   };
 
+  const userInfo = useRecoilValue(UserInfoState);
+
   return (
     <>
       <Container
@@ -188,15 +219,32 @@ const Header = () => {
             <Menu src={menu} onClick={menuClickHandler} />
 
             <DropDownMenuWrapper>
-              <DropDownMenu>
-                <b>scorpion</b> 회원님
-              </DropDownMenu>
-              <DropDownMenuContainer>
-                <DropDownMenu>권한 : 관리자</DropDownMenu>
-                <DropDownMenu>게시글 수 : 10</DropDownMenu>
-                <DropDownMenu>댓글 수 : 10</DropDownMenu>
-              </DropDownMenuContainer>
-              <DropDownMenu>가입일시 : 2016.09.01</DropDownMenu>
+              {userInfo.username ? (
+                <>
+                  <DropDownMenu>
+                    <b>{userInfo.username}</b> 회원님
+                  </DropDownMenu>
+                  <DropDownMenuContainer>
+                    <DropDownMenu>
+                      권한 :&nbsp;
+                      {userInfo.authorization == "USER_ROLE"
+                        ? "회원"
+                        : "관리자"}
+                    </DropDownMenu>
+                    <DropDownMenu>
+                      게시글 수 : {userInfo.postCount}
+                    </DropDownMenu>
+                    <DropDownMenu>
+                      댓글 수 : {userInfo.commentCount}
+                    </DropDownMenu>
+                  </DropDownMenuContainer>
+                  <DropDownMenu>
+                    가입일시 : {userInfo.createdDate.substring(0, 10)}
+                  </DropDownMenu>
+                </>
+              ) : (
+                <NavToLogin />
+              )}
             </DropDownMenuWrapper>
           </MenuWrapper>
         </NavContainer>

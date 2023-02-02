@@ -9,6 +9,7 @@ import activatedPwIcon from "../../assets/images/activated_pw.png";
 import checkIcon from "../../assets/images/check.png";
 import activatedCheckIcon from "../../assets/images/activated_check.png";
 import googleLogo from "../../assets/images/google_icon.png";
+import naverLogo from "../../assets/images/naver_logo.png";
 
 import WaveGroup from "../organisms/WaveGroup";
 
@@ -16,7 +17,10 @@ import InputContainer from "../organisms/InputContainer";
 import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 
-import { postAuthenticate } from "../../api/request";
+import { getNaverLogin, postAuthenticate } from "../../api/request";
+import { useSetRecoilState } from "recoil";
+import UserInfoState from "../../state/UserInfoState";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   height: 100vh;
@@ -28,7 +32,7 @@ const Container = styled.div`
 
 const LoginForm = styled.div`
   width: 300px;
-  height: 334px;
+  height: 382px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -36,7 +40,7 @@ const LoginForm = styled.div`
   border-radius: 20px;
   border: 1px solid #024298;
   box-sizing: border-box;
-  padding: 45px 25px;
+  padding: 45px 25px 40px 25px;
 `;
 
 const Icon = styled.img`
@@ -99,6 +103,38 @@ const GoogleLoginButton = () => {
   );
 };
 
+const StyledNaverLoginButton = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2db400;
+  border: 1px solid #2db400;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 4px 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+`;
+
+const NaverIcon = styled.img`
+  width: 40px;
+  height: 40px;
+  /* margin: 4px; */
+`;
+
+const NaverLoginButton = ({ onClick }) => {
+  return (
+    <StyledNaverLoginButton onClick={onClick}>
+      <NaverIcon src={naverLogo} />
+      NAVER 로그인
+    </StyledNaverLoginButton>
+  );
+};
+
 const LinkContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -117,7 +153,13 @@ const StyledLink = styled.div`
 `;
 
 const Link = ({ typo }) => {
-  return <StyledLink>{typo}</StyledLink>;
+  const navigate = useNavigate();
+  const path =
+    typo === "회원가입" ? "/signup" : typo === "아이디 찾기" ? "" : "";
+  const linkOnClick = () => {
+    navigate(path);
+  };
+  return <StyledLink onClick={linkOnClick}>{typo}</StyledLink>;
 };
 
 export default function Login() {
@@ -154,13 +196,9 @@ export default function Login() {
     }
   };
 
-  const handleLogin = () => {
-    console.log("login clicked");
-    const signInData = {
-      email: id,
-      password: pw,
-    };
-    postAuthenticate(signInData);
+  const handleNaverLogin = () => {
+    console.log("naver login clicked");
+    getNaverLogin();
   };
 
   const inputInfo = [
@@ -179,6 +217,24 @@ export default function Login() {
   ];
 
   const linkTypo = ["회원가입", "아이디 찾기", "문의"];
+
+  const setUserInfo = useSetRecoilState(UserInfoState);
+  const handleUserInfo = (info) => {
+    setUserInfo(info);
+  };
+
+  const navigate = useNavigate();
+
+  const loginOnClick = () => {
+    console.log("login clicked");
+    const signInData = {
+      email: id,
+      password: pw,
+    };
+    postAuthenticate(signInData, handleUserInfo);
+
+    navigate("/notify_list");
+  };
 
   return (
     <Container>
@@ -205,9 +261,10 @@ export default function Login() {
           <CommunityButton
             typo="로그인"
             activated={id && pw && idValid && pwValid}
-            onClick={handleLogin}
+            onClick={loginOnClick}
           />
           <GoogleLoginButton />
+          <NaverLoginButton onClick={handleNaverLogin} />
         </div>
       </LoginForm>
       <LinkContainer>

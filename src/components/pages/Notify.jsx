@@ -4,6 +4,15 @@ import Header from "../organisms/Header";
 import Comment from "../organisms/Comment";
 import RecommendComment from "../molecules/RecommendComment";
 import ApplyButton from "../atoms/ApplyButton";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import {
+  getSpecificNotify,
+  getNofityComments,
+  deleteNotify,
+  postNotifyComment,
+} from "../../api/request";
 
 const Container = styled.div`
   width: 100%;
@@ -97,12 +106,12 @@ const StyledEditDeleteButton = styled.div`
   margin: 10px 0;
 `;
 
-const EditDeleteButton = () => {
+const EditDeleteButton = ({ editOnClick, deleteOnClick }) => {
   return (
     <StyledEditDeleteButton>
-      <SmallTypo>수정</SmallTypo>
+      <SmallTypo onClick={editOnClick}>수정</SmallTypo>
       <SmallTypo>&nbsp;|&nbsp;</SmallTypo>
-      <SmallTypo>삭제</SmallTypo>
+      <SmallTypo onClick={deleteOnClick}>삭제</SmallTypo>
     </StyledEditDeleteButton>
   );
 };
@@ -168,6 +177,9 @@ const CommentContainer = styled.div`
 `;
 
 const Notify = () => {
+  let lastComment = 0;
+  const navigate = useNavigate();
+
   const grayButton = {
     background: "#828282",
   };
@@ -183,13 +195,70 @@ const Notify = () => {
     { typo: "글쓰기", background: navyButton },
   ];
 
-  const recommendComment = {
+  const [recommendComment, setRecommentComment] = useState({
     key1: "추천",
-    val1: 37,
+    val1: -1,
     key2: "댓글",
-    val2: 12,
+    val2: -1,
     isReply: false,
+  });
+
+  const [notifyInfo, setNotifyInfo] = useState({
+    author: "",
+    authorId: -1,
+    commentCount: -1,
+    content: "",
+    level: -1,
+    likeCount: -1,
+    modifiedAt: "",
+    noticeId: -1,
+    title: "",
+  });
+
+  const handleNotifyInfo = (notifyInfo) => {
+    const info = notifyInfo;
+    setNotifyInfo(info);
+    setRecommentComment({
+      ...recommendComment,
+      val1: info.likeCount,
+      val2: info.commentCount,
+    });
   };
+
+  const [comments, setComments] = useState([]);
+  const handleComment = (commentList) => {
+    if (comments.length <= lastComment) {
+      // 수정 필요: 이미 로드된 데이터 재로드 방지
+      setComments([...comments, ...commentList]);
+      lastComment += commentList.length;
+    }
+  };
+
+  const deleteOnClick = (id) => {
+    deleteNotify(id);
+    navigate("/notify_list");
+  };
+
+  const [commentContent, setCommentContent] = useState("");
+
+  const handleCommentWrite = (event) => {
+    setCommentContent(event.target.value);
+  };
+
+  const applyOnClick = (parentId) => {
+    postNotifyComment({
+      noticeId: notifyInfo.noticeId,
+      parentCommentId: parentId,
+      content: commentContent,
+    });
+  };
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    getSpecificNotify(id, handleNotifyInfo, handleComment);
+    // getNofityComments(id, handleComment);
+  }, []);
 
   return (
     <>
@@ -197,19 +266,23 @@ const Notify = () => {
       <Container>
         <NoticeTypo>공지사항</NoticeTypo>
         <Notice>
-          <NoticeTitle>안녕하세요.</NoticeTitle>
+          <NoticeTitle>{notifyInfo.title}</NoticeTitle>
 
           <AuthorInfo>
-            <AuthorLevel>21</AuthorLevel>
-            <AuthorTypo>senuej37</AuthorTypo>
+            <AuthorLevel>{notifyInfo.level}</AuthorLevel>
+            <AuthorTypo>{notifyInfo.author}</AuthorTypo>
             <AuthorTypo>&nbsp;|&nbsp;</AuthorTypo>
-            <AuthorTypo>2022.11.07</AuthorTypo>
+            <AuthorTypo>
+              {notifyInfo.modifiedAt.substring(0, 10).replaceAll("-", ".")}
+            </AuthorTypo>
           </AuthorInfo>
 
           <NoticeDivider />
 
-          <NoticeContent>DNA입니다. 환영합니다!</NoticeContent>
-          <EditDeleteButton />
+          <NoticeContent>{notifyInfo.content}</NoticeContent>
+          <EditDeleteButton
+            deleteOnClick={() => deleteOnClick(notifyInfo.noticeId)}
+          />
 
           <NoticeDivider />
 
@@ -229,12 +302,17 @@ const Notify = () => {
 
           <CommentWrite>
             <CommentWriteTypo>댓글쓰기</CommentWriteTypo>
-            <CommentWriteInput />
-            <ApplyButton />
+            <CommentWriteInput
+              onChange={handleCommentWrite}
+              value={commentContent}
+            />
+            <ApplyButton onClick={applyOnClick} parentId={null} />
           </CommentWrite>
 
           <CommentContainer>
-            <Comment />
+            {comments.map((commentInfo) => {
+              return <Comment commentInfo={commentInfo} />;
+            })}
           </CommentContainer>
         </Notice>
       </Container>

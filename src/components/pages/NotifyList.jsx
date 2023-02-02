@@ -1,8 +1,10 @@
 import { useInView } from "react-intersection-observer";
+import { useNavigate } from "react-router-dom";
 
 import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
+import Header from "../organisms/Header";
 
 import styled from "styled-components";
 import { useEffect, useState } from "react";
@@ -222,18 +224,18 @@ const NoticeLiked = styled.div`
   margin-left: 6px;
 `;
 
-const Notice = ({ noticeInfo }) => {
+const Notice = ({ noticeInfo, onClick }) => {
   return (
-    <StyledNotice>
+    <StyledNotice onClick={() => onClick(noticeInfo.noticeId)}>
       <NoticeTitleContainer>
         <NoticeTitle>{noticeInfo.title}</NoticeTitle>
-        <NoticeView>{noticeInfo.view}</NoticeView>
+        <NoticeView>{noticeInfo.commentCount}</NoticeView>
       </NoticeTitleContainer>
-      <NoticeAuthorLevel>{noticeInfo.authorLevel}</NoticeAuthorLevel>
+      <NoticeAuthorLevel>{noticeInfo.level}</NoticeAuthorLevel>
       <NoticeAuthor>{noticeInfo.author}</NoticeAuthor>
-      <NoticeCreatedDate>{noticeInfo.date}</NoticeCreatedDate>
+      <NoticeCreatedDate>{noticeInfo.modifiedAt}</NoticeCreatedDate>
       <img src={noticeLikedIcon} />
-      <NoticeLiked>{noticeInfo.liked}</NoticeLiked>
+      <NoticeLiked>{noticeInfo.likeCount}</NoticeLiked>
     </StyledNotice>
   );
 };
@@ -249,16 +251,10 @@ const StyledLoading = styled.div`
 
 const Loading = ({ inViewed, cnt }) => {
   const [ref, inView] = useInView();
-  const noticeInfo = {
-    start: cnt,
-    offset: 13,
-    criteria: "",
-    keyword: "",
-  };
 
   if (inView) {
     // console.log("refresh inviewed");
-    // getNotices(noticeInfo);
+    // getNotices(noticeInfo, inViewed);
     // inViewed();
   }
 
@@ -270,16 +266,11 @@ const Loading = ({ inViewed, cnt }) => {
 };
 
 const NotifyList = () => {
-  const noticeInfo = {
-    title: "안녕하세요",
-    view: 22,
-    authorLevel: 21,
-    author: "장은세",
-    date: "2021. 11. 07",
-    liked: 22,
+  const navigate = useNavigate();
+  const noticeOnClick = (id) => {
+    navigate(`/notify/${id}`);
   };
 
-  const [notices, setNotices] = useState([]);
   const [selected, setSelected] = useState("제목");
   const handleSelected = (typo) => {
     setSelected(typo);
@@ -290,17 +281,25 @@ const NotifyList = () => {
     setSearchSelectboxClicked((prev) => !prev);
   };
 
+  const [notices, setNotices] = useState([]);
+  const [refreshCnt, setRefrshCnt] = useState(0);
+  const handleRefreshInview = (noticeList) => {
+    setRefrshCnt(refreshCnt + 1);
+    setNotices([...notices, ...noticeList]);
+  };
+
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
-    console.log("use effect");
-    const initialNoticeInfo = {
-      start: "",
-      offset: "",
-      criteria: "",
-      keyword: "",
-    };
-    getNotices(initialNoticeInfo);
+    if (notices.length === 0) {
+      const initialNoticeInfo = {
+        start: "",
+        offset: "",
+        criteria: "",
+        keyword: "",
+      };
+      getNotices(initialNoticeInfo, handleRefreshInview);
+    }
   }, []);
 
   const selectBoxOpenedAnimation = {
@@ -311,14 +310,10 @@ const NotifyList = () => {
     height: "34px",
   };
 
-  const [refreshCnt, setRefrshCnt] = useState(0);
-  const handleRefreshInview = () => {
-    setRefrshCnt(refreshCnt + 1);
-  };
-
   return (
     <>
       <Background />
+      <Header />
       <Container>
         <NoticeContainer>
           <NoticeBlock>공지사항</NoticeBlock>
@@ -362,10 +357,12 @@ const NotifyList = () => {
         </SearchBarContainer>
 
         <NoticeList>
-          {[...Array(13)].map((_) => (
-            <Notice noticeInfo={noticeInfo} />
-            // notices로 수정
-          ))}
+          {notices.map((notice) => {
+            notice.modifiedAt = notice.modifiedAt
+              .substring(0, 10)
+              .replaceAll("-", ".");
+            return <Notice noticeInfo={notice} onClick={noticeOnClick} />;
+          })}
           <Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
         </NoticeList>
       </Container>
