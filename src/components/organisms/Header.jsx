@@ -60,10 +60,7 @@ const DropDownDivider = styled.div`
   height: 166px;
   background: #024298;
   margin: 14px 0;
-<<<<<<< HEAD
-=======
   transition: all ease-in-out 0.5s;
->>>>>>> d96484410d36b12c5656616da0d7006b503f8564
 `;
 
 const MenuWrapper = styled.div`
@@ -80,13 +77,11 @@ const DropDownNavContainer = styled.div`
   overflow: hidden;
 `;
 
-
 const DropDownNav = styled.div`
   margin: 0 0 12px 0;
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
-
 `;
 
 const DropDownMenuWrapper = styled.div`
@@ -103,7 +98,6 @@ const DropDownMenu = styled.div`
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
-
 `;
 
 const UpperSpace = styled.div`
@@ -151,7 +145,6 @@ const Header = () => {
     게시판: ["공지사항", "자유게시판", "스터디 게시판", "앨범 게시판"],
   };
 
-
   const menuOpenedAnimation = {
     height: "205px",
   };
@@ -182,7 +175,6 @@ const Header = () => {
             <Nav
               key={t}
               typo={t}
-
               options={navOptions[t]}
               onClick={() => {
                 navClickHandler(t);

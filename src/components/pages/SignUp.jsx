@@ -19,6 +19,7 @@ import ErrorMessage from "../organisms/ErrorMessage";
 import SingUpBackGround from "../organisms/SignUpBackGround";
 
 import { postSignUp } from "../../api/request";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   height: 100vh;
@@ -88,6 +89,8 @@ export default function SignUp() {
   const [isEmail, setIsEmail] = useState(false);
   const [isPw, setIsPw] = useState(false);
   const [isPwConfirm, setIsPwComfirm] = useState(false);
+
+  const navigate = useNavigate();
 
   const onChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -215,6 +218,10 @@ export default function SignUp() {
             valid={isPwConfirm && pw.length > 0}
             msg="비밀번호가 일치합니다."
           />
+          <ErrorMessage
+            valid={!isPwConfirm && pwConfirm.length > 1}
+            msg="비밀번호가 일치하지 않습니다."
+          />
         </div>
 
         <div>
@@ -232,7 +239,10 @@ export default function SignUp() {
               isPw &&
               isPwConfirm
             }
-            onClick={handleSignUp}
+            onClick={() => {
+              handleSignUp();
+              navigate("/signin");
+            }}
           />
         </div>
       </SignUpForm>
