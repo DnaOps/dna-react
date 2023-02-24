@@ -25,6 +25,7 @@ const HomeTypo = styled.div`
   display: flex;
   box-sizing: border-box;
   padding: 0 5px;
+  margin: 0 0 35px;
   font-size: 30px;
   font-weight: 700;
   color: #000000;
@@ -53,8 +54,7 @@ const AboutDnaTypoContainer = styled.div`
 
 // justify-content: flex-end;
 const AboutDnaTypoWrapper = styled.div`
-  width: 100%;
-  heihgt: auto;
+  min-width: 230px;
   display: flex;
 `;
 
@@ -116,7 +116,7 @@ const Home = () => {
             <AboutDnaTypoWrapper>
               <AboutDnaTypo>
                 <b>대학 연합동아리 ULUG 참가</b>
-                <br /> 고려대, 경희대, 단국대, 동국대, 서강대, 서율여대
+                <br /> 고려대, 경희대, 단국대, 동국대, 서강대, 서울여대
                 <br />
                 숙명여대, 숭실대, 한국외대, 한양대가 참가하는
                 <br />
@@ -140,7 +140,7 @@ const Home = () => {
         <HomeListContainer>
           <BoardIcon
             onClick={() => {
-              navigate("/board_notify");
+              navigate("/notify_list");
             }}
             src={boardNotifyIcon}
           />
