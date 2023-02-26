@@ -52,9 +52,9 @@ export const deleteNotify = async (id) => {
   console.log("res: ", res);
 };
 
-export const postNotifyComment = async (commentData) => {
-  const res = await Axios.post("/comments", commentData);
-  console.log("res: ", res);
+export const postNotifyComment = async (commentData, callBack) => {
+  await Axios.post("/comments", commentData);
+  callBack();
 };
 
 export const postSignUp = async (signUpData) => {

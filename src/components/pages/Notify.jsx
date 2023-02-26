@@ -258,11 +258,7 @@ const Notify = () => {
 
   const [comments, setComments] = useState([]);
   const handleComment = (commentList) => {
-    if (comments.length <= lastComment) {
-      // 수정 필요: 이미 로드된 데이터 재로드 방지
-      setComments([...comments, ...commentList]);
-      lastComment += commentList.length;
-    }
+    setComments([...commentList]);
   };
 
   const deleteOnClick = (id) => {
@@ -277,11 +273,16 @@ const Notify = () => {
   };
 
   const applyOnClick = (parentId) => {
-    postNotifyComment({
+    const commentData = {
       noticeId: notifyInfo.noticeId,
       parentCommentId: parentId,
       content: commentContent,
-    });
+    };
+    postNotifyComment(commentData, () =>
+      getSpecificNotify(id, handleNotifyInfo, handleComment)
+    );
+
+    setCommentContent("");
   };
 
   const { id } = useParams();
