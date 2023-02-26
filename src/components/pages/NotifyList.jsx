@@ -291,6 +291,13 @@ const NotifyList = () => {
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
+
+    const token = localStorage.getItem("Authorization");
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+    }
+
     if (notices.length === 0) {
       const initialNoticeInfo = {
         start: "",
