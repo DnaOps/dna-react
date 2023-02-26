@@ -12,7 +12,6 @@ import likeButtonActivated from "../../assets/images/like_activated_button.png";
 
 import {
   getSpecificNotify,
-  getNofityComments,
   deleteNotify,
   postNotifyComment,
   postLike,
@@ -207,8 +206,7 @@ const LikeButton = ({ liked, handleLike, id }) => {
   );
 };
 
-const Notify = () => {
-  let lastComment = 0;
+const Notify = ({ type }) => {
   const navigate = useNavigate();
 
   const grayButton = {
@@ -314,11 +312,17 @@ const Notify = () => {
     getIfLiked(id, setLiked);
   }, []);
 
+  const typo = {
+    notify: "공지사항",
+    study: "스터디 게시판",
+    board: "자유 게시판",
+  };
+
   return (
     <>
       <Header />
       <Container>
-        <NoticeTypo>공지사항</NoticeTypo>
+        <NoticeTypo>{typo[type]}</NoticeTypo>
         <Notice>
           <NoticeTitle>{notifyInfo.title}</NoticeTitle>
 
