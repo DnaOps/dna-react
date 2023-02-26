@@ -2,13 +2,22 @@ import { Axios, AxiosBeforeAuthored } from "./axios";
 
 import { setCookie } from "../util/Cookie";
 
-export const postAuthenticate = async (signInData, handleUserInfo) => {
-  const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
-  const userInfo = res.data.data.userInfoResponse;
-  const jwt = res.data.data.tokenResponse.jwt;
-  localStorage.setItem("Authorization", `Bearer ${jwt.accessToken}`);
-  setCookie("refresh_token", jwt.refreshToken, { secure: true });
-  handleUserInfo(userInfo);
+export const postAuthenticate = async (
+  signInData,
+  handleUserInfo,
+  redirectHome
+) => {
+  try {
+    const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
+    const userInfo = res.data.data.userInfoResponse;
+    const jwt = res.data.data.tokenResponse.jwt;
+    redirectHome();
+    localStorage.setItem("Authorization", `Bearer ${jwt.accessToken}`);
+    setCookie("refresh_token", jwt.refreshToken, { secure: true });
+    handleUserInfo(userInfo);
+  } catch (e) {
+    alert("로그인 정보가 일치하지 않습니다.");
+  }
 };
 
 export const getNaverLogin = async () => {

@@ -225,15 +225,17 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const redirectHome = () => {
+    navigate("/home");
+  };
+
   const loginOnClick = () => {
     console.log("login clicked");
     const signInData = {
       email: id,
       password: pw,
     };
-    postAuthenticate(signInData, handleUserInfo);
-
-    navigate("/notify_list");
+    postAuthenticate(signInData, handleUserInfo, redirectHome);
   };
 
   return (
