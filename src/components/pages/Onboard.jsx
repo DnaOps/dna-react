@@ -106,7 +106,7 @@ const DNAIntro = () => {
 
   const navigate = useNavigate();
   const handleClickEnter = () => {
-    navigate("/login");
+    navigate("/home");
   };
   // 경로 설정: 라우팅 X
 
