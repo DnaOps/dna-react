@@ -61,12 +61,22 @@ export const deleteNotify = async (id) => {
   console.log("res: ", res);
 };
 
-export const postNotifyComment = async (commentData) => {
-  const res = await Axios.post("/comments", commentData);
-  console.log("res: ", res);
+export const postNotifyComment = async (commentData, callBack) => {
+  await Axios.post("/comments", commentData);
+  callBack();
 };
 
 export const postSignUp = async (signUpData) => {
   const res = await Axios.post("/auth/signUp", signUpData);
   console.log("res: ", res);
+};
+
+export const getIfLiked = async (noticeId, handleLike) => {
+  const res = await Axios.get(`/likes/notices/${noticeId}`);
+  handleLike(res.data.data);
+};
+
+export const postLike = async (noticeId, handleLike) => {
+  const res = await Axios.post(`/likes/notices/${noticeId}`);
+  handleLike(res.data.data);
 };

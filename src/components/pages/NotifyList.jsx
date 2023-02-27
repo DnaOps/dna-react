@@ -265,10 +265,10 @@ const Loading = ({ inViewed, cnt }) => {
   );
 };
 
-const NotifyList = () => {
+const NotifyList = ({ type }) => {
   const navigate = useNavigate();
   const noticeOnClick = (id) => {
-    navigate(`/notify/${id}`);
+    navigate(`/${type}/${id}`);
   };
 
   const [selected, setSelected] = useState("제목");
@@ -317,19 +317,25 @@ const NotifyList = () => {
     height: "34px",
   };
 
+  const typo = {
+    notify: "공지사항",
+    study: "스터디 게시판",
+    board: "자유 게시판",
+  };
+
   return (
     <>
       <Background />
       <Header />
       <Container>
         <NoticeContainer>
-          <NoticeBlock>공지사항</NoticeBlock>
+          <NoticeBlock>{typo[type]}</NoticeBlock>
           <NoticeHeader>
-            <NoticeHeaderTitle>공지사항</NoticeHeaderTitle>
+            <NoticeHeaderTitle>{typo[type]}</NoticeHeaderTitle>
             <NoticeHeaderTypo>
               DNA 동아리의 다양한 소식을 전해드립니다.
               <br />
-              동아리 회원분들은 꼭 공지사항을 확인해주세요!
+              동아리 회원분들은 꼭 {typo[type]}을 확인해주세요!
             </NoticeHeaderTypo>
           </NoticeHeader>
         </NoticeContainer>

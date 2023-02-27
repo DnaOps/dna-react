@@ -38,7 +38,7 @@ const Comment = ({ commentInfo }) => {
       <CommentInfo commentInfo={commentInfo} />
 
       <RecommendComment
-        recommendComment={recommendComment}
+        recommendComment={{ ...recommendComment, val1: commentInfo.likeCount }}
         onClick={replyOnClick}
       />
       {replyClicked ? <ReplyDropDown /> : null}

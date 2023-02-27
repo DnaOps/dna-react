@@ -7,11 +7,15 @@ import ApplyButton from "../atoms/ApplyButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import likeButton from "../../assets/images/like_button.png";
+import likeButtonActivated from "../../assets/images/like_activated_button.png";
+
 import {
   getSpecificNotify,
-  getNofityComments,
   deleteNotify,
   postNotifyComment,
+  postLike,
+  getIfLiked,
 } from "../../api/request";
 
 const Container = styled.div`
@@ -117,6 +121,7 @@ const EditDeleteButton = ({ editOnClick, deleteOnClick }) => {
 };
 
 const RecommendCommentWrapper = styled.div`
+  display: flex;
   box-sizing: border-box;
   margin: 0 0 0 20px;
 `;
@@ -176,8 +181,32 @@ const CommentContainer = styled.div`
   margin: 30px auto 0 auto;
 `;
 
-const Notify = () => {
-  let lastComment = 0;
+const StyledLikeButton = styled.img`
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  margin: 10px 8px 0 -8px;
+  cursor: pointer;
+  filter: invert(12%) sepia(100%) saturate(4290%) hue-rotate(203deg)
+    brightness(87%) contrast(111%);
+`;
+
+const LikeButton = ({ liked, handleLike, id }) => {
+  const [mouseOver, setMouseOver] = useState(false);
+  const likeButtonOnClick = () => {
+    postLike(id, handleLike);
+  };
+  return (
+    <StyledLikeButton
+      src={liked || mouseOver ? likeButtonActivated : likeButton}
+      onMouseOver={() => setMouseOver(true)}
+      onMouseOut={() => setMouseOver(false)}
+      onClick={likeButtonOnClick}
+    />
+  );
+};
+
+const Notify = ({ type }) => {
   const navigate = useNavigate();
 
   const grayButton = {
@@ -227,11 +256,7 @@ const Notify = () => {
 
   const [comments, setComments] = useState([]);
   const handleComment = (commentList) => {
-    if (comments.length <= lastComment) {
-      // 수정 필요: 이미 로드된 데이터 재로드 방지
-      setComments([...comments, ...commentList]);
-      lastComment += commentList.length;
-    }
+    setComments([...commentList]);
   };
 
   const deleteOnClick = (id) => {
@@ -246,25 +271,58 @@ const Notify = () => {
   };
 
   const applyOnClick = (parentId) => {
-    postNotifyComment({
+    const commentData = {
       noticeId: notifyInfo.noticeId,
       parentCommentId: parentId,
       content: commentContent,
-    });
+    };
+    postNotifyComment(commentData, () =>
+      getSpecificNotify(id, handleNotifyInfo, handleComment)
+    );
+
+    setCommentContent("");
   };
 
   const { id } = useParams();
 
+  const [liked, setLiked] = useState(false);
+  const handleLike = (added) => {
+    setLiked((prev) => !prev);
+    switch (added) {
+      case "added":
+        handleNotifyInfo({
+          ...notifyInfo,
+          likeCount: notifyInfo.likeCount + 1,
+        });
+        break;
+      case "deleted":
+        handleNotifyInfo({
+          ...notifyInfo,
+          likeCount: notifyInfo.likeCount - 1,
+        });
+        break;
+      default:
+        console.log("like event did not applied");
+    }
+  };
+
   useEffect(() => {
     getSpecificNotify(id, handleNotifyInfo, handleComment);
     // getNofityComments(id, handleComment);
+    getIfLiked(id, setLiked);
   }, []);
+
+  const typo = {
+    notify: "공지사항",
+    study: "스터디 게시판",
+    board: "자유 게시판",
+  };
 
   return (
     <>
       <Header />
       <Container>
-        <NoticeTypo>공지사항</NoticeTypo>
+        <NoticeTypo>{typo[type]}</NoticeTypo>
         <Notice>
           <NoticeTitle>{notifyInfo.title}</NoticeTitle>
 
@@ -287,6 +345,7 @@ const Notify = () => {
           <NoticeDivider />
 
           <RecommendCommentWrapper>
+            <LikeButton liked={liked} handleLike={handleLike} id={id} />
             <RecommendComment recommendComment={recommendComment} />
           </RecommendCommentWrapper>
 
