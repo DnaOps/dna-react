@@ -19,6 +19,7 @@ function App() {
       <Route path="/notify/:id" element={<Notify type="notify" />} />
       <Route path="/board/:id" element={<Notify type="board" />} />
       <Route path="/study/:id" element={<Notify type="study" />} />
+      <Route path="/home" element={<Home />} />
     </Routes>
   );
 }
