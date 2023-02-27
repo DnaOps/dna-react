@@ -1,3 +1,4 @@
+import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Notify from "./components/pages/Notify";
 import NotifyList from "./components/pages/NotifyList";
