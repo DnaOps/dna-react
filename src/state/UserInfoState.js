@@ -3,7 +3,14 @@ import { postAuthenticate } from "../api/request";
 
 export const UserInfoState = atom({
   key: "UserInfoState",
-  default: {},
+  default: {
+    commentCount: 0,
+    createdDate: "",
+    likeCount: 0,
+    postCount: 0,
+    role: "",
+    username: "",
+  },
 });
 
 export const UserInfo = selector({
