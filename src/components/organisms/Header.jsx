@@ -78,12 +78,28 @@ const DropDownNavContainer = styled.div`
   overflow: hidden;
 `;
 
-const DropDownNav = styled.div`
+const StyledDropDownNav = styled.div`
   margin: 0 0 12px 0;
   font-size: 10px;
   font-weight: 400;
   cursor: pointer;
 `;
+
+const DropDownNav = ({ option, url }) => {
+  const navigate = useNavigate();
+  const [mouseOver, setMouseOver] = useState(false);
+  return (
+    <StyledDropDownNav
+      key={option}
+      onMouseOver={() => setMouseOver(true)}
+      onMouseOut={() => setMouseOver(false)}
+      style={{ textDecoration: mouseOver ? "underline" : null }}
+      onClick={() => navigate(url)}
+    >
+      {option}
+    </StyledDropDownNav>
+  );
+};
 
 const DropDownMenuWrapper = styled.div`
   box-sizing: border-box;
@@ -106,12 +122,21 @@ const UpperSpace = styled.div`
 `;
 
 const Nav = ({ typo, options }) => {
+  const navOnClick = {
+    "About us": "/home",
+    회칙: "/rule",
+    공지사항: "/notify_list",
+    자유게시판: "/board_list",
+    "스터디 게시판": "/study_list",
+    "앨범 게시판": "/album_list",
+  };
+
   return (
     <div>
       <StyledNav>{typo}</StyledNav>
       <DropDownNavContainer>
         {options.map((option) => (
-          <DropDownNav key={option}>{option}</DropDownNav>
+          <DropDownNav option={option} url={navOnClick[option]} />
         ))}
       </DropDownNavContainer>
     </div>
@@ -201,21 +226,14 @@ const Header = () => {
           <LogoText src={logoText} />
         </LogoContainer>
 
-        <NavContainer>
+        <NavContainer onClick={menuClickHandler}>
           {nav.map((t) => (
-            <Nav
-              key={t}
-              typo={t}
-              options={navOptions[t]}
-              onClick={() => {
-                navClickHandler(t);
-              }}
-            />
+            <Nav key={t} typo={t} options={navOptions[t]} />
           ))}
           <DropDownDivider
             style={menuClicked ? menuDividerAppear : menuDividerDisappear}
           />
-          <MenuWrapper>
+          <MenuWrapper onClick={menuClickHandler}>
             <Menu src={menu} onClick={menuClickHandler} />
 
             <DropDownMenuWrapper>
@@ -227,9 +245,7 @@ const Header = () => {
                   <DropDownMenuContainer>
                     <DropDownMenu>
                       권한 :&nbsp;
-                      {userInfo.authorization == "USER_ROLE"
-                        ? "회원"
-                        : "관리자"}
+                      {userInfo.role == "USER_ROLE" ? "회원" : "관리자"}
                     </DropDownMenu>
                     <DropDownMenu>
                       게시글 수 : {userInfo.postCount}
