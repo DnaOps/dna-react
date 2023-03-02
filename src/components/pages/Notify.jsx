@@ -18,6 +18,9 @@ import {
   getIfLiked,
 } from "../../api/request";
 
+import UserInfoState from "../../state/UserInfoState";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -270,15 +273,19 @@ const Notify = ({ type }) => {
     setCommentContent(event.target.value);
   };
 
+  const userInfo = useRecoilValue(UserInfoState);
+  const setUserInfo = useSetRecoilState(UserInfoState);
+
   const applyOnClick = (parentId) => {
     const commentData = {
       noticeId: notifyInfo.noticeId,
       parentCommentId: parentId,
       content: commentContent,
     };
-    postNotifyComment(commentData, () =>
-      getSpecificNotify(id, handleNotifyInfo, handleComment)
-    );
+    postNotifyComment(commentData, () => {
+      setUserInfo({ ...userInfo, commentCount: userInfo.commentCount + 1 });
+      getSpecificNotify(id, handleNotifyInfo, handleComment);
+    });
 
     setCommentContent("");
   };
