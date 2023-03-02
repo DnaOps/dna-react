@@ -151,8 +151,21 @@ const StyledNoticeButton = styled.div`
   cursor: pointer;
 `;
 
-const NoticeButton = ({ typo, background }) => {
-  return <StyledNoticeButton style={background}>{typo}</StyledNoticeButton>;
+const NoticeButton = ({ typo, background, type }) => {
+  const navigate = useNavigate();
+  const navURL = {
+    목록: `/${type}_list`,
+    답변: "",
+    글쓰기: "",
+  };
+  return (
+    <StyledNoticeButton
+      style={background}
+      onClick={() => navigate(navURL[typo])}
+    >
+      {typo}
+    </StyledNoticeButton>
+  );
 };
 
 const CommentWrite = styled.div`
@@ -361,6 +374,7 @@ const Notify = ({ type }) => {
               <NoticeButton
                 key={info.typo}
                 typo={info.typo}
+                type={type}
                 background={info.background}
               />
             ))}
