@@ -174,20 +174,6 @@ const NavToLogin = () => {
 const Header = () => {
   const navigate = useNavigate();
 
-  const navClickHandler = (Nav) => {
-    switch (Nav) {
-      // 수정 필요: 경로 임시 설정
-      case "개요":
-        navigate("/about");
-        break;
-      case "게시판":
-        navigate("/board");
-        break;
-      default:
-        console.log("err: invalid Nav");
-    }
-  };
-
   const [menuClicked, setMenuClicked] = useState(false);
   const menuClickHandler = () => {
     setMenuClicked((prev) => !prev);
