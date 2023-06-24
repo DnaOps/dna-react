@@ -148,7 +148,7 @@ const SearchSelectBox = styled.div`
 `;
 
 const SearchSelectBoxDropDown = ({ onClick, selected }) => {
-	const typos = ["제목", "내용", "작성자"];
+	const typos = ["제목", "내용", "작성자", "제목+내용"];
 
 	return (
 		<>
@@ -194,8 +194,8 @@ const StyledSearchButton = styled.div`
 	cursor: pointer;
 `;
 
-const SearchButton = () => {
-	return <StyledSearchButton>검색</StyledSearchButton>;
+const SearchButton = ({ onClick }) => {
+	return <StyledSearchButton onClick={onClick}>검색</StyledSearchButton>;
 };
 
 const NoticeList = styled.div`
@@ -298,6 +298,15 @@ const Loading = ({ inViewed, cnt }) => {
 	);
 };
 
+const NoNotices = styled.div`
+	height: 56px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #fff;
+	font-size: 20px;
+`;
+
 const NotifyList = ({ type }) => {
 	const navigate = useNavigate();
 	const noticeOnClick = (id) => {
@@ -316,11 +325,28 @@ const NotifyList = ({ type }) => {
 
 	const [notices, setNotices] = useState([]);
 	const [refreshCnt, setRefrshCnt] = useState(0);
+	const handleNotices = (noticeList) => {
+		setNotices(noticeList);
+	};
 	const handleRefreshInview = (noticeList) => {
 		setRefrshCnt(refreshCnt + 1);
 		setNotices([...notices, ...noticeList]);
 	};
 
+	const [search, setSearch] = useState("");
+	const handleSearchChange = (e) => {
+		setSearch(e.target.value);
+	};
+	const searchContents = () => {
+		const initialNoticeInfo = {
+			type: type,
+			start: "",
+			title: selected == "제목" || selected == "제목+내용" ? search : "",
+			author: selected == "작성자" ? search : "",
+			content: selected == "내용" || selected == "제목+내용" ? search : "",
+		};
+		getNotices(initialNoticeInfo, handleNotices);
+	};
 	useEffect(() => {
 		// request first 13 notices
 		// setNotices(res....);
@@ -340,12 +366,12 @@ const NotifyList = ({ type }) => {
 				content: "",
 			};
 
-			getNotices(initialNoticeInfo, handleRefreshInview);
+			getNotices(initialNoticeInfo, handleNotices);
 		}
 	}, []);
 
 	const selectBoxOpenedAnimation = {
-		height: "102px",
+		height: "136px",
 	};
 
 	const selectBoxClosedAnimation = {
@@ -404,8 +430,8 @@ const NotifyList = ({ type }) => {
 							/>
 						</SearchSelectBoxWrapper>
 						<SearchBar>
-							<SearchField />
-							<SearchButton />
+							<SearchField onChange={handleSearchChange} />
+							<SearchButton onClick={searchContents} />
 						</SearchBar>
 					</SearchBarContainer>
 					<WritePostButton type={type} />
@@ -417,7 +443,10 @@ const NotifyList = ({ type }) => {
 							.replaceAll("-", ".");
 						return <Notice noticeInfo={notice} onClick={noticeOnClick} />;
 					})}
-					<Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
+					{notices.length == 0 ? (
+						<NoNotices> 표시할 게시글이 없습니다.</NoNotices>
+					) : null}
+					<Loading inViewed={handleNotices} cnt={refreshCnt} />
 				</NoticeList>
 			</Container>
 		</>
