@@ -23,7 +23,11 @@ const StyledWritePostButton = styled.div`
 	cursor: pointer;
 `;
 
-const WritePostButton = ({ onClick }) => {
+const WritePostButton = ({ type }) => {
+	const navigate = useNavigate();
+	const writePostOnClick = () => {
+		navigate(`/${type}_post/write`);
+	};
 	return (
 		<div
 			style={{
@@ -32,7 +36,9 @@ const WritePostButton = ({ onClick }) => {
 				justifyContent: "flex-end",
 			}}
 		>
-			<StyledWritePostButton onClick={onClick}>글쓰기</StyledWritePostButton>
+			<StyledWritePostButton onClick={writePostOnClick}>
+				글쓰기
+			</StyledWritePostButton>
 		</div>
 	);
 };
@@ -402,7 +408,7 @@ const NotifyList = ({ type }) => {
 							<SearchButton />
 						</SearchBar>
 					</SearchBarContainer>
-					<WritePostButton />
+					<WritePostButton type={type} />
 				</div>
 				<NoticeList>
 					{notices.map((notice) => {
