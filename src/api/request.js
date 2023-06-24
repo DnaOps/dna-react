@@ -96,3 +96,8 @@ export const postLike = async (noticeId, handleLike) => {
 	const res = await Axios.post(`/likes/notices/${noticeId}`);
 	handleLike(res.data.data);
 };
+
+export const postNotify = async (postNotifyDTO, navigate) => {
+	const res = await Axios.post(`/forumPosts`, postNotifyDTO);
+	if (res.data.apiStatus.errorCodeMessage == "Okay") navigate();
+};

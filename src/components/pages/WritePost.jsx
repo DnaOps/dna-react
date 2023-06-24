@@ -4,6 +4,10 @@ import styled from "styled-components";
 
 import photoUploadImg from "../../assets/images/photo_upload.png";
 
+import { postNotify } from "../../api/request";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Container = styled.div`
 	width: 100%;
 	height: 100vh;
@@ -54,9 +58,9 @@ const StyledNoticeButton = styled.div`
 	cursor: pointer;
 `;
 
-const NoticeButton = ({ typo, background }) => {
+const NoticeButton = ({ typo, background, onClick }) => {
 	return (
-		<StyledNoticeButton style={{ background: background }}>
+		<StyledNoticeButton style={{ background: background }} onClick={onClick}>
 			{typo}
 		</StyledNoticeButton>
 	);
@@ -129,9 +133,34 @@ const PhotoUpload = styled.div`
 `;
 
 const WritePost = ({ type }) => {
+	const navigate = useNavigate();
+
+	const [title, setTitle] = useState("");
+	const [content, setContent] = useState("");
+
+	const handleTitleChange = (e) => {
+		setTitle(e.target.value);
+	};
+	const handleContentChange = (e) => {
+		setContent(e.target.value);
+	};
+
+	const applyOnClick = () => {
+		postNotify(
+			{
+				title: title,
+				content: content,
+			},
+			navigate(`/${type}_list`)
+		);
+	};
+	const cancelOnclick = () => {
+		navigate(`/${type}_list`);
+	};
+
 	const buttonInfo = [
-		{ typo: "등록", background: "#024298" },
-		{ typo: "취소", background: "#828282" },
+		{ typo: "등록", background: "#024298", onClick: applyOnClick },
+		{ typo: "취소", background: "#828282", onClick: cancelOnclick },
 	];
 	return (
 		<>
@@ -150,13 +179,14 @@ const WritePost = ({ type }) => {
 								key={info.typo}
 								typo={info.typo}
 								background={info.background}
+								onClick={info.onClick}
 							/>
 						))}
 					</NoticeButtonContainer>
 				</UpperContainer>
 				<Notice>
-					<TitleInput />
-					<ContentInput></ContentInput>
+					<TitleInput onChange={handleTitleChange} />
+					<ContentInput onChange={handleContentChange}></ContentInput>
 					<Footer />
 				</Notice>
 			</Container>

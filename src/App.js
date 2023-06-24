@@ -15,7 +15,7 @@ function App() {
 			<Route path="/login" element={<Login />} />
 			<Route path="/signup" element={<SignUp />} />
 			<Route path="/notify_list" element={<NotifyList type="notify" />} />
-			<Route path="/board_list" element={<NotifyList type="forum" />} />
+			<Route path="/forum_list" element={<NotifyList type="forum" />} />
 			<Route path="/study_list" element={<NotifyList type="study" />} />
 			<Route path="/notify/:id" element={<Notify type="notify" />} />
 			<Route path="/forum/:id" element={<Notify type="forum" />} />
