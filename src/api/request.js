@@ -58,17 +58,19 @@ export const getNotices = async (boardInfo, inViewed) => {
 };
 
 export const getSpecificNotify = async (
+	type,
 	id,
+	start,
 	handleNotifyInfo,
 	handleComment
 ) => {
-	const notifyRes = await Axios.get(`/boards/notices/${id}`);
+	const notifyRes = await Axios.get(`/${type}Posts/${id}`);
 	handleNotifyInfo(notifyRes.data.data);
-	getNofityComments(id, handleComment);
+	getNofityComments(type, id, start, handleComment);
 };
 
-export const getNofityComments = async (id, handleComment) => {
-	const res = await Axios.get(`/comments/notices/${id}`);
+export const getNofityComments = async (type, id, start, handleComment) => {
+	const res = await Axios.get(`/${type}Posts/${id}/comments?start=${start}`);
 	handleComment(res.data.data.list);
 };
 
@@ -77,8 +79,8 @@ export const deleteNotify = async (id) => {
 	console.log("res: ", res);
 };
 
-export const postNotifyComment = async (commentData, callBack) => {
-	await Axios.post("/comments", commentData);
+export const postNotifyComment = async (type, id, commentData, callBack) => {
+	await Axios.post(`/${type}Posts/${id}/comments`, commentData);
 	callBack();
 };
 
@@ -87,14 +89,9 @@ export const postSignUp = async (signUpData) => {
 	console.log("res: ", res);
 };
 
-export const getIfLiked = async (noticeId, handleLike) => {
-	const res = await Axios.get(`/likes/notices/${noticeId}`);
-	handleLike(res.data.data);
-};
-
-export const postLike = async (noticeId, handleLike) => {
-	const res = await Axios.post(`/likes/notices/${noticeId}`);
-	handleLike(res.data.data);
+export const postLike = async (type, noticeId) => {
+	const res = await Axios.post(`/${type}Posts/${noticeId}/like`);
+	console.log("res:", res);
 };
 
 export const postNotify = async (postNotifyDTO, navigate) => {

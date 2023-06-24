@@ -257,9 +257,9 @@ const NoticeLiked = styled.div`
 	margin-left: 6px;
 `;
 
-const Notice = ({ noticeInfo, onClick }) => {
+const Notice = ({ type, noticeInfo, onClick }) => {
 	return (
-		<StyledNotice onClick={() => onClick(noticeInfo.noticeId)}>
+		<StyledNotice onClick={() => onClick(noticeInfo[type + "Id"])}>
 			<NoticeTitleContainer>
 				<NoticeTitle>{noticeInfo.title}</NoticeTitle>
 				<NoticeView>{noticeInfo.commentCount}</NoticeView>
@@ -310,7 +310,7 @@ const NoNotices = styled.div`
 const NotifyList = ({ type }) => {
 	const navigate = useNavigate();
 	const noticeOnClick = (id) => {
-		navigate(`/${type}Posts/${id}/comments?start=0`);
+		navigate(`/${type}/${id}`);
 	};
 
 	const [selected, setSelected] = useState("제목");
@@ -441,7 +441,9 @@ const NotifyList = ({ type }) => {
 						notice.modifiedAt = notice.modifiedAt
 							.substring(0, 10)
 							.replaceAll("-", ".");
-						return <Notice noticeInfo={notice} onClick={noticeOnClick} />;
+						return (
+							<Notice type={type} noticeInfo={notice} onClick={noticeOnClick} />
+						);
 					})}
 					{notices.length == 0 ? (
 						<NoNotices> 표시할 게시글이 없습니다.</NoNotices>
