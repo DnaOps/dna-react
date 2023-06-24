@@ -10,6 +10,33 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getNotices } from "../../api/request";
 
+const StyledWritePostButton = styled.div`
+	width: 56px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #024298;
+	box-sizing: border-box;
+	font-size: 12px;
+	color: #fff;
+	cursor: pointer;
+`;
+
+const WritePostButton = ({ onClick }) => {
+	return (
+		<div
+			style={{
+				width: "100%",
+				display: "flex",
+				justifyContent: "flex-end",
+			}}
+		>
+			<StyledWritePostButton onClick={onClick}>글쓰기</StyledWritePostButton>
+		</div>
+	);
+};
+
 const Background = styled.div`
 	width: 100%;
 	height: 100vh;
@@ -84,12 +111,12 @@ const NoticeHeaderTypo = styled.div`
 `;
 
 const SearchBarContainer = styled.div`
-	width: 500px;
+	min-width: 500px;
 	height: 34px;
 	display: flex;
 	justify-content: space-between;
 	box-sizing: border-box;
-	margin-bottom: 30px;
+	margin: 0 30px 30px;
 `;
 
 const SearchSelectBoxWrapper = styled.div`
@@ -341,36 +368,42 @@ const NotifyList = ({ type }) => {
 						</NoticeHeaderTypo>
 					</NoticeHeader>
 				</NoticeContainer>
+				<div
+					style={{
+						display: "flex",
+						alignItem: "center",
+					}}
+				>
+					<SearchBarContainer>
+						<SearchSelectBoxWrapper
+							style={
+								searchSelectboxClicked
+									? selectBoxOpenedAnimation
+									: selectBoxClosedAnimation
+							}
+						>
+							<SearchSelectBox onClick={searchSelectboxOnClick}>
+								{selected}
+								<SearchSelectBoxArrow
+									src={searchSelectboxArrow}
+									style={{
+										transform: searchSelectboxClicked ? "rotate(180deg)" : "",
+									}}
+								/>
+							</SearchSelectBox>
 
-				<SearchBarContainer>
-					<SearchSelectBoxWrapper
-						style={
-							searchSelectboxClicked
-								? selectBoxOpenedAnimation
-								: selectBoxClosedAnimation
-						}
-					>
-						<SearchSelectBox onClick={searchSelectboxOnClick}>
-							{selected}
-							<SearchSelectBoxArrow
-								src={searchSelectboxArrow}
-								style={{
-									transform: searchSelectboxClicked ? "rotate(180deg)" : "",
-								}}
+							<SearchSelectBoxDropDown
+								onClick={handleSelected}
+								selected={selected}
 							/>
-						</SearchSelectBox>
-
-						<SearchSelectBoxDropDown
-							onClick={handleSelected}
-							selected={selected}
-						/>
-					</SearchSelectBoxWrapper>
-					<SearchBar>
-						<SearchField />
-						<SearchButton />
-					</SearchBar>
-				</SearchBarContainer>
-
+						</SearchSelectBoxWrapper>
+						<SearchBar>
+							<SearchField />
+							<SearchButton />
+						</SearchBar>
+					</SearchBarContainer>
+					<WritePostButton />
+				</div>
 				<NoticeList>
 					{notices.map((notice) => {
 						notice.modifiedAt = notice.modifiedAt
