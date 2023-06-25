@@ -16,7 +16,7 @@ import {
 	postNotifyComment,
 	postLike,
 } from "../../api/request";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import UserInfoState from "../../state/UserInfoState";
 
 const Container = styled.div`
@@ -213,6 +213,8 @@ const LikeButton = ({ type, liked, id }) => {
 
 const Notify = ({ type }) => {
 	const navigate = useNavigate();
+	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
+	const [userInfo, setUserInfo] = useState(useRecoilValue(UserInfoState));
 
 	const grayButton = {
 		background: "#828282",
@@ -299,6 +301,11 @@ const Notify = ({ type }) => {
 
 	useEffect(() => {
 		getSpecificNotify(type, id, 0, handleNotifyInfo, handleComment);
+		if (!userInfo.username) {
+			const recoveredInfo = JSON.parse(localStorage.getItem("userInfo"));
+			setRecoilUserInfo(recoveredInfo);
+			setUserInfo(recoveredInfo);
+		}
 	}, []);
 
 	const typo = {
