@@ -140,7 +140,7 @@ const Home = () => {
 				<HomeListContainer>
 					<BoardIcon
 						onClick={() => {
-							navigate("/notify_list");
+							navigate("/notice_list");
 						}}
 						src={boardNotifyIcon}
 					/>

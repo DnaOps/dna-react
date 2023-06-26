@@ -309,7 +309,7 @@ const Notify = ({ type }) => {
 	}, []);
 
 	const typo = {
-		notify: "공지사항",
+		notice: "공지사항",
 		study: "스터디 게시판",
 		board: "자유 게시판",
 	};

@@ -379,7 +379,7 @@ const NotifyList = ({ type }) => {
 	};
 
 	const typo = {
-		notify: "공지사항",
+		notice: "공지사항",
 		study: "스터디 게시판",
 		forum: "자유 게시판",
 	};
@@ -437,7 +437,7 @@ const NotifyList = ({ type }) => {
 					<WritePostButton type={type} />
 				</div>
 				<NoticeList>
-					{notices.map((notice) => {
+					{notices?.map((notice) => {
 						notice.modifiedAt = notice.modifiedAt
 							.substring(0, 10)
 							.replaceAll("-", ".");
@@ -445,7 +445,7 @@ const NotifyList = ({ type }) => {
 							<Notice type={type} noticeInfo={notice} onClick={noticeOnClick} />
 						);
 					})}
-					{notices.length == 0 ? (
+					{!notices || notices?.length == 0 ? (
 						<NoNotices> 표시할 게시글이 없습니다.</NoNotices>
 					) : null}
 					<Loading inViewed={handleNotices} cnt={refreshCnt} />
