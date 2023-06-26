@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
+import pinImg from "../../assets/images/notice_pin.png";
 import Header from "../organisms/Header";
 
 import styled from "styled-components";
@@ -229,6 +230,8 @@ const NoticeTitle = styled.div`
 `;
 
 const NoticeView = styled.div`
+	box-sizing: border-box;
+	margin: 0 15px 0 5px;
 	color: #024298;
 	font-weight: 700;
 `;
@@ -257,12 +260,15 @@ const NoticeLiked = styled.div`
 	margin-left: 6px;
 `;
 
-const Notice = ({ type, noticeInfo, onClick }) => {
+const Notice = ({ type, noticeInfo, onClick, pin }) => {
 	return (
 		<StyledNotice onClick={() => onClick(noticeInfo[type + "Id"])}>
 			<NoticeTitleContainer>
-				<NoticeTitle>{noticeInfo.title}</NoticeTitle>
+				<NoticeTitle style={{ fontWeight: pin ? "600" : "400" }}>
+					{noticeInfo.title}
+				</NoticeTitle>
 				<NoticeView>{noticeInfo.commentCount}</NoticeView>
+				{pin}
 			</NoticeTitleContainer>
 			<NoticeAuthorLevel>{noticeInfo.level}</NoticeAuthorLevel>
 			<NoticeAuthor>{noticeInfo.author}</NoticeAuthor>
@@ -345,7 +351,12 @@ const NotifyList = ({ type }) => {
 			author: selected == "작성자" ? search : "",
 			content: selected == "내용" || selected == "제목+내용" ? search : "",
 		};
-		getNotices(initialNoticeInfo, handleNotices);
+		getNotices(initialNoticeInfo, handleNotices, handlePinned);
+	};
+
+	const [pinned, setPinned] = useState([]);
+	const handlePinned = (notice) => {
+		setPinned(notice);
 	};
 	useEffect(() => {
 		// request first 13 notices
@@ -366,7 +377,7 @@ const NotifyList = ({ type }) => {
 				content: "",
 			};
 
-			getNotices(initialNoticeInfo, handleNotices);
+			getNotices(initialNoticeInfo, handleNotices, handlePinned);
 		}
 	}, []);
 
@@ -437,6 +448,21 @@ const NotifyList = ({ type }) => {
 					<WritePostButton type={type} />
 				</div>
 				<NoticeList>
+					{pinned.map((pin) => {
+						pin.modifiedAt = pin.modifiedAt
+							.substring(0, 10)
+							.replaceAll("-", ".");
+						return (
+							<Notice
+								type={type}
+								noticeInfo={pin}
+								onClick={noticeOnClick}
+								pin={
+									<img style={{ width: "15px", height: "15px" }} src={pinImg} />
+								}
+							/>
+						);
+					})}
 					{notices?.map((notice) => {
 						notice.modifiedAt = notice.modifiedAt
 							.substring(0, 10)
