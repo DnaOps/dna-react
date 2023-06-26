@@ -25,7 +25,7 @@ export const getNaverLogin = async () => {
 	console.log("res: ", res);
 };
 
-export const getNotices = async (boardInfo, inViewed) => {
+export const getNotices = async (boardInfo, handleNotify, handlePinned) => {
 	const { type, start, title, author, content } = boardInfo;
 
 	let res = null;
@@ -52,10 +52,14 @@ export const getNotices = async (boardInfo, inViewed) => {
 			res = await Axios.get(`/${type}Posts?start=${start}&content=${content}`);
 	}
 
-	const noticeList = res.data.data.list;
-	// if
-
-	inViewed(noticeList);
+	console.log("res:", res);
+	if (type == "notice") {
+		console.log("pinned:", res.data.data.pinnedNoticePost.list);
+		handleNotify(res.data.data.noticePost.list);
+		handlePinned(res.data.data.pinnedNoticePost.list);
+	} else {
+		handleNotify(res.data.data.list);
+	}
 };
 
 export const getSpecificNotify = async (

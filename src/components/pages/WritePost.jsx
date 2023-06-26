@@ -146,14 +146,22 @@ const WritePost = ({ type }) => {
 	};
 
 	const applyOnClick = () => {
-		postNotify(
-			{
+		let postNotifyDTO = {};
+		if (type == "notice") {
+			postNotifyDTO = {
 				title: title,
 				content: content,
-			},
-			navigate(`/${type}_list`)
-		);
+				isPinned: false,
+			};
+		} else {
+			postNotifyDTO = {
+				title: title,
+				content: content,
+			};
+		}
+		postNotify(type, postNotifyDTO, navigate(`/${type}_list`));
 	};
+
 	const cancelOnclick = () => {
 		navigate(`/${type}_list`);
 	};
