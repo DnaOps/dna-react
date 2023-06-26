@@ -271,8 +271,8 @@ const Notify = ({ type }) => {
 		setComments(commentList);
 	};
 
-	const deleteOnClick = (id) => {
-		deleteNotify(id);
+	const deleteOnClick = (type, id) => {
+		deleteNotify(type, id);
 		navigate(`/${type}_list`);
 	};
 
@@ -334,9 +334,9 @@ const Notify = ({ type }) => {
 					<NoticeDivider />
 
 					<NoticeContent>{notifyInfo?.content}</NoticeContent>
-					{userId == notifyInfo?.authorId ? (
+					{userId == notifyInfo.authorId ? (
 						<EditDeleteButton
-							deleteOnClick={() => deleteOnClick(notifyInfo?.noticeId)}
+							deleteOnClick={() => deleteOnClick(type, notifyInfo[`${type}Id`])}
 						/>
 					) : null}
 

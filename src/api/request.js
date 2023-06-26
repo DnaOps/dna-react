@@ -52,9 +52,7 @@ export const getNotices = async (boardInfo, handleNotify, handlePinned) => {
 			res = await Axios.get(`/${type}Posts?start=${start}&content=${content}`);
 	}
 
-	console.log("res:", res);
 	if (type == "notice") {
-		console.log("pinned:", res.data.data.pinnedNoticePost.list);
 		handleNotify(res.data.data.noticePost.list);
 		handlePinned(res.data.data.pinnedNoticePost.list);
 	} else {
@@ -80,9 +78,8 @@ export const getNofityComments = async (type, id, start, handleComment) => {
 	handleComment(res.data.data.list);
 };
 
-export const deleteNotify = async (id) => {
-	const res = await Axios.delete("/boards/notices", { data: { noticeId: id } });
-	console.log("res: ", res);
+export const deleteNotify = async (type, id) => {
+	const res = await Axios.delete(`${type}Posts/${id}`);
 };
 
 export const postNotifyComment = async (type, id, commentData, callBack) => {
