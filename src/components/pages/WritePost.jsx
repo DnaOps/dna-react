@@ -4,9 +4,9 @@ import styled from "styled-components";
 
 import photoUploadImg from "../../assets/images/photo_upload.png";
 
-import { postNotify } from "../../api/request";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { postNotify, putNotify } from "../../api/request";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 	width: 100%;
@@ -159,7 +159,16 @@ const WritePost = ({ type }) => {
 				content: content,
 			};
 		}
-		postNotify(type, postNotifyDTO, navigate(`/${type}_list`));
+		if (state) {
+			putNotify(
+				type,
+				state[`${type}Id`],
+				postNotifyDTO,
+				navigate(`/${type}_list`)
+			);
+		} else {
+			postNotify(type, postNotifyDTO, navigate(`/${type}_list`));
+		}
 	};
 
 	const cancelOnclick = () => {
@@ -170,6 +179,9 @@ const WritePost = ({ type }) => {
 		{ typo: "등록", background: "#024298", onClick: applyOnClick },
 		{ typo: "취소", background: "#828282", onClick: cancelOnclick },
 	];
+
+	const { state } = useLocation();
+
 	return (
 		<>
 			<Header />
@@ -193,8 +205,14 @@ const WritePost = ({ type }) => {
 					</NoticeButtonContainer>
 				</UpperContainer>
 				<Notice>
-					<TitleInput onChange={handleTitleChange} />
-					<ContentInput onChange={handleContentChange}></ContentInput>
+					<TitleInput
+						onChange={handleTitleChange}
+						defaultValue={state?.title}
+					/>
+					<ContentInput
+						onChange={handleContentChange}
+						defaultValue={state?.content}
+					></ContentInput>
 					<Footer />
 				</Notice>
 			</Container>

@@ -276,6 +276,10 @@ const Notify = ({ type }) => {
 		navigate(`/${type}_list`);
 	};
 
+	const editOnClick = (path, param) => {
+		navigate(path, { state: param });
+	};
+
 	const [commentContent, setCommentContent] = useState("");
 
 	const handleCommentWrite = (event) => {
@@ -337,6 +341,7 @@ const Notify = ({ type }) => {
 					{userId == notifyInfo.authorId ? (
 						<EditDeleteButton
 							deleteOnClick={() => deleteOnClick(type, notifyInfo[`${type}Id`])}
+							editOnClick={() => editOnClick(`/${type}_post/write`, notifyInfo)}
 						/>
 					) : null}
 

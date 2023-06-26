@@ -102,3 +102,8 @@ export const postNotify = async (type, postNotifyDTO, navigate) => {
 	console.log("res:", res);
 	if (res.data.apiStatus.errorCodeMessage == "Okay") navigate();
 };
+
+export const putNotify = async (type, id, postNotifyDTO, navigate) => {
+	const res = await Axios.put(`/${type}Posts/${id}`, postNotifyDTO);
+	if (res.data.apiStatus.errorCodeMessage == "Okay") navigate();
+};
