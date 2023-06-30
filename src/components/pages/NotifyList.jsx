@@ -361,7 +361,7 @@ const NotifyList = ({ type }) => {
 	useEffect(() => {
 		// request first 13 notices
 		// setNotices(res....);
-		console.log("rendered");
+		setPinned([]);
 		const token = localStorage.getItem("Authorization");
 		if (!token) {
 			alert("로그인이 필요합니다.");
