@@ -24,7 +24,7 @@ export const getNaverLogin = async () => {
   console.log("res: ", res);
 };
 
-export const getNotices = async (boardInfo, inViewed) => {
+export const getNotices = async (boardInfo, handleNotify, handlePinned) => {
   const { type, start, title, author, content } = boardInfo;
 
   let res = null;
@@ -32,7 +32,7 @@ export const getNotices = async (boardInfo, inViewed) => {
     if (title == "" && author == "" && content == "")
       res = await Axios.get(`/${type}Posts`);
     else if (title && content)
-      res = await Axios.get(`/${type}Posts?title=${title}?content=${content}`);
+      res = await Axios.get(`/${type}Posts?title=${title}&content=${content}`);
     else if (title) res = await Axios.get(`/${type}Posts?title=${title}`);
     else if (author) res = await Axios.get(`/${type}Posts?author=${author}`);
     else if (content) res = await Axios.get(`/${type}Posts?content=${content}`);
@@ -41,43 +41,48 @@ export const getNotices = async (boardInfo, inViewed) => {
       res = await Axios.get(`/${type}Posts?start=${start}`);
     else if (title && content)
       res = await Axios.get(
-        `/${type}Posts?start=${start}?title=${title}?content=${content}`
+        `/${type}Posts?start=${start}&title=${title}&content=${content}`
       );
     else if (title)
-      res = await Axios.get(`/${type}Posts?start=${start}?title=${title}`);
+      res = await Axios.get(`/${type}Posts?start=${start}&title=${title}`);
     else if (author)
-      res = await Axios.get(`/${type}Posts?start=${start}?author=${author}`);
+      res = await Axios.get(`/${type}Posts?start=${start}&author=${author}`);
     else if (content)
-      res = await Axios.get(`/${type}Posts?start=${start}?content=${content}`);
+      res = await Axios.get(`/${type}Posts?start=${start}&content=${content}`);
   }
 
-  const noticeList = res.data.data.list;
-
-  inViewed(noticeList);
+  if (type == "notice") {
+    handleNotify(res.data.data.noticePost.list);
+    handlePinned(res.data.data.pinnedNoticePost.list);
+  } else {
+    handleNotify(res.data.data.list);
+  }
 };
 
 export const getSpecificNotify = async (
+  type,
   id,
+  start,
   handleNotifyInfo,
   handleComment
 ) => {
-  const notifyRes = await Axios.get(`/boards/notices/${id}`);
+  const notifyRes = await Axios.get(`/${type}Posts/${id}`);
+  console.log("res:", notifyRes);
   handleNotifyInfo(notifyRes.data.data);
-  getNofityComments(id, handleComment);
+  getNofityComments(type, id, start, handleComment);
 };
 
-export const getNofityComments = async (id, handleComment) => {
-  const res = await Axios.get(`/comments/notices/${id}`);
+export const getNofityComments = async (type, id, start, handleComment) => {
+  const res = await Axios.get(`/${type}Posts/${id}/comments?start=${start}`);
   handleComment(res.data.data.list);
 };
 
-export const deleteNotify = async (id) => {
-  const res = await Axios.delete("/boards/notices", { data: { noticeId: id } });
-  console.log("res: ", res);
+export const deleteNotify = async (type, id) => {
+  const res = await Axios.delete(`${type}Posts/${id}`);
 };
 
-export const postNotifyComment = async (commentData, callBack) => {
-  await Axios.post("/comments", commentData);
+export const postNotifyComment = async (type, id, commentData, callBack) => {
+  await Axios.post(`/${type}Posts/${id}/comments`, commentData);
   callBack();
 };
 
@@ -86,17 +91,18 @@ export const postSignUp = async (signUpData) => {
   console.log("res: ", res);
 };
 
-export const getIfLiked = async (noticeId, handleLike) => {
-  const res = await Axios.get(`/likes/notices/${noticeId}`);
-  handleLike(res.data.data);
-};
-
-export const postLike = async (noticeId, handleLike) => {
-  const res = await Axios.post(`/likes/notices/${noticeId}`);
-  handleLike(res.data.data);
+export const postLike = async (type, noticeId) => {
+  const res = await Axios.post(`/${type}Posts/${noticeId}/like`);
+  console.log("res:", res);
 };
 
 export const postNotify = async (type, postNotifyDTO, navigate) => {
   const res = await Axios.post(`/${type}Posts`, postNotifyDTO);
+  console.log("res:", res);
+  if (res.data.apiStatus.errorCodeMessage == "Okay") navigate();
+};
+
+export const putNotify = async (type, id, postNotifyDTO, navigate) => {
+  const res = await Axios.put(`/${type}Posts/${id}`, postNotifyDTO);
   if (res.data.apiStatus.errorCodeMessage == "Okay") navigate();
 };

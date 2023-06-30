@@ -4,9 +4,9 @@ import styled from "styled-components";
 
 import photoUploadImg from "../../assets/images/photo_upload.png";
 
-import { postNotify } from "../../api/request";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { postNotify, putNotify } from "../../api/request";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -100,8 +100,6 @@ const ContentInput = styled.textarea.attrs({
   padding: 22px;
   resize: none;
   font-size: 16px;
-
-  border: orange 5px solid;
 `;
 
 const ContentInputTest = styled.div`
@@ -193,12 +191,13 @@ const WritePost = ({ type }) => {
 
   const applyOnClick = () => {
     let postNotifyDTO = {};
-    if (type != "album") {
+    if (type == "notice") {
       postNotifyDTO = {
         title: title,
         content: content,
+        isPinned: false,
       };
-    } else {
+    } else if (type == "album") {
       postNotifyDTO = {
         albumPost: {
           title: title,
@@ -207,8 +206,22 @@ const WritePost = ({ type }) => {
         },
         images: images,
       };
+    } else {
+      postNotifyDTO = {
+        title: title,
+        content: content,
+      };
     }
-    postNotify(type, postNotifyDTO, navigate(`/${type}_list`));
+    if (state) {
+      putNotify(
+        type,
+        state[`${type}Id`],
+        postNotifyDTO,
+        navigate(`/${type}_list`)
+      );
+    } else {
+      postNotify(type, postNotifyDTO, navigate(`/${type}_list`));
+    }
   };
 
   const cancelOnclick = () => {
@@ -220,6 +233,8 @@ const WritePost = ({ type }) => {
     { typo: "취소", background: "#828282", onClick: cancelOnclick },
   ];
 
+  const { state } = useLocation();
+
   return (
     <>
       <Header />
@@ -229,10 +244,12 @@ const WritePost = ({ type }) => {
             <NoticeTypo>
               {type == "album" ? "사진 업로드" : "글쓰기"}
             </NoticeTypo>
-            {type === "album" && (
-              <img src={photoUploadImg} alt="Photo Upload" />
-            )}
-            <input type="file" onChange={handleImageUpload} />
+            {type == "album" ? (
+              <>
+                <img src={photoUploadImg} />
+                <input type="file" onChange={handleImageUpload} />
+              </>
+            ) : null}
           </PhotoUpload>
           <NoticeButtonContainer>
             {buttonInfo.map((info) => (
@@ -246,32 +263,42 @@ const WritePost = ({ type }) => {
           </NoticeButtonContainer>
         </UpperContainer>
         <Notice>
-          <TitleInput onChange={handleTitleChange} />
-          <ContentInputTest
-            onChange={handleContentChange}
-            style={{ height: "500px" }}
-          >
-            <div className="thumbnails-container">
-              {type === "album" && Image.length != 0 ? (
-                <img
-                  src={images[0]?.dataURL}
-                  alt="Thumbnail"
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              ) : null}
-              {images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image.dataURL}
-                  alt={`Thumbnail ${index}`}
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                  onClick={() => handleThumbnailClick(index)}
-                />
-              ))}
-              <br />
-              {images.length}
-            </div>
-          </ContentInputTest>
+          <TitleInput
+            onChange={handleTitleChange}
+            defaultValue={state?.title}
+          />
+          {type != "album" ? (
+            <ContentInput
+              onChange={handleContentChange}
+              defaultValue={state?.content}
+            ></ContentInput>
+          ) : (
+            <ContentInputTest
+              onChange={handleContentChange}
+              style={{ height: "500px" }}
+            >
+              <div className="thumbnails-container">
+                {type === "album" && Image.length != 0 ? (
+                  <img
+                    src={images[0]?.dataURL}
+                    alt="Thumbnail"
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                  />
+                ) : null}
+                {images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.dataURL}
+                    alt={`Thumbnail ${index}`}
+                    style={{ maxWidth: "100%", maxHeight: "100%" }}
+                    onClick={() => handleThumbnailClick(index)}
+                  />
+                ))}
+                <br />
+                {images.length}
+              </div>
+            </ContentInputTest>
+          )}
           <Footer />
         </Notice>
       </Container>
