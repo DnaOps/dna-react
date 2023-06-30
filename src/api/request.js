@@ -8,7 +8,7 @@ export const postAuthenticate = async (
 	redirectHome
 ) => {
 	const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
-	if (res.data.apiStatus.errorCode != "N200") {
+	if (res.data.apiStatus.errorCode != "Y000") {
 		console.log("api status:", res.data.apiStatus);
 		alert("로그인 정보가 일치하지 않습니다.");
 		return;
@@ -69,7 +69,6 @@ export const getSpecificNotify = async (
 	handleComment
 ) => {
 	const notifyRes = await Axios.get(`/${type}Posts/${id}`);
-	console.log("res:", notifyRes);
 	handleNotifyInfo(notifyRes.data.data);
 	getNofityComments(type, id, start, handleComment);
 };
@@ -84,13 +83,20 @@ export const deleteNotify = async (type, id) => {
 };
 
 export const postNotifyComment = async (type, id, commentData, callBack) => {
-	await Axios.post(`/${type}Posts/${id}/comments`, commentData);
+	const res = await Axios.post(`/${type}Posts/${id}/comments`, commentData);
+	console.log("posted");
+	console.log("comment data", commentData);
+	console.log(res);
 	callBack();
 };
 
 export const postSignUp = async (signUpData) => {
 	const res = await Axios.post("/auth/signUp", signUpData);
-	console.log("res: ", res);
+	if (res.data.apiStatus.errorCode == "Y000") {
+		alert("회원가입 되었습니다.");
+	} else {
+		alert("회원가입에 실패했습니다.");
+	}
 };
 
 export const postLike = async (type, noticeId) => {
