@@ -6,6 +6,7 @@ import AlbumList from "./components/pages/AlbumList";
 import Onboard from "./components/pages/Onboard";
 import SignUp from "./components/pages/SignUp";
 import WritePost from "./components/pages/WritePost";
+import Rule from "./components/pages/Rule";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -26,6 +27,7 @@ function App() {
       <Route path="/study/:id" element={<Notify type="study" />} />
       <Route path="/album_post/write" element={<WritePost type="album" />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/rule" element={<Rule />} />
     </Routes>
   );
 }

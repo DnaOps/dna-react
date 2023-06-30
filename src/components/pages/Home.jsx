@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../organisms/Header";
 import styled from "styled-components";
 import homeLogo from "../../assets/images/home_logo.png";
@@ -7,6 +7,8 @@ import boardForumIcon from "../../assets/images/board_forum_icon.png";
 import boardStudyIcon from "../../assets/images/board_study_icon.png";
 import boardAlbumIcon from "../../assets/images/board_album_icon.png";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import UserInfoState from "../../state/UserInfoState";
 
 const Container = styled.div`
 	width: 100%;
@@ -84,7 +86,16 @@ const BoardIcon = styled.img`
 
 const Home = () => {
 	const navigate = useNavigate();
+	const userInfo = useRecoilValue(UserInfoState);
 
+	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
+
+	useEffect(() => {
+		if (!userInfo.username) {
+			const recoveredInfo = JSON.parse(localStorage.getItem("userInfo"));
+			setRecoilUserInfo(recoveredInfo);
+		}
+	}, []);
 	return (
 		<>
 			<Header />

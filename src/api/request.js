@@ -6,17 +6,18 @@ export const postAuthenticate = async (
   handleUserInfo,
   redirectHome
 ) => {
-  try {
-    const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
-    const userInfo = res.data.data.userInfoResponse;
-    const jwt = res.data.data.tokenResponse.jwt;
-    redirectHome();
-    localStorage.setItem("Authorization", `Bearer ${jwt.accessToken}`);
-    setCookie("refresh_token", jwt.refreshToken, { secure: true });
-    handleUserInfo(userInfo);
-  } catch (e) {
+  const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
+  if (res.data.apiStatus.errorCode != "Y000") {
+    console.log("api status:", res.data.apiStatus);
     alert("로그인 정보가 일치하지 않습니다.");
+    return;
   }
+  const userInfo = res.data.data.userInfoResponse;
+  const jwt = res.data.data.tokenResponse.jwt;
+  redirectHome();
+  localStorage.setItem("Authorization", `Bearer ${jwt.accessToken}`);
+  setCookie("refresh_token", jwt.refreshToken, { secure: true });
+  handleUserInfo(userInfo);
 };
 
 export const getNaverLogin = async () => {
@@ -67,7 +68,6 @@ export const getSpecificNotify = async (
   handleComment
 ) => {
   const notifyRes = await Axios.get(`/${type}Posts/${id}`);
-  console.log("res:", notifyRes);
   handleNotifyInfo(notifyRes.data.data);
   getNofityComments(type, id, start, handleComment);
 };
@@ -88,7 +88,11 @@ export const postNotifyComment = async (type, id, commentData, callBack) => {
 
 export const postSignUp = async (signUpData) => {
   const res = await Axios.post("/auth/signUp", signUpData);
-  console.log("res: ", res);
+  if (res.data.apiStatus.errorCode == "Y000") {
+    alert("회원가입 되었습니다.");
+  } else {
+    alert("회원가입에 실패했습니다.");
+  }
 };
 
 export const postLike = async (type, noticeId) => {

@@ -361,25 +361,23 @@ const NotifyList = ({ type }) => {
 	useEffect(() => {
 		// request first 13 notices
 		// setNotices(res....);
-
+		setPinned([]);
 		const token = localStorage.getItem("Authorization");
 		if (!token) {
 			alert("로그인이 필요합니다.");
 			navigate("/login");
 		}
 
-		if (notices.length === 0) {
-			const initialNoticeInfo = {
-				type: type,
-				start: "",
-				title: "",
-				author: "",
-				content: "",
-			};
+		const initialNoticeInfo = {
+			type: type,
+			start: "",
+			title: "",
+			author: "",
+			content: "",
+		};
 
-			getNotices(initialNoticeInfo, handleNotices, handlePinned);
-		}
-	}, []);
+		getNotices(initialNoticeInfo, handleNotices, handlePinned);
+	}, [type]);
 
 	const selectBoxOpenedAnimation = {
 		height: "136px",

@@ -6,6 +6,7 @@ import Reply from "./Reply";
 import RecommendComment from "../molecules/RecommendComment";
 import ReplyDropDown from "../molecules/ReplyDropDown";
 import CommentInfo from "../molecules/CommentInfo";
+import { postNotifyComment } from "../../api/request";
 
 const ReplyContainer = styled.div`
 	width: 100%;
@@ -15,7 +16,7 @@ const StyledComment = styled.div`
 	margin-top: 25px;
 `;
 
-const Comment = ({ commentInfo }) => {
+const Comment = ({ commentInfo, type, id, callback }) => {
 	const [replyClicked, setReplyClicked] = useState(false);
 	const replyOnClick = () => {
 		setReplyClicked((prev) => !prev);
@@ -28,7 +29,20 @@ const Comment = ({ commentInfo }) => {
 		isReply: true,
 	});
 
-	const childrenComments = commentInfo.childrenComments.list;
+	const childrenComments = commentInfo.childrenComments;
+
+	const [reply, setReply] = useState("");
+	const handleReplyChange = (e) => {
+		setReply(e.target.value);
+	};
+	const handleReply = () => {
+		const postReplyDTO = {
+			content: reply,
+			commentGroupId: commentInfo.commentGroupId,
+			parentCommentId: commentInfo.commentId,
+		};
+		postNotifyComment(type, id, postReplyDTO, () => callback(type, id));
+	};
 
 	return (
 		<StyledComment>
@@ -38,11 +52,20 @@ const Comment = ({ commentInfo }) => {
 				recommendComment={{ ...recommendComment, val1: commentInfo.likeCount }}
 				onClick={replyOnClick}
 			/>
-			{replyClicked ? <ReplyDropDown /> : null}
+			{replyClicked ? (
+				<ReplyDropDown onChange={handleReplyChange} onClick={handleReply} />
+			) : null}
 
 			<ReplyContainer>
 				{childrenComments?.map((reply) => (
-					<Reply replyInfo={reply} />
+					<Reply
+						replyInfo={reply}
+						type={type}
+						id={id}
+						onClick={handleReply}
+						onChange={handleReplyChange}
+						callback={callback}
+					/>
 				))}
 			</ReplyContainer>
 		</StyledComment>
