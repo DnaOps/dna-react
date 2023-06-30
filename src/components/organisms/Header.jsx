@@ -149,6 +149,37 @@ const NavToLogin = () => {
 	);
 };
 
+const LogoutButtonWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	box-sizing: border-box;
+	padding: 0 18px 0 0;
+`;
+
+const StyledLogoutButton = styled.div`
+	width: 60px;
+	height: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: solid 1px #024298;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin: 8px 0;
+	color: #024298;
+	font-size: 10px;
+	cursor: pointer;
+`;
+
+const LogoutButton = ({ onClick }) => {
+	return (
+		<LogoutButtonWrapper>
+			<StyledLogoutButton onClick={onClick}>로그아웃</StyledLogoutButton>
+		</LogoutButtonWrapper>
+	);
+};
+
 const Header = () => {
 	const navigate = useNavigate();
 
@@ -272,6 +303,7 @@ const Header = () => {
 									<DropDownMenu>
 										가입일시 : {userInfo.createdDate.substring(0, 10)}
 									</DropDownMenu>
+									<LogoutButton>로그아웃</LogoutButton>
 								</>
 							) : (
 								<NavToLogin />
