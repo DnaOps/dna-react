@@ -86,16 +86,7 @@ const BoardIcon = styled.img`
 
 const Home = () => {
 	const navigate = useNavigate();
-	const userInfo = useRecoilValue(UserInfoState);
 
-	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
-
-	useEffect(() => {
-		if (!userInfo.username) {
-			const recoveredInfo = JSON.parse(localStorage.getItem("userInfo"));
-			setRecoilUserInfo(recoveredInfo);
-		}
-	}, []);
 	return (
 		<>
 			<Header />

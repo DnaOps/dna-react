@@ -250,7 +250,7 @@ const Header = () => {
 	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
 
 	useEffect(() => {
-		if (!userInfo.username) {
+		if (!userInfo?.username) {
 			const recoveredInfo = JSON.parse(localStorage.getItem("userInfo"));
 			setRecoilUserInfo(recoveredInfo);
 		}
@@ -281,10 +281,10 @@ const Header = () => {
 						<Menu src={menu} onClick={menuClickHandler} />
 
 						<DropDownMenuWrapper>
-							{userInfo.username ? (
+							{userInfo?.username ? (
 								<>
 									<DropDownMenu>
-										<b>{userInfo.username}</b> 회원님
+										<b>{userInfo?.username}</b> 회원님
 									</DropDownMenu>
 									<DropDownMenuContainer>
 										<DropDownMenu>
