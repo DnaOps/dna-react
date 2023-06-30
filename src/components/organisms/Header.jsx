@@ -31,6 +31,7 @@ const LogoContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	cursor: pointer;
 `;
 
 const LogoImg = styled.img`
@@ -221,7 +222,7 @@ const Header = () => {
 			<Container
 				style={menuClicked ? menuOpenedAnimation : menuClosedAnimation}
 			>
-				<LogoContainer>
+				<LogoContainer onClick={() => navigate("/home")}>
 					<LogoImg src={logoImg} />
 					<LogoText src={logoText} />
 				</LogoContainer>
