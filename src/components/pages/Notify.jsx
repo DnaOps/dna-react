@@ -186,12 +186,6 @@ const CommentContainer = styled.div`
 	margin: 30px auto 0 auto;
 `;
 
-const CommentSubContainer = styled.div`
-	width: calc(100% - 50px);
-	box-sizing: border-box;
-	margin: 30px auto 0 auto;
-`;
-
 const StyledLikeButton = styled.img`
 	width: 15px;
 	height: 15px;
