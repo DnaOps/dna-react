@@ -186,6 +186,12 @@ const CommentContainer = styled.div`
 	margin: 30px auto 0 auto;
 `;
 
+const CommentSubContainer = styled.div`
+	width: calc(100% - 50px);
+	box-sizing: border-box;
+	margin: 30px auto 0 auto;
+`;
+
 const StyledLikeButton = styled.img`
 	width: 15px;
 	height: 15px;
@@ -215,6 +221,7 @@ const Notify = ({ type }) => {
 	const navigate = useNavigate();
 	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
 	const [userInfo, setUserInfo] = useState(useRecoilValue(UserInfoState));
+	// const [currentType, setCurrentType] = useState(type);
 
 	const grayButton = {
 		background: "#828282",
@@ -286,15 +293,17 @@ const Notify = ({ type }) => {
 		setCommentContent(event.target.value);
 	};
 
+	const commentCallback = (type, id) => {
+		getSpecificNotify(type, id, 0, handleNotifyInfo, handleComment);
+	};
+
 	const applyOnClick = (parentId) => {
 		const commentData = {
 			// noticeId: notifyInfo.noticeId,
 			// parentCommentId: parentId,
 			content: commentContent,
 		};
-		postNotifyComment(type, id, commentData, () =>
-			getSpecificNotify(type, id, 0, handleNotifyInfo, handleComment)
-		);
+		postNotifyComment(type, id, commentData, () => commentCallback(type, id));
 
 		setCommentContent("");
 	};
@@ -373,7 +382,14 @@ const Notify = ({ type }) => {
 
 					<CommentContainer>
 						{comments.map((commentInfo) => {
-							return <Comment commentInfo={commentInfo} />;
+							return (
+								<Comment
+									commentInfo={commentInfo}
+									type={type}
+									id={id}
+									callback={commentCallback}
+								/>
+							);
 						})}
 					</CommentContainer>
 				</Notice>

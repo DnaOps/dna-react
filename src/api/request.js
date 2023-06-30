@@ -83,10 +83,7 @@ export const deleteNotify = async (type, id) => {
 };
 
 export const postNotifyComment = async (type, id, commentData, callBack) => {
-	const res = await Axios.post(`/${type}Posts/${id}/comments`, commentData);
-	console.log("posted");
-	console.log("comment data", commentData);
-	console.log(res);
+	await Axios.post(`/${type}Posts/${id}/comments`, commentData);
 	callBack();
 };
 
