@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 
 const DNATypo = styled.div`
-	width: 100%;
+	width: 917px;
 	display: flex;
 	color: #024298;
 	font-size: 30px;
