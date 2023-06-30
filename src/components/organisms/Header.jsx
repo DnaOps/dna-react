@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import logoImg from "../../../src/assets/images/logo_img.png";
@@ -7,7 +7,7 @@ import menu from "../../../src/assets/images/menu.png";
 
 import styled from "styled-components";
 
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import UserInfoState from "../../state/UserInfoState";
 
 const Container = styled.div`
@@ -153,7 +153,6 @@ const Header = () => {
 	const navigate = useNavigate();
 
 	const navClickHandler = (Nav) => {
-		console.log("nav:", Nav);
 		switch (Nav) {
 			// 수정 필요: 경로 임시 설정
 			case "개요":
@@ -217,6 +216,14 @@ const Header = () => {
 
 	const userInfo = useRecoilValue(UserInfoState);
 
+	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
+
+	useEffect(() => {
+		if (!userInfo.username) {
+			const recoveredInfo = JSON.parse(localStorage.getItem("userInfo"));
+			setRecoilUserInfo(recoveredInfo);
+		}
+	}, []);
 	return (
 		<>
 			<Container
