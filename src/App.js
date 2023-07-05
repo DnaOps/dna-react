@@ -3,6 +3,7 @@ import Login from "./components/pages/Login";
 import Notify from "./components/pages/Notify";
 import NotifyList from "./components/pages/NotifyList";
 import AlbumList from "./components/pages/AlbumList";
+import AlbumCkeditor from "./components/pages/AlbumCkeditor";
 import Onboard from "./components/pages/Onboard";
 import SignUp from "./components/pages/SignUp";
 import WritePost from "./components/pages/WritePost";
@@ -17,6 +18,10 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/notice_list" element={<NotifyList type="notice" />} />
+
+      <Route path="/album_list" element={<NotifyList type="album" />} />
+      <Route path="/album_post/write" element={<AlbumCkeditor />} />
+
       <Route path="/forum_list" element={<NotifyList type="forum" />} />
       <Route path="/study_list" element={<NotifyList type="study" />} />
       <Route path="/notice/:id" element={<Notify type="notice" />} />
