@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 import Header from "../organisms/Header";
+import { useState } from "react";
+import { useEffect } from "react";
+import { getUnverifiedUsers, postVerifyUser } from "../../api/request";
 
 const Container = styled.div`
 	width: 100%;
@@ -24,6 +27,9 @@ const DNATypo = styled.div`
 
 const SignUpRequestContainer = styled.div`
 	width: 862px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	border: solid 1px #ddd;
 `;
 
@@ -57,7 +63,7 @@ const SignUpRequestInfo = styled.div`
 	font-weight: 700;
 `;
 
-const SignUpRequest = ({ req }) => {
+const SignUpRequest = ({ req, remove }) => {
 	return (
 		<StyledSignUpRequest>
 			<div>
@@ -83,8 +89,19 @@ const SignUpRequest = ({ req }) => {
 				</SignUpRequestInfoContainer>
 			</div>
 			<AdminButtonContainer>
-				<AdminButton color="#024298" typo="확인" />
-				<AdminButton color="#b5b5b5" typo="거절" />
+				<AdminButton
+					color="#024298"
+					typo="확인"
+					onClick={() => {
+						postVerifyUser(req.userId);
+						remove(req.userId);
+					}}
+				/>
+				<AdminButton
+					color="#b5b5b5"
+					typo="거절"
+					onClick={() => remove(req.userId)}
+				/>
 			</AdminButtonContainer>
 		</StyledSignUpRequest>
 	);
@@ -115,40 +132,17 @@ const AdminButton = ({ typo, color, onClick }) => {
 	);
 };
 
-const request = [
-	{
-		email: "nayeon1002@naver.com",
-		studentId: 2021111896,
-		username: "helloworld",
-	},
-	{
-		email: "nayeon1002@naver.com",
-		studentId: 2021111896,
-		username: "helloworld",
-	},
-	{
-		email: "nayeon1002@naver.com",
-		studentId: 2021111896,
-		username: "helloworld",
-	},
-	{
-		email: "nayeon1002@naver.com",
-		studentId: 2021111896,
-		username: "helloworld",
-	},
-	{
-		email: "nayeon1002@naver.com",
-		studentId: 2021111896,
-		username: "helloworld",
-	},
-	{
-		email: "nayeon1002@naver.com",
-		studentId: 2021111896,
-		username: "helloworld",
-	},
-];
-
 const Admin = () => {
+	const [request, setRequest] = useState([]);
+	const handleRequest = (data) => {
+		setRequest(data);
+	};
+	const removeRequest = (userId) => {
+		setRequest(request.filter((e) => e.userId != userId));
+	};
+	useEffect(() => {
+		getUnverifiedUsers(handleRequest);
+	}, []);
 	return (
 		<>
 			<Header />
@@ -160,7 +154,7 @@ const Admin = () => {
 					<SignUpRequestDivider />
 					{request.map((req) => (
 						<>
-							<SignUpRequest req={req} />
+							<SignUpRequest req={req} remove={removeRequest} />
 							<SignUpRequestDivider />
 						</>
 					))}
