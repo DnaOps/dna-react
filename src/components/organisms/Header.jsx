@@ -9,6 +9,8 @@ import styled from "styled-components";
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import UserInfoState from "../../state/UserInfoState";
+import { Axios } from "../../api/axios";
+import { getCookie, setCookie } from "../../util/Cookie";
 
 const Container = styled.div`
 	width: 100%;
@@ -249,6 +251,17 @@ const Header = () => {
 
 	const setRecoilUserInfo = useSetRecoilState(UserInfoState);
 
+	const logoutOnClick = async () => {
+		await Axios.post("auth/logout", {
+			accessToken: localStorage.getItem("Authorization"),
+			refreshToken: getCookie("refresh_token"),
+		});
+		localStorage.removeItem("Authrization");
+		localStorage.removeItem("userInfo");
+		setCookie("refresh_token", "");
+		navigate("/login");
+	};
+
 	useEffect(() => {
 		if (!userInfo?.username) {
 			const recoveredInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -289,9 +302,7 @@ const Header = () => {
 									<DropDownMenuContainer>
 										<DropDownMenu>
 											권한 :&nbsp;
-											{userInfo.authorization == "USER_ROLE"
-												? "회원"
-												: "관리자"}
+											{userInfo.role == "USER_ROLE" ? "회원" : "관리자"}
 										</DropDownMenu>
 										<DropDownMenu>
 											게시글 수 : {userInfo.postCount}
@@ -303,7 +314,7 @@ const Header = () => {
 									<DropDownMenu>
 										가입일시 : {userInfo.createdDate.substring(0, 10)}
 									</DropDownMenu>
-									<LogoutButton>로그아웃</LogoutButton>
+									<LogoutButton onClick={logoutOnClick}>로그아웃</LogoutButton>
 								</>
 							) : (
 								<NavToLogin />
