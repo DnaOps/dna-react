@@ -352,12 +352,6 @@ const AlbumList = ({ type }) => {
     height: "34px",
   };
 
-  const typo = {
-    notify: "공지사항",
-    study: "스터디 게시판",
-    forum: "자유 게시판",
-  };
-
   return (
     <>
       <Background />

@@ -72,20 +72,6 @@ export const getSpecificNotify = async (
   getNofityComments(type, id, start, handleComment);
 };
 
-export const getNofityComments = async (type, id, start, handleComment) => {
-  const res = await Axios.get(`/${type}Posts/${id}/comments?start=${start}`);
-  handleComment(res.data.data.list);
-};
-
-export const deleteNotify = async (type, id) => {
-  const res = await Axios.delete(`${type}Posts/${id}`);
-};
-
-export const postNotifyComment = async (type, id, commentData, callBack) => {
-  await Axios.post(`/${type}Posts/${id}/comments`, commentData);
-  callBack();
-};
-
 export const postSignUp = async (signUpData) => {
   const res = await Axios.post("/auth/signUp", signUpData);
   if (res.data.apiStatus.errorCode == "Y000") {
@@ -109,4 +95,48 @@ export const postNotify = async (type, postNotifyDTO, navigate) => {
 export const putNotify = async (type, id, postNotifyDTO, navigate) => {
   const res = await Axios.put(`/${type}Posts/${id}`, postNotifyDTO);
   if (res.data.apiStatus.errorCodeMessage == "Okay") navigate();
+};
+
+export const getNofityComments = async (type, id, start, handleComment) => {
+  const res = await Axios.get(`/${type}Posts/${id}/comments?start=${start}`);
+  handleComment(res.data.data.list);
+};
+
+export const postNotifyComment = async (type, id, commentData, callBack) => {
+  await Axios.post(`/${type}Posts/${id}/comments`, commentData);
+  callBack();
+};
+
+export const deleteNotify = async (type, id) => {
+  const res = await Axios.delete(`${type}Posts/${id}`);
+};
+
+export const putNotifyComment = async (
+  type,
+  id,
+  commentId,
+  commentData,
+  callBack
+) => {
+  const res = await Axios.put(
+    `/${type}Posts/${id}/comments/${commentId}`,
+    commentData
+  );
+  callBack();
+  console.log("resModify:", res);
+};
+
+export const deleteNofityComment = async (
+  type,
+  id,
+  commentId,
+  commentData,
+  callBack
+) => {
+  const res = await Axios.delete(
+    `/${type}Posts/${id}/comments/${commentId}`,
+    commentData
+  );
+  callBack();
+  console.log("res:", res);
 };

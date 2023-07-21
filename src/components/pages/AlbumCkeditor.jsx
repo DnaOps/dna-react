@@ -1,16 +1,14 @@
-import React, { Component } from "react";
+import Header from "../organisms/Header";
+import styled from "styled-components";
 import axios from "axios";
+
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "../../assets/css/ckEditor.css";
 
-import Header from "../organisms/Header";
-import styled from "styled-components";
-import photoUploadImg from "../../assets/images/photo_upload.png";
-
-import { postNotify, putNotify } from "../../api/request";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { postNotify, putNotify } from "../../api/request";
 
 const Container = styled.div`
   width: 100%;
@@ -62,6 +60,7 @@ const StyledNoticeButton = styled.div`
   cursor: pointer;
 `;
 
+// 등록, 취소 버튼
 const NoticeButton = ({ typo, background, onClick }) => {
   return (
     <StyledNoticeButton style={{ background: background }} onClick={onClick}>
@@ -116,11 +115,6 @@ const Footer = () => {
   );
 };
 
-const PhotoUpload = styled.div`
-  max-width: 200px;
-  display: flex;
-`;
-
 const AlbumCkeditor = ({ type }) => {
   const navigate = useNavigate();
 
@@ -137,18 +131,13 @@ const AlbumCkeditor = ({ type }) => {
 
   const applyOnClick = () => {
     let postNotifyDTO = {};
-
-    // Album write and post
     postNotifyDTO = {
-      albumPost: {
-        title: title,
-        content: content,
-        // *** 구현) thumbnail 추가
-      },
-      // *** 구현) fileImage 추가
+      title: title,
+      content: content,
     };
 
-    /*if (state) {
+    // 수정
+    if (state) {
       putNotify(
         type,
         state[`${type}Id`],
@@ -157,7 +146,7 @@ const AlbumCkeditor = ({ type }) => {
       );
     } else {
       postNotify(type, postNotifyDTO, navigate(`/${type}_list`));
-    }*/
+    }
   };
 
   const cancelOnclick = () => {
@@ -173,9 +162,6 @@ const AlbumCkeditor = ({ type }) => {
 
   // ckeditor5 - Album Upload
   const Editor = ({ setDesc, desc, setAlbumImage }) => {
-    const [thumbnail, setThumbnail] = useState(false);
-    const imgLink = "";
-
     const accessToken = localStorage.getItem("Authorization");
 
     const uploadAlbumAdapter = (loader) => {
@@ -185,7 +171,6 @@ const AlbumCkeditor = ({ type }) => {
             const formData = new FormData();
 
             loader.file.then((file) => {
-              // formData.append("name", file.name);
               formData.append(
                 "file",
                 new Blob([file], { type: "multipart/form-data" }),
@@ -207,7 +192,7 @@ const AlbumCkeditor = ({ type }) => {
                 .then((res) => {
                   console.log("res:", res);
                   resolve({
-                    default: `${imgLink}/${res.data.filename}`,
+                    default: res.data.url,
                   });
                 })
                 .catch((err) => reject(err));
@@ -233,16 +218,9 @@ const AlbumCkeditor = ({ type }) => {
             placeholder: "사진과 함께 본문을 입력하세요.",
             extraPlugins: [uploadAlbumPlugin],
           }}
-          onReady={(editor) => {
-            console.log("Editor is ready to use!", editor);
-          }}
           onChange={(event, editor) => {
-            const albumContent = editor.getData();
-
-            // 작성된 본문을 setContent로 설정
-            // [등록] 버튼 누르면 setContent로..
-            // setContent(albumContent);
-            console.log({ event, editor, albumContent });
+            // setContent(editor.getDate());
+            console.log({ event, editor, content });
           }}
         />
       </div>
@@ -254,9 +232,7 @@ const AlbumCkeditor = ({ type }) => {
       <Header />
       <Container>
         <UpperContainer>
-          <PhotoUpload>
-            <NoticeTypo>{(type = "글쓰기")}</NoticeTypo>
-          </PhotoUpload>
+          <NoticeTypo>{(type = "글쓰기")}</NoticeTypo>
           <NoticeButtonContainer>
             {buttonInfo.map((info) => (
               <NoticeButton
@@ -275,7 +251,7 @@ const AlbumCkeditor = ({ type }) => {
           />
           <Editor
             onChange={handleContentChange}
-            defaultValue={state?.title}
+            defaultValue={state?.content}
           ></Editor>
           <Footer />
         </Notice>

@@ -102,20 +102,6 @@ const ContentInput = styled.textarea.attrs({
   font-size: 16px;
 `;
 
-const ContentInputTest = styled.div`
-  width: 100%;
-  height: 600px;
-  background: transparent;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  padding: 22px;
-  resize: none;
-  font-size: 16px;
-
-  border: orange 5px solid;
-`;
-
 const FooterContainer = styled.div`
   border-top: solid 1px #b5b5b5;
 `;
@@ -151,42 +137,12 @@ const WritePost = ({ type }) => {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [thumbnailImageIndex, setThumbnailImageIndex] = useState(0);
-  const [images, setImages] = useState([]);
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
   const handleContentChange = (e) => {
     setContent(e.target.value);
-  };
-
-  const handleAlbumContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handleThumbnailImageIndex = (e) => {
-    setThumbnailImageIndex(e.target.value);
-  };
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const newImage = {
-        file: file,
-        dataURL: e.target.result,
-      };
-
-      setImages((prevImages) => [...prevImages, newImage]);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  const handleThumbnailClick = (index) => {
-    setThumbnailImageIndex(index);
   };
 
   const applyOnClick = () => {
@@ -196,15 +152,6 @@ const WritePost = ({ type }) => {
         title: title,
         content: content,
         isPinned: false,
-      };
-    } else if (type == "album") {
-      postNotifyDTO = {
-        albumPost: {
-          title: title,
-          content: content,
-          thumbnailImageIndex: thumbnailImageIndex,
-        },
-        images: images,
       };
     } else {
       postNotifyDTO = {
@@ -244,12 +191,7 @@ const WritePost = ({ type }) => {
             <NoticeTypo>
               {type == "album" ? "사진 업로드" : "글쓰기"}
             </NoticeTypo>
-            {type == "album" ? (
-              <>
-                <img src={photoUploadImg} />
-                <input type="file" onChange={handleImageUpload} />
-              </>
-            ) : null}
+            {type == "album" ? <img src={photoUploadImg} /> : null}
           </PhotoUpload>
           <NoticeButtonContainer>
             {buttonInfo.map((info) => (
@@ -267,38 +209,10 @@ const WritePost = ({ type }) => {
             onChange={handleTitleChange}
             defaultValue={state?.title}
           />
-          {type != "album" ? (
-            <ContentInput
-              onChange={handleContentChange}
-              defaultValue={state?.content}
-            ></ContentInput>
-          ) : (
-            <ContentInputTest
-              onChange={handleContentChange}
-              style={{ height: "500px" }}
-            >
-              <div className="thumbnails-container">
-                {type === "album" && Image.length != 0 ? (
-                  <img
-                    src={images[0]?.dataURL}
-                    alt="Thumbnail"
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                  />
-                ) : null}
-                {images.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.dataURL}
-                    alt={`Thumbnail ${index}`}
-                    style={{ maxWidth: "100%", maxHeight: "100%" }}
-                    onClick={() => handleThumbnailClick(index)}
-                  />
-                ))}
-                <br />
-                {images.length}
-              </div>
-            </ContentInputTest>
-          )}
+          <ContentInput
+            onChange={handleContentChange}
+            defaultValue={state?.content}
+          ></ContentInput>
           <Footer />
         </Notice>
       </Container>

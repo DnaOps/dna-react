@@ -19,7 +19,7 @@ function App() {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/notice_list" element={<NotifyList type="notice" />} />
 
-      <Route path="/album_list" element={<NotifyList type="album" />} />
+      <Route path="/album_list" element={<AlbumList type="album" />} />
       <Route path="/album_post/write" element={<AlbumCkeditor />} />
 
       <Route path="/forum_list" element={<NotifyList type="forum" />} />
