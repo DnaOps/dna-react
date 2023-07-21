@@ -8,6 +8,8 @@ import WritePost from "./components/pages/WritePost";
 import Rule from "./components/pages/Rule";
 
 import { Route, Routes } from "react-router-dom";
+import Admin from "./components/pages/Admin";
+import SocialSignUp from "./components/pages/SocialSignUp";
 
 function App() {
 	return (
@@ -27,6 +29,8 @@ function App() {
 			<Route path="/album_post/write" element={<WritePost type="album" />} />
 			<Route path="/home" element={<Home />} />
 			<Route path="/rule" element={<Rule />} />
+			<Route path="/admin" element={<Admin />} />
+			<Route path="/oauth" element={<SocialSignUp />} />
 		</Routes>
 	);
 }

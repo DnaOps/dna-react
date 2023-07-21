@@ -18,8 +18,11 @@ import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 import SingUpBackGround from "../organisms/SignUpBackGround";
 
-import { postSignUp } from "../../api/request";
+import { postSignUp, postSocialSignUp } from "../../api/request";
 import { useNavigate } from "react-router-dom";
+
+import googleLogo from "../../assets/images/google_icon.png";
+import naverLogo from "../../assets/images/naver_logo.png";
 
 const Container = styled.div`
 	height: 100vh;
@@ -40,7 +43,7 @@ const SignUpForm = styled.div`
 	border-radius: 20px;
 	border: 1px solid #024298;
 	box-sizing: border-box;
-	padding: 45px 25px;
+	padding: 45px 25px 25px 25px;
 `;
 
 const LinkContainer = styled.div`
@@ -86,6 +89,77 @@ const PwComfirmMessage = ({ valid, msg, pwValid }) => {
 				</div>
 			) : null}
 		</StyledConfirmMessage>
+	);
+};
+
+const StyledGoogleSignUpButton = styled.div`
+	width: 300px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #fff;
+	border: 1px solid #828282;
+	border-radius: 8px;
+	box-sizing: border-box;
+	margin: 24px 0 4px 0;
+	color: #828282;
+	font-size: 15px;
+	font-weight: 700;
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	cursor: pointer;
+`;
+
+const GoogleIcon = styled.img`
+	width: 20px;
+	height: 20px;
+	margin: 4px;
+`;
+
+const GoogleSignUpButton = ({ onClick }) => {
+	return (
+		<StyledGoogleSignUpButton onClick={onClick}>
+			<GoogleIcon src={googleLogo} />
+			Google로 회원가입
+		</StyledGoogleSignUpButton>
+	);
+};
+
+const StyledNaverSignUpButton = styled.div`
+	width: 300px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #2db400;
+	border: 1px solid #2db400;
+	border-radius: 8px;
+	box-sizing: border-box;
+	margin: 4px 0;
+	color: #fff;
+	font-size: 15px;
+	font-weight: 700;
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	cursor: pointer;
+`;
+
+const NaverIcon = styled.img`
+	width: 40px;
+	height: 40px;
+	/* margin: 4px; */
+`;
+
+const NaverSignUpButton = ({ onClick }) => {
+	return (
+		<StyledNaverSignUpButton onClick={onClick}>
+			<NaverIcon src={naverLogo} />
+			<a
+				href="http://54.144.153.88:8080/oauth2/authorization/naver"
+				style={{ textDecoration: "none", color: "#fff" }}
+			>
+				NAVER로 회원가입
+			</a>
+		</StyledNaverSignUpButton>
 	);
 };
 
@@ -216,6 +290,27 @@ export default function SignUp() {
 		"비밀번호는 8자리 이상, 영소문자, 대문자, 특수문자를 포함하여야 합니다.",
 	];
 
+	const handleGoogle = () => {
+		const signUpData = {
+			type: "google",
+			username: username,
+			studentId: studentId,
+			email: email,
+			password: pw,
+		};
+		postSocialSignUp(signUpData);
+	};
+	const handleNaver = () => {
+		const signUpData = {
+			type: "naver",
+			username: username,
+			studentId: studentId,
+			email: email,
+			password: pw,
+		};
+		postSocialSignUp(signUpData);
+	};
+
 	return (
 		<Container>
 			<SingUpBackGround />
@@ -278,6 +373,9 @@ export default function SignUp() {
 					);
 				})}
 			</LinkContainer>
+
+			<GoogleSignUpButton onClick={handleGoogle} />
+			<NaverSignUpButton onClick={handleNaver} />
 			<WaveGroup />
 		</Container>
 	);
