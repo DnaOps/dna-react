@@ -130,7 +130,12 @@ const NaverLoginButton = ({ onClick }) => {
 	return (
 		<StyledNaverLoginButton onClick={onClick}>
 			<NaverIcon src={naverLogo} />
-			NAVER 로그인
+			<a
+				href="http://54.144.153.88:8080/oauth2/authorization/naver"
+				style={{ textDecoration: "none", color: "#fff" }}
+			>
+				NAVER 로그인
+			</a>
 		</StyledNaverLoginButton>
 	);
 };
