@@ -10,6 +10,7 @@ import Rule from "./components/pages/Rule";
 import { Route, Routes } from "react-router-dom";
 import Admin from "./components/pages/Admin";
 import SocialSignUp from "./components/pages/SocialSignUp";
+import NotFound from "./components/pages/NotFound";
 
 function App() {
 	return (
@@ -31,6 +32,7 @@ function App() {
 			<Route path="/rule" element={<Rule />} />
 			<Route path="/admin" element={<Admin />} />
 			<Route path="/oauth" element={<SocialSignUp />} />
+			<Route path="/*" element={<NotFound />} />
 		</Routes>
 	);
 }
