@@ -10,6 +10,8 @@ import WritePost from "./components/pages/WritePost";
 import Rule from "./components/pages/Rule";
 
 import { Route, Routes } from "react-router-dom";
+import Admin from "./components/pages/Admin";
+import SocialSignUp from "./components/pages/SocialSignUp";
 
 function App() {
   return (
@@ -18,10 +20,6 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/notice_list" element={<NotifyList type="notice" />} />
-
-      <Route path="/album_list" element={<AlbumList type="album" />} />
-      <Route path="/album_post/write" element={<AlbumCkeditor />} />
-
       <Route path="/forum_list" element={<NotifyList type="forum" />} />
       <Route path="/study_list" element={<NotifyList type="study" />} />
       <Route path="/notice/:id" element={<Notify type="notice" />} />
@@ -33,6 +31,8 @@ function App() {
       <Route path="/album_post/write" element={<WritePost type="album" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/rule" element={<Rule />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/oauth" element={<SocialSignUp />} />
     </Routes>
   );
 }

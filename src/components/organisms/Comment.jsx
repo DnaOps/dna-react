@@ -13,10 +13,9 @@ import {
   getSpecificNotify,
 } from "../../api/request";
 import { useLocation } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useNavigate, useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 import UserInfoState from "../../state/UserInfoState";
-import ApplyButton from "../atoms/ApplyButton";
 
 const ReplyContainer = styled.div`
   width: 100%;
@@ -41,11 +40,16 @@ const SmallTypo = styled.div`
   cursor: pointer;
 `;
 
+const CommentContainer = styled.div`
+  width: 717px;
+  box-sizing: border-box;
+  margin: 12px 0 0 0;
+`;
+
 const CommentWrite = styled.div`
   width: 100%;
   box-sizing: border-box;
-  padding: 0 25px;
-  margin: 0 0 10px 0;
+  margin: 0 0 5px 0;
 `;
 
 const CommentWriteInput = styled.textarea`
@@ -95,13 +99,17 @@ const ModifyButton = ({ onClick, name, color }) => {
   );
 };
 
-const EditDeleteButton = ({ editOnClick, deleteOnClick }) => {
+const EditDeleteButton = ({ editOnClick, deleteOnClick, isEditing }) => {
   return (
-    <StyledEditDeleteButton>
-      <SmallTypo onClick={editOnClick}>수정</SmallTypo>
-      <SmallTypo>&nbsp;|&nbsp;</SmallTypo>
-      <SmallTypo onClick={deleteOnClick}>삭제</SmallTypo>
-    </StyledEditDeleteButton>
+    <>
+      {isEditing ? null : (
+        <StyledEditDeleteButton>
+          <SmallTypo onClick={editOnClick}>수정</SmallTypo>
+          <SmallTypo>&nbsp;|&nbsp;</SmallTypo>
+          <SmallTypo onClick={deleteOnClick}>삭제</SmallTypo>
+        </StyledEditDeleteButton>
+      )}
+    </>
   );
 };
 
@@ -164,23 +172,27 @@ const Comment = ({ commentInfo, type, id, callback }) => {
   const handleReply = () => {
     const postReplyDTO = {
       content: reply,
-      commentGroupId: commentInfo.commentGroupId,
+      commentGroupId: commentInfo.commentGroupId
+        ? commentInfo.commentGroupId
+        : commentInfo.commentId,
       parentCommentId: commentInfo.commentId,
+      content: reply,
     };
 
-    if (state) {
-      putNotifyComment(type, state[`${type}Id`], postReplyDTO, () =>
-        callback(type, id)
-      );
-    } else {
-      postNotifyComment(type, id, postReplyDTO, () => callback(type, id));
-    }
+    postNotifyComment(type, id, postReplyDTO, () => {
+      setReplyClicked(false);
+      setReply("");
+      callback(type, id);
+    });
   };
 
   const postReplyDTO = {
     content: reply,
-    commentGroupId: commentInfo.commentGroupId,
+    commentGroupId: commentInfo.commentGroupId
+      ? commentInfo.commentGroupId
+      : commentInfo.commentId,
     parentCommentId: commentInfo.commentId,
+    content: reply,
   };
 
   const deleteOnClick = (type, id, commentId) => {
@@ -188,17 +200,6 @@ const Comment = ({ commentInfo, type, id, callback }) => {
       callback(type, id)
     );
     navigate(`/${type}/${id}`);
-  };
-
-  const applyOnClick = (parentId) => {
-    const commentData = {
-      // noticeId: notifyInfo.noticeId,
-      // parentCommentId: parentId,
-      content: commentContent,
-    };
-    putNotifyComment(type, id, commentData, () => commentCallback(type, id));
-
-    setCommentContent("");
   };
 
   const commentCallback = (type, id) => {
@@ -236,82 +237,76 @@ const Comment = ({ commentInfo, type, id, callback }) => {
     commentInfo.content
   );
 
-  // 수정 버튼 클릭 시 호출되는 함수
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  // 수정 취소 버튼 클릭 시 호출되는 함수
   const handleCancelEdit = () => {
     setIsEditing(false);
     setEditedCommentContent(commentInfo.content);
   };
 
+  const [isReplyEditing, setIsReplyEditing] = useState(false);
+  const replyEditOnClick = () => {
+    setIsReplyEditing((prev) => !prev);
+  };
+
   return (
     <StyledComment>
-      <CommentInfo commentInfo={commentInfo} />
-
-      {/* 수정 버튼 클릭 시 */}
+      <CommentInfo commentInfo={commentInfo} isEditing={isEditing} />
       {isEditing && (
-        <CommentWrite>
-          <CommentWriteInput
-            onChange={(event) => setEditedCommentContent(event.target.value)}
-            value={editedCommentContent}
-          />
-          <NoticeButtonContainer>
-            <ModifyButton onClick={handleCommentUpdate} name="수정" />
-            <ModifyButton
-              onClick={handleCancelEdit}
-              name="취소"
-              color="#828282"
+        <CommentContainer>
+          <CommentWrite>
+            <CommentWriteInput
+              onChange={(event) => setEditedCommentContent(event.target.value)}
+              value={editedCommentContent}
             />
-          </NoticeButtonContainer>
-        </CommentWrite>
-      )}
-
-      {/* 수정 버튼을 누르지 않았을 때 */}
-      {!isEditing && (
-        <>
-          {userId == commentInfo.authorId ? (
-            <EditDeleteButton
-              deleteOnClick={() =>
-                deleteOnClick(
-                  type,
-                  id,
-                  commentInfo.commentId,
-                  postReplyDTO,
-                  () => callback(type, id)
-                )
-              }
-              editOnClick={handleEditClick}
-            />
-          ) : null}
-
-          <RecommendComment
-            recommendComment={{
-              ...recommendComment,
-              val1: commentInfo.likeCount,
-            }}
-            onClick={replyOnClick}
-          />
-          {replyClicked ? (
-            <ReplyDropDown onChange={handleReplyChange} onClick={handleReply} />
-          ) : null}
-          <ReplyContainer>
-            {childrenComments?.map((reply) => (
-              <Reply
-                replyInfo={reply}
-                type={type}
-                id={id}
-                onClick={handleReply}
-                onChange={handleReplyChange}
-                callback={callback}
+            <NoticeButtonContainer>
+              <ModifyButton onClick={handleCommentUpdate} name="수정" />
+              <ModifyButton
+                onClick={handleCancelEdit}
+                name="취소"
+                color="#828282"
               />
-            ))}
-          </ReplyContainer>
-        </>
+            </NoticeButtonContainer>
+          </CommentWrite>
+        </CommentContainer>
       )}
+
+      {userId == commentInfo.authorId ? (
+        <EditDeleteButton
+          deleteOnClick={() =>
+            deleteOnClick(type, id, commentInfo.commentId, postReplyDTO, () =>
+              callback(type, id)
+            )
+          }
+          editOnClick={handleEditClick}
+          isEditing={isEditing}
+        />
+      ) : null}
+
+      <RecommendComment
+        recommendComment={{ ...recommendComment, val1: commentInfo.likeCount }}
+        onClick={replyOnClick}
+      />
+
+      {replyClicked ? (
+        <ReplyDropDown onChange={handleReplyChange} onClick={handleReply} />
+      ) : null}
+      <ReplyContainer>
+        {childrenComments?.map((reply) => (
+          <Reply
+            replyInfo={reply}
+            type={type}
+            id={id}
+            onClick={handleReply}
+            onChange={handleReplyChange}
+            callback={callback}
+          />
+        ))}
+      </ReplyContainer>
     </StyledComment>
   );
 };
+
 export default Comment;

@@ -8,7 +8,10 @@ export const postAuthenticate = async (
 ) => {
   const res = await AxiosBeforeAuthored.post("auth/authenticate", signInData);
   if (res.data.apiStatus.errorCode != "Y000") {
-    console.log("api status:", res.data.apiStatus);
+    if (res.data.apiStatus.errorCode == "N206") {
+      alert("관리자로부터 회원가입 승인 전입니다. \n관리자에게 문의해주세요.");
+      return;
+    }
     alert("로그인 정보가 일치하지 않습니다.");
     return;
   }
@@ -75,7 +78,21 @@ export const getSpecificNotify = async (
 export const postSignUp = async (signUpData) => {
   const res = await Axios.post("/auth/signUp", signUpData);
   if (res.data.apiStatus.errorCode == "Y000") {
-    alert("회원가입 되었습니다.");
+    alert(
+      "회원가입 요청되었습니다.\n관리자가 승인하면 드나의 모든 페이지를 이용할 수 있습니다."
+    );
+  } else {
+    alert("회원가입에 실패했습니다.");
+  }
+};
+
+export const postSocialSignUp = async (signUpData) => {
+  const res = await Axios.post("/auth/signUp/oauth", signUpData);
+  console.log("res:", res);
+  if (res.data.apiStatus.errorCode == "Y000") {
+    alert(
+      "회원가입 요청되었습니다.\n관리자가 승인하면 드나의 모든 페이지를 이용할 수 있습니다."
+    );
   } else {
     alert("회원가입에 실패했습니다.");
   }
@@ -99,6 +116,7 @@ export const putNotify = async (type, id, postNotifyDTO, navigate) => {
 
 export const getNofityComments = async (type, id, start, handleComment) => {
   const res = await Axios.get(`/${type}Posts/${id}/comments?start=${start}`);
+  console.log("Res", res);
   handleComment(res.data.data.list);
 };
 
@@ -139,4 +157,13 @@ export const deleteNofityComment = async (
   );
   callBack();
   console.log("res:", res);
+};
+
+export const getUnverifiedUsers = async (handleReqeust) => {
+  const res = await Axios.get("auth/unverifiedUsers");
+  handleReqeust(res.data.data);
+};
+
+export const postVerifyUser = async (userId) => {
+  await Axios.post(`auth/unverifiedUsers/${userId}`);
 };
