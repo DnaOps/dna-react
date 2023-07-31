@@ -1,12 +1,14 @@
 import Header from "../organisms/Header";
-
 import styled from "styled-components";
+import axios from "axios";
 
-import photoUploadImg from "../../assets/images/photo_upload.png";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "../../assets/css/ckEditor.css";
 
-import { postNotify, putNotify } from "../../api/request";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { postNotify, putNotify } from "../../api/request";
 
 const Container = styled.div`
   width: 100%;
@@ -58,6 +60,7 @@ const StyledNoticeButton = styled.div`
   cursor: pointer;
 `;
 
+// 등록, 취소 버튼
 const NoticeButton = ({ typo, background, onClick }) => {
   return (
     <StyledNoticeButton style={{ background: background }} onClick={onClick}>
@@ -87,21 +90,6 @@ const TitleInput = styled.input.attrs({
   font-size: 32px;
 `;
 
-const ContentInput = styled.textarea.attrs({
-  placeholder: "본문에 내용을 작성해주세요.",
-  placeholderTextColor: "#B5B5B5",
-})`
-  width: 100%;
-  height: 600px;
-  background: transparent;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  padding: 22px;
-  resize: none;
-  font-size: 16px;
-`;
-
 const FooterContainer = styled.div`
   border-top: solid 1px #b5b5b5;
 `;
@@ -127,12 +115,7 @@ const Footer = () => {
   );
 };
 
-const PhotoUpload = styled.div`
-  max-width: 200px;
-  display: flex;
-`;
-
-const WritePost = ({ type }) => {
+const AlbumCkeditor = ({ type }) => {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -141,24 +124,19 @@ const WritePost = ({ type }) => {
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
   };
+
   const handleContentChange = (e) => {
-    setContent(e.target.value);
+    setContent(e.target.vallue);
   };
 
   const applyOnClick = () => {
     let postNotifyDTO = {};
-    if (type == "notice") {
-      postNotifyDTO = {
-        title: title,
-        content: content,
-        isPinned: false,
-      };
-    } else {
-      postNotifyDTO = {
-        title: title,
-        content: content,
-      };
-    }
+    postNotifyDTO = {
+      title: title,
+      content: content,
+    };
+
+    // 수정
     if (state) {
       putNotify(
         type,
@@ -182,17 +160,79 @@ const WritePost = ({ type }) => {
 
   const { state } = useLocation();
 
+  // ckeditor5 - Album Upload
+  const Editor = ({ setDesc, desc, setAlbumImage }) => {
+    const accessToken = localStorage.getItem("Authorization");
+
+    const uploadAlbumAdapter = (loader) => {
+      return {
+        upload() {
+          return new Promise((resolve, reject) => {
+            const formData = new FormData();
+
+            loader.file.then((file) => {
+              formData.append(
+                "file",
+                new Blob([file], { type: "multipart/form-data" }),
+                file.name
+              );
+              for (var key of formData.keys()) {
+                console.log("key:", key);
+              }
+              for (var val of formData.values()) {
+                console.log("val:", val);
+              }
+
+              axios
+                .post("http://54.144.153.88:8080/albumPosts/images", formData, {
+                  headers: {
+                    Authorization: accessToken,
+                  },
+                })
+                .then((res) => {
+                  console.log("res:", res);
+                  resolve({
+                    default: res.data.url,
+                  });
+                })
+                .catch((err) => reject(err));
+            });
+          });
+        },
+      };
+    };
+
+    function uploadAlbumPlugin(editor) {
+      editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+        return uploadAlbumAdapter(loader);
+      };
+    }
+
+    return (
+      <div className="App">
+        <CKEditor
+          data=""
+          editor={ClassicEditor}
+          className="ck ck-editor__editable"
+          config={{
+            placeholder: "사진과 함께 본문을 입력하세요.",
+            extraPlugins: [uploadAlbumPlugin],
+          }}
+          onChange={(event, editor) => {
+            // setContent(editor.getDate());
+            console.log({ event, editor, content });
+          }}
+        />
+      </div>
+    );
+  };
+
   return (
     <>
       <Header />
       <Container>
         <UpperContainer>
-          <PhotoUpload>
-            <NoticeTypo>
-              {type == "album" ? "사진 업로드" : "글쓰기"}
-            </NoticeTypo>
-            {type == "album" ? <img src={photoUploadImg} /> : null}
-          </PhotoUpload>
+          <NoticeTypo>{(type = "글쓰기")}</NoticeTypo>
           <NoticeButtonContainer>
             {buttonInfo.map((info) => (
               <NoticeButton
@@ -209,10 +249,10 @@ const WritePost = ({ type }) => {
             onChange={handleTitleChange}
             defaultValue={state?.title}
           />
-          <ContentInput
+          <Editor
             onChange={handleContentChange}
             defaultValue={state?.content}
-          ></ContentInput>
+          ></Editor>
           <Footer />
         </Notice>
       </Container>
@@ -220,4 +260,4 @@ const WritePost = ({ type }) => {
   );
 };
 
-export default WritePost;
+export default AlbumCkeditor;
