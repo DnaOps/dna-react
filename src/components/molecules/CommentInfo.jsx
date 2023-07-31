@@ -45,7 +45,7 @@ const SmallTypo = styled.div`
   cursor: pointer;
 `;
 
-const CommentInfo = ({ commentInfo }) => {
+const CommentInfo = ({ commentInfo, isEditing }) => {
   const {
     author,
     authorId,
@@ -68,7 +68,9 @@ const CommentInfo = ({ commentInfo }) => {
           <SmallTypo>{modifiedAt}</SmallTypo>
         </CommentWriteDate>
       </StyledCommentInfo>
-      <CommentContent>{content}</CommentContent>
+      {isEditing ? null : (
+        <CommentContent>{commentInfo.content}</CommentContent>
+      )}
     </>
   );
 };

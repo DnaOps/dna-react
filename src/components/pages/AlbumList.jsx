@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import searchSelectboxArrow from "../../assets/images/selectbox_arrow.png";
 import loading from "../../assets/images/loading.png";
 import noticeLikedIcon from "../../assets/images/notice_liked_icon.png";
-import pinImg from "../../assets/images/notice_pin.png";
 import Header from "../organisms/Header";
 
 import styled from "styled-components";
@@ -149,7 +148,7 @@ const SearchSelectBox = styled.div`
 `;
 
 const SearchSelectBoxDropDown = ({ onClick, selected }) => {
-  const typos = ["제목", "내용", "작성자", "제목+내용"];
+  const typos = ["제목", "내용", "작성자"];
 
   return (
     <>
@@ -195,14 +194,14 @@ const StyledSearchButton = styled.div`
   cursor: pointer;
 `;
 
-const SearchButton = ({ onClick }) => {
-  return <StyledSearchButton onClick={onClick}>검색</StyledSearchButton>;
+const SearchButton = () => {
+  return <StyledSearchButton>검색</StyledSearchButton>;
 };
 
 const NoticeList = styled.div`
   width: 917px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   border-top: 2.5px solid #024298;
   box-shadow: var(--box-shadow);
 `;
@@ -230,8 +229,6 @@ const NoticeTitle = styled.div`
 `;
 
 const NoticeView = styled.div`
-  box-sizing: border-box;
-  margin: 0 15px 0 5px;
   color: #024298;
   font-weight: 700;
 `;
@@ -260,15 +257,12 @@ const NoticeLiked = styled.div`
   margin-left: 6px;
 `;
 
-const Notice = ({ type, noticeInfo, onClick, pin }) => {
+const Album = ({ noticeInfo, onClick }) => {
   return (
-    <StyledNotice onClick={() => onClick(noticeInfo[type + "Id"])}>
+    <StyledNotice onClick={() => onClick(noticeInfo.noticeId)}>
       <NoticeTitleContainer>
-        <NoticeTitle style={{ fontWeight: pin ? "600" : "400" }}>
-          {noticeInfo.title}
-        </NoticeTitle>
+        <NoticeTitle>{noticeInfo.title}</NoticeTitle>
         <NoticeView>{noticeInfo.commentCount}</NoticeView>
-        {pin}
       </NoticeTitleContainer>
       <NoticeAuthorLevel>{noticeInfo.level}</NoticeAuthorLevel>
       <NoticeAuthor>{noticeInfo.author}</NoticeAuthor>
@@ -304,19 +298,10 @@ const Loading = ({ inViewed, cnt }) => {
   );
 };
 
-const NoNotices = styled.div`
-  height: 56px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  font-size: 20px;
-`;
-
-const NotifyList = ({ type }) => {
+const AlbumList = ({ type }) => {
   const navigate = useNavigate();
   const noticeOnClick = (id) => {
-    navigate(`/${type}/${id}`);
+    navigate(`/${type}Posts/${id}/comments?start=0`);
   };
 
   const [selected, setSelected] = useState("제목");
@@ -331,67 +316,40 @@ const NotifyList = ({ type }) => {
 
   const [notices, setNotices] = useState([]);
   const [refreshCnt, setRefrshCnt] = useState(0);
-  const handleNotices = (noticeList) => {
-    setNotices(noticeList);
-  };
   const handleRefreshInview = (noticeList) => {
     setRefrshCnt(refreshCnt + 1);
     setNotices([...notices, ...noticeList]);
   };
 
-  const [search, setSearch] = useState("");
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-  const searchContents = () => {
-    const initialNoticeInfo = {
-      type: type,
-      start: "",
-      title: selected == "제목" || selected == "제목+내용" ? search : "",
-      author: selected == "작성자" ? search : "",
-      content: selected == "내용" || selected == "제목+내용" ? search : "",
-    };
-    getNotices(initialNoticeInfo, handleNotices, handlePinned);
-  };
-
-  const [pinned, setPinned] = useState([]);
-  const handlePinned = (notice) => {
-    setPinned(notice);
-  };
-
   useEffect(() => {
     // request first 13 notices
     // setNotices(res....);
-    setPinned([]);
+
     const token = localStorage.getItem("Authorization");
     if (!token) {
       alert("로그인이 필요합니다.");
       navigate("/login");
     }
 
-    const initialNoticeInfo = {
-      type: type,
-      start: "",
-      title: "",
-      author: "",
-      content: "",
-    };
+    if (notices.length === 0) {
+      const initialNoticeInfo = {
+        type: type,
+        start: "",
+        title: "",
+        author: "",
+        content: "",
+      };
 
-    getNotices(initialNoticeInfo, handleNotices, handlePinned);
-  }, [type]);
+      getNotices(initialNoticeInfo, handleRefreshInview);
+    }
+  }, []);
 
   const selectBoxOpenedAnimation = {
-    height: "136px",
+    height: "102px",
   };
 
   const selectBoxClosedAnimation = {
     height: "34px",
-  };
-
-  const typo = {
-    notice: "공지사항",
-    study: "스터디 게시판",
-    forum: "자유 게시판",
   };
 
   return (
@@ -400,13 +358,13 @@ const NotifyList = ({ type }) => {
       <Header />
       <Container>
         <NoticeContainer>
-          <NoticeBlock>{typo[type]}</NoticeBlock>
+          <NoticeBlock>앨범 게시판</NoticeBlock>
           <NoticeHeader>
-            <NoticeHeaderTitle>{typo[type]}</NoticeHeaderTitle>
+            <NoticeHeaderTitle>앨범 게시판</NoticeHeaderTitle>
             <NoticeHeaderTypo>
-              DNA 동아리의 다양한 소식을 전해드립니다.
+              DNA 사진을 볼 수 있는 앨범입니다.
               <br />
-              동아리 회원분들은 꼭 {typo[type]}을 확인해주세요!
+              <br />
             </NoticeHeaderTypo>
           </NoticeHeader>
         </NoticeContainer>
@@ -440,44 +398,24 @@ const NotifyList = ({ type }) => {
               />
             </SearchSelectBoxWrapper>
             <SearchBar>
-              <SearchField onChange={handleSearchChange} />
-              <SearchButton onClick={searchContents} />
+              <SearchField />
+              <SearchButton />
             </SearchBar>
           </SearchBarContainer>
           <WritePostButton type={type} />
         </div>
         <NoticeList>
-          {pinned.map((pin) => {
-            pin.modifiedAt = pin.modifiedAt
-              .substring(0, 10)
-              .replaceAll("-", ".");
-            return (
-              <Notice
-                type={type}
-                noticeInfo={pin}
-                onClick={noticeOnClick}
-                pin={
-                  <img style={{ width: "15px", height: "15px" }} src={pinImg} />
-                }
-              />
-            );
-          })}
-          {notices?.map((notice) => {
+          {notices.map((notice) => {
             notice.modifiedAt = notice.modifiedAt
               .substring(0, 10)
               .replaceAll("-", ".");
-            return (
-              <Notice type={type} noticeInfo={notice} onClick={noticeOnClick} />
-            );
+            return <Album noticeInfo={notice} onClick={noticeOnClick} />;
           })}
-          {!notices || notices?.length == 0 ? (
-            <NoNotices> 표시할 게시글이 없습니다.</NoNotices>
-          ) : null}
-          <Loading inViewed={handleNotices} cnt={refreshCnt} />
+          <Loading inViewed={handleRefreshInview} cnt={refreshCnt} />
         </NoticeList>
       </Container>
     </>
   );
 };
 
-export default NotifyList;
+export default AlbumList;

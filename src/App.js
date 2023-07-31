@@ -2,6 +2,8 @@ import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Notify from "./components/pages/Notify";
 import NotifyList from "./components/pages/NotifyList";
+import AlbumList from "./components/pages/AlbumList";
+import AlbumCkeditor from "./components/pages/AlbumCkeditor";
 import Onboard from "./components/pages/Onboard";
 import SignUp from "./components/pages/SignUp";
 import WritePost from "./components/pages/WritePost";
