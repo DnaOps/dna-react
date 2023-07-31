@@ -14,7 +14,7 @@ import InputContainer from "../organisms/InputContainer";
 import CommunityButton from "../organisms/CommunityButton";
 import ErrorMessage from "../organisms/ErrorMessage";
 import SingUpBackGround from "../organisms/SignUpBackGround";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { postSocialSignUp } from "../../api/request";
 
 const Container = styled.div`
@@ -41,7 +41,7 @@ const SignUpForm = styled.div`
 const SocialSignUp = () => {
 	const navigate = useNavigate();
 
-	const { provider, providerId, email } = useParams();
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [username, setUsername] = useState("");
 	const [studentId, setStudentId] = useState("");
@@ -89,10 +89,11 @@ const SocialSignUp = () => {
 		const signUpData = {
 			username: username,
 			studentId: studentId,
-			email: email,
-			provider: provider,
-			providerId: providerId,
+			email: searchParams.get("email"),
+			provider: searchParams.get("provider"),
+			providerId: searchParams.get("providerId"),
 		};
+		console.log("sign up data", signUpData);
 		postSocialSignUp(signUpData);
 	};
 
