@@ -79,16 +79,20 @@ input:focus {
   box-shadow: none;
 }
 
+figure > img {
+max-width: 600px;
+}
+
 `;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <RecoilRoot>
-    <BrowserRouter>
-      <GlobalStyle />
-      <App />
-    </BrowserRouter>
-  </RecoilRoot>
+	<RecoilRoot>
+		<BrowserRouter>
+			<GlobalStyle />
+			<App />
+		</BrowserRouter>
+	</RecoilRoot>
 );
 
 // If you want to start measuring performance in your app, pass a function
