@@ -118,11 +118,14 @@ const Footer = () => {
 const AlbumCkeditor = ({ type }) => {
 	const navigate = useNavigate();
 
+	let realTitle = "";
+
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
 
 	const handleTitleChange = (e) => {
-		setTitle(e.target.value);
+		// setTitle(e.target.value);
+		realTitle = e.target.value;
 	};
 
 	const handleContentChange = (e) => {
@@ -133,7 +136,7 @@ const AlbumCkeditor = ({ type }) => {
 
 	const applyOnClick = () => {
 		const postNotifyDTO = {
-			title: title,
+			title: realTitle,
 			content: fakeContent,
 			thumbnailImage: "thumnail image URL",
 		};
