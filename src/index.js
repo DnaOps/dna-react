@@ -80,7 +80,11 @@ input:focus {
 }
 
 figure > img {
-max-width: 600px;
+max-width: 757px;
+}
+
+p > img {
+max-width: 757px;
 }
 
 `;
