@@ -25,7 +25,7 @@ function App() {
 			<Route path="/study_list" element={<NotifyList type="study" />} />
 			<Route path="/notice/:id" element={<Notify type="notice" />} />
 			<Route path="/forum/:id" element={<Notify type="forum" />} />
-			<Route path="/album_list" element={<AlbumList />} />
+			<Route path="/album_list" element={<AlbumList type="album" />} />
 			<Route path="/forum_post/write" element={<WritePost type="forum" />} />
 			<Route path="/study_post/write" element={<WritePost type="study" />} />
 			<Route path="/notice_post/write" element={<WritePost type="notice" />} />
