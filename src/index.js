@@ -79,12 +79,15 @@ input:focus {
   box-shadow: none;
 }
 
+figure {
+  margin: 0;
+}
 figure > img {
-max-width: 757px;
+width: 737px;
 }
 
 p > img {
-max-width: 757px;
+width: 737px;
 }
 
 `;
