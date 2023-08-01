@@ -201,7 +201,7 @@ const SearchButton = () => {
 const NoticeList = styled.div`
 	width: 917px;
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	border-top: 2.5px solid #024298;
 	box-shadow: var(--box-shadow);
 `;
@@ -317,7 +317,6 @@ const AlbumList = ({ type }) => {
 
 	const [notices, setNotices] = useState([]);
 	const handleNotices = (noticeList) => {
-		console.log(noticeList);
 		setNotices(noticeList);
 	};
 	const [refreshCnt, setRefrshCnt] = useState(0);
